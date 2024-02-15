@@ -1,4 +1,5 @@
 import pygame
+import os
 
 class GameObject:
 
@@ -27,9 +28,10 @@ screen = pygame.display.set_mode((40*SCALE, 40*SCALE))
 clock = pygame.time.Clock()
 running = True
 dt = 0
+score = 0
 
 PLAYER_SPEED = 20*SCALE
-BALL_SPEED = 10*SCALE
+BALL_SPEED = 40*SCALE
 
 player = GameObject(pygame.Rect(0,screen.get_height()/2,1*SCALE,6*SCALE),pygame.Vector2(0,PLAYER_SPEED))
 ball = GameObject(pygame.Rect((screen.get_width()/2), (screen.get_height()/2),1*SCALE,1*SCALE),pygame.Vector2(BALL_SPEED,-BALL_SPEED))
@@ -43,7 +45,7 @@ playing_field = pygame.Rect(0,0,32*SCALE,32*SCALE)
 def withinBoard(rect:pygame.Rect):
     return playing_field.contains(rect)
 
- 
+
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -80,7 +82,7 @@ while running:
 
 
 
-    #ball movement
+    #BALL MOVEMENT
 
     #collide left and right
     if ball.rect.top < playing_field.top or ball.rect.bottom >= playing_field.bottom:
@@ -96,27 +98,25 @@ while running:
         ball.speed.x *= -1
         ball.rect.right = wall.left
     # collide left
-    elif ball.rect.left <= playing_field.left:
-        # print("lose")
-        #end_screen_img = pygame.image.load('endscreen.png')
-        #playing_field.blit(end_screen_img, (0,0))
-        ball.speed.x *= -1
-        ball.rect.left = playing_field.left
-    # collide player
     elif ball.rect.colliderect(player.rect):
         ball.speed.x *= -1
         ball.rect.left = player.rect.right
+        score += 1
+    elif ball.rect.left <= playing_field.left:
+        # print("lose")
+        end_screen_img = pygame.image.load('C:/Users/TM_Be/Desktop/pong/RetroPi/games/pong/resources/endscreen.png')
+        screen.blit(end_screen_img,playing_field)
+        # ball.speed.x *= -1
+        # ball.rect.left = playing_field.left
+        print("score", score)
+    # collide player
+        
     
     ball.rect.top = ball.rect.top + ball.speed.y* dt
     ball.rect.left = ball.rect.left + ball.speed.x* dt
     
 
 
-    #if ball collision  
-    #if     player collide x flip
-    #if    top or bottom y flip
-    
-    
 
     # flip() the display to put your work on screen
     pygame.display.flip()
