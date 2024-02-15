@@ -1,6 +1,5 @@
 import pygame
 
-
 class GameObject:
 
     def __init__(self, rect:pygame.Rect, speed:pygame.Vector2):
@@ -8,12 +7,6 @@ class GameObject:
         self.speed = speed        
         self.x = rect.left
         self.y = rect.top
-
-    # def get_rect(self):
-    #     return self.rect
-    
-    # def get_speed(self):
-    #     return self.speed
 
     def set_position(self, x, y):
         self.rect.left = x
@@ -36,22 +29,21 @@ running = True
 dt = 0
 
 PLAYER_SPEED = 20*SCALE
-BALL_SPEED = 30*SCALE
+BALL_SPEED = 10*SCALE
 
 player = GameObject(pygame.Rect(0,screen.get_height()/2,1*SCALE,6*SCALE),pygame.Vector2(0,PLAYER_SPEED))
+ball = GameObject(pygame.Rect((screen.get_width()/2), (screen.get_height()/2),1*SCALE,1*SCALE),pygame.Vector2(BALL_SPEED,-BALL_SPEED))
 
-#player_pos = pygame.Vector2(screen.get_width() / 10, screen.get_height() / 2) #comment due to player object
 
-
-ball_pos = pygame.Vector2((screen.get_width()/2), (screen.get_height()/2))
+# ball_pos = pygame.Vector2((screen.get_width()/2), (screen.get_height()/2))
 playing_field = pygame.Rect(0,0,32*SCALE,32*SCALE)
 
-next_tick_ball = pygame.Vector2(0,0)
+# next_tick_ball = pygame.Vector2(0,0)
 
 def withinBoard(rect:pygame.Rect):
     return playing_field.contains(rect)
 
-
+ 
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -63,14 +55,13 @@ while running:
     screen.fill("black")
 
     wall = pygame.Rect(32*SCALE, 0, 1*SCALE, 32*SCALE)
-    ball_box = pygame.Rect(ball_pos.x,ball_pos.y,10,10)
-    #player_box = pygame.Rect(0,player_pos.y,1*SCALE,6*SCALE+size) #comment due to player object
+    #ball_box = pygame.Rect(ball_pos.x,ball_pos.y,10,10)
 
     #draw gameobjects
-    pygame.draw.rect(screen, "purple", wall)
+    pygame.draw.rect(screen, "white", wall)
     pygame.draw.rect(screen, "green", playing_field)
     pygame.draw.rect(screen, "white", player.rect)
-    pygame.draw.rect(screen, "red", ball_box)
+    pygame.draw.rect(screen, "red", ball.rect)
 
     #update variable for gameobjects
     #player movement
@@ -88,13 +79,39 @@ while running:
             player.rect.top += player.speed.y* dt
 
 
-    
-    #ball_box.
+
     #ball movement
+
+    #collide left and right
+    if ball.rect.top < playing_field.top or ball.rect.bottom >= playing_field.bottom:
+        ball.speed.y *= -1
+        if ball.rect.top < playing_field.top-1*SCALE:
+            ball.rect.top = playing_field.top
+        if ball.rect.bottom  >= playing_field.bottom:
+            ball.rect.bottom = playing_field.bottom
+
     
-    # next_tick_ball.x = ball_pos.x + BALL_SPEED * dt
-    # next_tick_ball.y = ball_pos.y + BALL_SPEED * dt
+    # collide right
+    if ball.rect.colliderect(wall):
+        ball.speed.x *= -1
+        ball.rect.right = wall.left
+    # collide left
+    elif ball.rect.left <= playing_field.left:
+        # print("lose")
+        #end_screen_img = pygame.image.load('endscreen.png')
+        #playing_field.blit(end_screen_img, (0,0))
+        ball.speed.x *= -1
+        ball.rect.left = playing_field.left
+    # collide player
+    elif ball.rect.colliderect(player.rect):
+        ball.speed.x *= -1
+        ball.rect.left = player.rect.right
     
+    ball.rect.top = ball.rect.top + ball.speed.y* dt
+    ball.rect.left = ball.rect.left + ball.speed.x* dt
+    
+
+
     #if ball collision  
     #if     player collide x flip
     #if    top or bottom y flip
