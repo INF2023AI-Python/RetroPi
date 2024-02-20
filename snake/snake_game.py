@@ -16,7 +16,6 @@ logic:
  movesnake
     head moves one step
     tail moves to the last head position
-
  checkforEvents/collision
  loop
 """
@@ -30,33 +29,32 @@ snake_dir = (0, 1)
 
 def spawn_snake():
     for i in range(1, 30):
-        x = pygame.Rect(i * (SCALE + 1), 1 * (SCALE+1), 1 * SCALE, 1 * SCALE)
+        x = pygame.Rect(i * (SCALE + 1), 1 * (SCALE + 1), 1 * SCALE, 1 * SCALE)
         tail.append(x)
         clist.append(x)
 
 
 def spawn_apple():
-    x = random.randint(0, SCALE)
-    y = random.randint(0, SCALE)
-    return pygame.draw.rect(screen, "yellow", (x * (SCALE + 1), y * (SCALE + 1), SCALE, SCALE))
+    # while not on element from tail
+    x = random.randint(0, 32 * SCALE)
+    y = random.randint(0, 32 * SCALE)
+    return pygame.Rect(x * (SCALE + 1), y * (SCALE + 1), SCALE, SCALE)
 
 
 def move_snake():
-    # move n to n-1
-    # for i in range(0,len(tail)-1):
     global snake_dir
     for i in range(0, len(tail) - 1):
         tail[i + 1] = copy.deepcopy(clist[i])
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_w]:
+    if keys[pygame.K_w] and snake_dir != (0, 1):
         snake_dir = (0, -1)
-    elif keys[pygame.K_a]:
+    elif keys[pygame.K_a] and snake_dir != (1, 0):
         snake_dir = (-1, 0)
-    elif keys[pygame.K_s]:
+    elif keys[pygame.K_s] and snake_dir != (0, -1):
         snake_dir = (0, 1)
-    elif keys[pygame.K_d]:
+    elif keys[pygame.K_d] and snake_dir != (-1, 0):
         snake_dir = (1, 0)
-    SPEED = 17
+    SPEED = SCALE + 1
     tail[0].move_ip(SPEED * snake_dir[0], SPEED * snake_dir[1])
     for i, e in enumerate(tail):
         clist[i] = copy.deepcopy(tail[i])
@@ -88,7 +86,7 @@ while running:
         else:
             pygame.draw.rect(screen, "green", e)
     pygame.draw.rect(screen, "red", head)
-    pygame.draw.rect(screen, "red", apple)
+    pygame.draw.rect(screen, "yellow", spawn_apple())
     # flip() the display to put your work on screen
     pygame.display.flip()
 
