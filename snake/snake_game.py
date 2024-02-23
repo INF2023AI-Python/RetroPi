@@ -19,32 +19,41 @@ logic:
  checkforEvents/collision
  loop
 """
-speed = 10
+screen_width = 32 * SCALE
+screen_height = 32 * SCALE
+screen = pygame.display.set_mode((screen_width, screen_height))
+clock = pygame.time.Clock()
+
+SPEED = SCALE
 tail = []
 clist = []
+
+global score
+score = 0
 
 global snake_dir
 snake_dir = (0, 1)
 
+global apple
+apple = 0
+
 
 def spawn_snake():
-    for i in range(1, 30):
-        x = pygame.Rect(i * (SCALE + 1), 1 * (SCALE + 1), 1 * SCALE, 1 * SCALE)
+    for i in range(1, 10):
+        x = pygame.Rect(i * SCALE, SCALE, 1 * SCALE, 1 * SCALE)
         tail.append(x)
         clist.append(x)
 
 
 def spawn_apple():
     # while not on element from tail
-    x = random.randint(0, 32 * SCALE)
-    y = random.randint(0, 32 * SCALE)
-    return pygame.Rect(x * (SCALE + 1), y * (SCALE + 1), SCALE, SCALE)
+    x = random.randint(0, 31)
+    y = random.randint(0, 31)
+    return pygame.Rect(x * SCALE, y * SCALE, SCALE, SCALE)
 
 
 def move_snake():
     global snake_dir
-    for i in range(0, len(tail) - 1):
-        tail[i + 1] = copy.deepcopy(clist[i])
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w] and snake_dir != (0, 1):
         snake_dir = (0, -1)
@@ -54,18 +63,53 @@ def move_snake():
         snake_dir = (0, 1)
     elif keys[pygame.K_d] and snake_dir != (-1, 0):
         snake_dir = (1, 0)
-    SPEED = SCALE + 1
+    for i in range(0, len(tail) - 1):
+        tail[i + 1] = copy.deepcopy(clist[i])
+
     tail[0].move_ip(SPEED * snake_dir[0], SPEED * snake_dir[1])
     for i, e in enumerate(tail):
         clist[i] = copy.deepcopy(tail[i])
 
 
 def check_events():
-    pass
+    global snake_dir, apple, score
+    # collision with border directions are relative
+    next_position_ahead = tail[0].move(SPEED * snake_dir[0], SPEED * snake_dir[1])
+    next_position_left = tail[0].move(SPEED * snake_dir[0], SPEED * snake_dir[1])
+    next_position_right = tail[0].move(SPEED * snake_dir[0], SPEED * snake_dir[1])
+
+    # split into method for other checks, such as left and right relative from the snake for self collision
+    if collision_self(next_position_ahead):
+        print("dead self")
+    if collision_self(next_position_left):
+        print("dead left")
+    if collision_self(next_position_right):
+        print("dead right")
+
+    # collision ahead
+    if (next_position_ahead.left < 0) or (next_position_ahead.left > screen_width) or (next_position_ahead.top < 0) or (
+            next_position_ahead.top > screen_height):
+        print("dead border")
+    # collision above
+    # collsion below
+
+    # snake on apple
+    if tail[0].left == apple.left and tail[0].top == apple.top:
+        apple = spawn_apple()
+        score = score + 1
+        tail.append(tail[len(tail) - 1].move(-SPEED * snake_dir[0], -SPEED * snake_dir[1]))
+        clist.append(tail[len(tail) - 1].move(-SPEED * snake_dir[0], -SPEED * snake_dir[1]))
+        print("len tail: ", len(tail))
+        print(score)
 
 
-screen = pygame.display.set_mode((32 * SCALE, 32 * SCALE))
-clock = pygame.time.Clock()
+def collision_self(next_relative_position: pygame.Rect) -> bool:
+    for snake_element in tail:
+        if snake_element.left == next_relative_position.left and snake_element.top == next_relative_position.top:
+            return True
+    return False
+
+
 spawn_snake()
 apple = spawn_apple()
 while running:
@@ -86,13 +130,14 @@ while running:
         else:
             pygame.draw.rect(screen, "green", e)
     pygame.draw.rect(screen, "red", head)
-    pygame.draw.rect(screen, "yellow", spawn_apple())
+    pygame.draw.rect(screen, "white", apple)
+
     # flip() the display to put your work on screen
     pygame.display.flip()
 
     # limits FPS to 60
     # dt is delta time in seconds since last frame, used for framerate-
     # independent physics.
-    dt = clock.tick(3) / 1000
+    dt = clock.tick(5) / 1000
 
 pygame.quit()
