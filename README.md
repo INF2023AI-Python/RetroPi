@@ -38,3 +38,19 @@ Installed Kernel Headers:
 sudo apt-get install raspberrypi-kernel-headers
 
 test display worked -> screen doesnt show up -> Debug_dump file
+
+-> Bullseye on Raspi:
+installed only rpi-fb-matrix
+
+worked out of the box
+
+installed newest version of python
+https://aruljohn.com/blog/python-raspberrypi/
+
+took ages (2h)
+
+installed newest version of pygame on this python env
+python -m pip install requests
+
+now works
+
