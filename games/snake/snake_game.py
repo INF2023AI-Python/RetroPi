@@ -4,7 +4,7 @@ import copy
 from PIL import Image
 from PIL import ImageDraw
 import time
-from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
+from samplebase import SampleBase
 
 running = True
 SCALE = 1
@@ -15,7 +15,7 @@ screen_height = 32 * SCALE
 # screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 
-SPEED = SCALE
+SPEED = 2
 tail = []
 clist = []
 
@@ -31,15 +31,15 @@ apple = 0
 
 def spawn_snake():
     for i in range(1, 10):
-        x = pygame.Rect(i * SCALE, SCALE, 1 * SCALE, 1 * SCALE)
+        x = pygame.Rect(i * SPEED, SPEED, 1 * SCALE, 1 * SCALE)
         tail.append(x)
         clist.append(x)
 
 
 def spawn_apple():
     # while not on element from tail
-    x = random.randint(0, 31)
-    y = random.randint(0, 31)
+    x = random.randrange(0, 30, 2)
+    y = random.randrange(0, 30, 2)
     return pygame.Rect(x * SCALE, y * SCALE, SCALE, SCALE)
 
 
@@ -59,7 +59,7 @@ def move_snake():
 
     tail[0].move_ip(SPEED * snake_dir[0], SPEED * snake_dir[1])
     for i, e in enumerate(tail):
-        clist[i] = copy.deepcopy(tail[i])
+        clist[i] = copy.deepcopy(e)
 
 
 def check_events():
@@ -106,14 +106,7 @@ apple = spawn_apple()
 
 image = Image.new("RGB", (32, 32))
 draw = ImageDraw.Draw(image)
-
-options = RGBMatrixOptions()
-options.rows = 32
-options.chain_length = 1
-options.parallel = 1
-options.hardware_mapping = 'regular'  # If you have an Adafruit HAT: 'adafruit-hat'
-
-matrix = RGBMatrix(options=options)
+buffer = SampleBase.matrix.CreateFrameCanvas()
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -128,14 +121,13 @@ while running:
     head = tail[0]
     for i, e in enumerate(tail):
         if i == 0:
+            draw.rectangle((e.left, e.top, e.right, e.bottom), fill=(255, 255, 0))
             continue
-        else:
-            continue
-            # pygame.draw.rect(screen, "green", e)
-
+        draw.rectangle((e.left, e.top, e.right, e.bottom), fill=(255, 0, 0))
+    draw.rectangle((apple.left, apple.top, apple.right, apple.bottom), fill=(0, 255, 0))
     print(head.left, head.top)
-    draw.rectangle((head.left, head.top, head.right, head.bottom), fill=(255, 0, 0))
-    matrix.SetImage(image, 0, 0)
+    draw.rectangle((0, 0, 32, 32), fill=(0, 0, 0))
+    buffer.SetImage(image)
     # pygame.draw.rect(screen, "red", head)
     # pygame.draw.rect(screen, "white", apple)
     # flip() the display to put your work on screen
