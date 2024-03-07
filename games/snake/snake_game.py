@@ -1,27 +1,18 @@
 import pygame
 import random
 import copy
-import os
+from PIL import Image
+from PIL import ImageDraw
+import time
+from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
 
 running = True
-
-SCALE = 16
+SCALE = 1
 pygame.init()
 
-"""
-logic:
- spawnsnake
- spawnapple
-    down spawn in snake
- movesnake
-    head moves one step
-    tail moves to the last head position
- checkforEvents/collision
- loop
-"""
 screen_width = 32 * SCALE
 screen_height = 32 * SCALE
-screen = pygame.display.set_mode((screen_width, screen_height))
+# screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 
 SPEED = SCALE
@@ -112,6 +103,17 @@ def collision_self(next_relative_position: pygame.Rect) -> bool:
 
 spawn_snake()
 apple = spawn_apple()
+
+image = Image.new("RGB", (32, 32))
+draw = ImageDraw.Draw(image)
+
+options = RGBMatrixOptions()
+options.rows = 32
+options.chain_length = 1
+options.parallel = 1
+options.hardware_mapping = 'regular'  # If you have an Adafruit HAT: 'adafruit-hat'
+
+matrix = RGBMatrix(options=options)
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -120,7 +122,7 @@ while running:
             running = False
 
     # fill the screen with a color to wipe away anything from last frame
-    screen.fill("black")
+    # screen.fill("black")
     move_snake()
     check_events()
     head = tail[0]
@@ -128,16 +130,16 @@ while running:
         if i == 0:
             continue
         else:
-            pygame.draw.rect(screen, "green", e)
-    pygame.draw.rect(screen, "red", head)
-    pygame.draw.rect(screen, "white", apple)
+            continue
+            # pygame.draw.rect(screen, "green", e)
 
+    print(head.left, head.top)
+    draw.rectangle((head.left, head.top, head.right, head.bottom), fill=(255, 0, 0))
+    matrix.SetImage(image, 0, 0)
+    # pygame.draw.rect(screen, "red", head)
+    # pygame.draw.rect(screen, "white", apple)
     # flip() the display to put your work on screen
     pygame.display.flip()
-
-    # limits FPS to 60
-    # dt is delta time in seconds since last frame, used for framerate-
-    # independent physics.
     dt = clock.tick(5) / 1000
 
 pygame.quit()
