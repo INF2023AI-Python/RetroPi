@@ -9,12 +9,18 @@ except ImportError:
     from rgbmatrix import RGBMatrix, RGBMatrixOptions
 
 running = True
+joystick_found = True
 SCALE = 1
 pygame.init()
-#pygame.joystick.init()
-#joystick = pygame.joystick.Joystick(0)
-#joystick.init()
-#joystick.get_numaxes()
+try:
+    pygame.joystick.init()
+    joystick = pygame.joystick.Joystick(0)
+    joystick.init()
+    joystick.get_numaxes()
+except Exception:
+    joystick_found = False
+    print("Kein Joystick gefunden")
+
 
 
 screen_width = 32 * SCALE
@@ -49,8 +55,29 @@ def spawn_apple():
     y = random.randint(0, 31)
     return pygame.Rect(x * SCALE, y * SCALE, SCALE, SCALE)
 
+def move_snake_joy(x_axis, y_axis, threshold = 0.1):
+    # Schwellenwert für Stick-Drift oder Neutralzone
+    x_axis = 0 if abs(x_axis) < threshold else x_axis
+    y_axis = 0 if abs(y_axis) < threshold else y_axis
+
+    if x_axis < 0:
+        snake_dir = (1, 0)
+    elif x_axis > 0:
+        snake_dir = (-1, 0)
+    elif y_axis < 0:
+        snake_dir = (0, 1)
+    elif y_axis > 0:
+        snake_dir = (0, -1)
+
+    for i in range(0, len(tail) - 1):
+        tail[i + 1] = copy.deepcopy(clist[i])
+
+    tail[0].move_ip(SPEED * snake_dir[0], SPEED * snake_dir[1])
+    for i, e in enumerate(tail):
+        clist[i] = copy.deepcopy(tail[i])
 
 def move_snake():
+
     global snake_dir
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w] and snake_dir != (0, 1):
@@ -130,6 +157,12 @@ while running:
 
     # fill the screen with a color to wipe away anything from last frame
     # screen.fill("black")
+    if joystick_found:
+        x_axis = joystick.get_axis(0)
+        y_axis = joystick.get_axis(1)
+        move_snake_joy(x_axis,y_axis)
+
+    draw.rectangle((0,0,32,32),fill=(0,0,0,0))
     move_snake()
     check_events()
     head = tail[0]
