@@ -11,9 +11,9 @@ except ImportError:
 running = True
 SCALE = 1
 pygame.init()
-pygame.joystick.init()
-joystick = pygame.joystick.Joystick(0)
-joystick.init()
+#pygame.joystick.init()
+#joystick = pygame.joystick.Joystick(0)
+#joystick.init()
 #joystick.get_numaxes()
 
 
@@ -53,8 +53,6 @@ def spawn_apple():
 def move_snake():
     global snake_dir
     keys = pygame.key.get_pressed()
-    if joystick.get_numbuttons()[8] == 1:
-        print("8")
     if keys[pygame.K_w] and snake_dir != (0, 1):
         snake_dir = (0, -1)
     elif keys[pygame.K_a] and snake_dir != (1, 0):
@@ -132,6 +130,8 @@ while running:
 
     # fill the screen with a color to wipe away anything from last frame
     # screen.fill("black")
+    draw.rectangle((0,0,32,32),fill=(0,0,0))
+    matrix.SetImage(image, 0, 0)
     move_snake()
     check_events()
     head = tail[0]
@@ -139,6 +139,7 @@ while running:
         if i == 0:
             continue
         else:
+            draw.rectangle((e.left,e.top,e.right,e.bottom), fill=(0,255,255))
             continue
             # pygame.draw.rect(screen, "green", e)
 
