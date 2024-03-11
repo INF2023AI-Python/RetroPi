@@ -56,10 +56,10 @@ def spawn_apple():
     return pygame.Rect(x * SCALE, y * SCALE, SCALE, SCALE)
 
 def move_snake_joy(x_axis, y_axis, threshold = 0.1):
+    global snake_dir
     # Schwellenwert für Stick-Drift oder Neutralzone
     x_axis = 0 if abs(x_axis) < threshold else x_axis
     y_axis = 0 if abs(y_axis) < threshold else y_axis
-
     if x_axis < 0:
         snake_dir = (1, 0)
     elif x_axis > 0:
@@ -77,7 +77,6 @@ def move_snake_joy(x_axis, y_axis, threshold = 0.1):
         clist[i] = copy.deepcopy(tail[i])
 
 def move_snake():
-
     global snake_dir
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w] and snake_dir != (0, 1):
