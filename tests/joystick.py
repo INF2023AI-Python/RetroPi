@@ -14,9 +14,8 @@ joystick.init()
 running = True
 while running:
     print("Found:", joystick.get_name())
-    for i in range(256):
+    for i in range(joystick.get_numaxes()-1):
         print("axis: ",joystick.get_axis(i))
-        print("hat: ",joystick.get_hat(i))
     print(joystick.get_id())
     print(joystick.get_guid())
 
