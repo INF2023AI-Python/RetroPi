@@ -4,7 +4,7 @@ import copy
 from PIL import Image
 from PIL import ImageDraw
 import time
-from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
+from rgbmatrix import RGBMatrix, RGBMatrixOptions
 
 running = True
 SCALE = 1
@@ -111,7 +111,7 @@ options = RGBMatrixOptions()
 options.rows = 32
 options.chain_length = 1
 options.parallel = 1
-options.hardware_mapping = 'regular'  # If you have an Adafruit HAT: 'adafruit-hat'
+options.hardware_mapping = 'adafruit-hat'  # If you have an Adafruit HAT: 'adafruit-hat'
 
 matrix = RGBMatrix(options=options)
 while running:
