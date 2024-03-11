@@ -130,8 +130,6 @@ while running:
 
     # fill the screen with a color to wipe away anything from last frame
     # screen.fill("black")
-    draw.rectangle((0,0,32,32),fill=(0,0,0))
-    matrix.SetImage(image, 0, 0)
     move_snake()
     check_events()
     head = tail[0]
