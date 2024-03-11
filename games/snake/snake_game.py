@@ -11,13 +11,18 @@ except ImportError:
 running = True
 SCALE = 1
 pygame.init()
+pygame.joystick.init()
+joystick = pygame.joystick.Joystick(0)
+joystick.init()
+#joystick.get_numaxes()
+
 
 screen_width = 32 * SCALE
 screen_height = 32 * SCALE
 # screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 
-SPEED = SCALE
+SPEED = 2
 tail = []
 clist = []
 
@@ -32,8 +37,8 @@ apple = 0
 
 
 def spawn_snake():
-    for i in range(1, 10):
-        x = pygame.Rect(i * SCALE, SCALE, 1 * SCALE, 1 * SCALE)
+    for i in range(0, 10):
+        x = pygame.Rect(i * SCALE, 0, 1 * SCALE, 1 * SCALE)
         tail.append(x)
         clist.append(x)
 
@@ -48,6 +53,8 @@ def spawn_apple():
 def move_snake():
     global snake_dir
     keys = pygame.key.get_pressed()
+    if joystick.get_numbuttons()[8] == 1:
+        print("8")
     if keys[pygame.K_w] and snake_dir != (0, 1):
         snake_dir = (0, -1)
     elif keys[pygame.K_a] and snake_dir != (1, 0):
@@ -140,6 +147,6 @@ while running:
     matrix.SetImage(image, 0, 0)
     # pygame.draw.rect(screen, "red", head)
     # pygame.draw.rect(screen, "white", apple)
-    dt = clock.tick(5) / 1000
+    dt = clock.tick(10) / 1000
 
 pygame.quit()
