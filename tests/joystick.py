@@ -1,7 +1,10 @@
 import pygame
 from PIL import Image
 from PIL import ImageDraw
-from rgbmatrix import RGBMatrix, RGBMatrixOptions
+try:
+    import RGBMatrixEmulator
+except ImportError:
+    from rgbmatrix import RGBMatrix, RGBMatrixOptions
 
 pygame.init()
 pygame.joystick.init()

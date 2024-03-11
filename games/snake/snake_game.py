@@ -3,8 +3,10 @@ import random
 import copy
 from PIL import Image
 from PIL import ImageDraw
-import time
-from rgbmatrix import RGBMatrix, RGBMatrixOptions
+try:
+    from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
+except ImportError:
+    from rgbmatrix import RGBMatrix, RGBMatrixOptions
 
 running = True
 SCALE = 1
