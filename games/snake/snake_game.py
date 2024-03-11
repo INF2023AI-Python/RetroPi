@@ -138,8 +138,6 @@ while running:
     matrix.SetImage(image, 0, 0)
     # pygame.draw.rect(screen, "red", head)
     # pygame.draw.rect(screen, "white", apple)
-    # flip() the display to put your work on screen
-    pygame.display.flip()
     dt = clock.tick(5) / 1000
 
 pygame.quit()
