@@ -41,7 +41,7 @@ apple = 0
 
 
 def spawn_snake():
-    for i in range(0, 10):
+    for i in range(0, 30):
         x = pygame.Rect(i * SCALE, 0, 1 * SCALE, 1 * SCALE)
         tail.append(x)
         clist.append(x)
@@ -106,7 +106,26 @@ def check_events():
     next_position_ahead = tail[0].move(SPEED * snake_dir[0], SPEED * snake_dir[1])
     next_position_left = tail[0].move(SPEED * snake_dir[0], SPEED * snake_dir[1])
     next_position_right = tail[0].move(SPEED * snake_dir[0], SPEED * snake_dir[1])
+    if snake_dir == (-1, 0) or snake_dir == (1, 0):
+        # horizontal
+        next_right_dir = (snake_dir[1], snake_dir[0])
+        next_left_dir = (-snake_dir[1], -snake_dir[0])
+        next_position_left = tail[0].move(SPEED * next_left_dir[0], SPEED * next_left_dir[1])
+        next_position_right = tail[0].move(SPEED * next_right_dir[0], SPEED * next_right_dir[1])
+        draw.rectangle((next_position_left.left, next_position_left.top, next_position_left.left,next_position_left.top), fill=(0,100,0))
+        draw.rectangle((next_position_right.left, next_position_right.top, next_position_right.left,next_position_right.top), fill=(0,100,0))
+    if snake_dir == (0, -1) or snake_dir == (0, 1):
+        # vertical
+        next_right_dir = (-snake_dir[1], -snake_dir[0])
+        next_left_dir = (snake_dir[1], snake_dir[0])
+        next_position_left = tail[0].move(SPEED * next_left_dir[0], SPEED * next_left_dir[1])
+        next_position_right = tail[0].move(SPEED * next_right_dir[0], SPEED * next_right_dir[1])
+        draw.rectangle((next_position_left.left, next_position_left.top, next_position_left.left,next_position_left.top), fill=(0,100,0))
+        draw.rectangle((next_position_right.left, next_position_right.top, next_position_right.left,next_position_right.top), fill=(0,100,0))
 
+    draw.rectangle(
+        (next_position_ahead.left, next_position_ahead.top, next_position_ahead.left, next_position_ahead.top),
+        fill=(0, 100, 0))
     # split into method for other checks, such as left and right relative from the snake for self collision
     if collision_self(next_position_ahead):
         print("dead self")
@@ -160,7 +179,7 @@ while running:
             running = False
 
     # clear screen
-    draw.rectangle((0, 0, 32, 32), fill=(0, 0, 0, 0))
+    draw.rectangle((0, 0, 32, 32), fill=(0, 0, 0))
     if joystick_found:
         x_axis = joystick.get_axis(0)
         y_axis = joystick.get_axis(1)
