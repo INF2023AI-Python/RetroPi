@@ -3,6 +3,7 @@ import random
 import copy
 from PIL import Image
 from PIL import ImageDraw
+
 try:
     from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
 except ImportError:
@@ -20,8 +21,6 @@ try:
 except Exception:
     joystick_found = False
     print("Kein Joystick gefunden")
-
-
 
 screen_width = 32 * SCALE
 screen_height = 32 * SCALE
@@ -55,7 +54,8 @@ def spawn_apple():
     y = random.randint(0, 31)
     return pygame.Rect(x * SCALE, y * SCALE, SCALE, SCALE)
 
-def move_snake_joy(x_axis, y_axis, threshold = 0.1):
+
+def move_snake_joy(x_axis, y_axis, threshold=0.1):
     global snake_dir
     # Schwellenwert für Stick-Drift oder Neutralzone
     x_axis = 0 if abs(x_axis) < threshold else x_axis
@@ -75,6 +75,7 @@ def move_snake_joy(x_axis, y_axis, threshold = 0.1):
     tail[0].move_ip(SPEED * snake_dir[0], SPEED * snake_dir[1])
     for i, e in enumerate(tail):
         clist[i] = copy.deepcopy(tail[i])
+
 
 def move_snake():
     global snake_dir
@@ -159,9 +160,9 @@ while running:
     if joystick_found:
         x_axis = joystick.get_axis(0)
         y_axis = joystick.get_axis(1)
-        move_snake_joy(x_axis,y_axis)
+        move_snake_joy(x_axis, y_axis)
 
-    draw.rectangle((0,0,32,32),fill=(0,0,0,0))
+    draw.rectangle((0, 0, 32, 32), fill=(0, 0, 0, 0))
     move_snake()
     check_events()
     head = tail[0]
@@ -169,15 +170,15 @@ while running:
         if i == 0:
             continue
         else:
-            draw.rectangle((e.left,e.top,e.left,e.top), fill=(0,255,255))
+            draw.rectangle((e.left, e.top, e.left, e.top), fill=(0, 255, 255))
             continue
-            # pygame.draw.rect(screen, "green", e)
 
     print(head.left, head.top)
     draw.rectangle((head.left, head.top, head.left, head.top), fill=(255, 0, 0))
+    draw.rectangle((apple.left, apple.top,apple.left, apple.top), fill=(255, 255, 0))
+
+
     matrix.SetImage(image, 0, 0)
-    # pygame.draw.rect(screen, "red", head)
-    # pygame.draw.rect(screen, "white", apple)
     dt = clock.tick(10) / 1000
 
 pygame.quit()
