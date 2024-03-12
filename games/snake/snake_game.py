@@ -49,12 +49,12 @@ def spawn_snake():
 
 def spawn_apple():
     # while not on element from tail
-    snake_points = [(e.left,e.top) for e in tail]
+    snake_points = [(e.left, e.top) for e in tail]
     x = random.randint(0, 31)
     y = random.randint(0, 31)
-    while (x,y) in snake_points:
-        x = random.randint(0, 31)
-        y = random.randint(0, 31)
+    while (x, y) in snake_points:
+        x = random.randrange(0, 32, 2)
+        y = random.randrange(0, 32, 2)
 
     return pygame.Rect(x * SCALE, y * SCALE, SCALE, SCALE)
 
@@ -165,9 +165,8 @@ while running:
         x_axis = joystick.get_axis(0)
         y_axis = joystick.get_axis(1)
         move_snake_joy(x_axis, y_axis)
-
-
-    move_snake()
+    else:
+        move_snake()
     check_events()
     head = tail[0]
     for i, e in enumerate(tail):
