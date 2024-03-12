@@ -28,7 +28,7 @@ screen_height = 32 * SCALE
 # screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 
-SPEED = 2
+SPEED = 1
 tail = []
 clist = []
 
@@ -169,12 +169,12 @@ while running:
         if i == 0:
             continue
         else:
-            draw.rectangle((e.left,e.top,e.right,e.bottom), fill=(0,255,255))
+            draw.rectangle((e.left,e.top,e.left,e.top), fill=(0,255,255))
             continue
             # pygame.draw.rect(screen, "green", e)
 
     print(head.left, head.top)
-    draw.rectangle((head.left, head.top, head.right, head.bottom), fill=(255, 0, 0))
+    draw.rectangle((head.left, head.top, head.left, head.top), fill=(255, 0, 0))
     matrix.SetImage(image, 0, 0)
     # pygame.draw.rect(screen, "red", head)
     # pygame.draw.rect(screen, "white", apple)
