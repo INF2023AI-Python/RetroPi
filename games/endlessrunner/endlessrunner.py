@@ -33,13 +33,30 @@ running = True
 
 obstacles = []
 
+try:
+    pygame.joystick.init()
+    joystick = pygame.joystick.Joystick(0)
+    joystick.init()
+    joystick.get_numaxes()
+except Exception:
+    joystick_found = False
+    print("Kein Joystick gefunden")
+
 def draw_floor():
     draw.rectangle((0,BOTTOM_FLOOR,32,BOTTOM_FLOOR),fill=(255,255,255))
     draw.rectangle((0,TOP_FLOOR,32,TOP_FLOOR),fill=(255,255,255))
 
-def spawn_obstacle():
+def spawn_random_obstacle():
     obstacle_x = (WIDTH-1)*SCALE
     obstacle_y = random.randint(TOP_FLOOR+1, BOTTOM_FLOOR-1)*SCALE
+    obstacles.append((obstacle_x, obstacle_y))
+
+def spawn_fixed_obstacle():
+    obstacle_x = (WIDTH-1)*SCALE
+    obstacle_y = BOTTOM_FLOOR-1*SCALE
+    obstacles.append((obstacle_x, obstacle_y))
+    obstacle_x = (WIDTH-1)*SCALE
+    obstacle_y = TOP_FLOOR+1*SCALE
     obstacles.append((obstacle_x, obstacle_y))
 
 def draw_obstacles():
@@ -56,12 +73,20 @@ image = Image.new("RGB", (32, 32))
 draw = ImageDraw.Draw(image)
 
 while running:
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
+                if gravity > 0:
+                    gravity = -1
+                    y_change = 1
+                else:
+                    gravity = 1
+                    y_change = -1
+        if event.type == pygame.JOYBUTTONDOWN:
+            print("Joystick Button pressed")
+            if event.button == 8:
                 if gravity > 0:
                     gravity = -1
                     y_change = 1
@@ -86,8 +111,11 @@ while running:
     draw_obstacles()
     matrix.SetImage(image, 0, 0)
 
-    if random.randint(0, 100) < 15:
-        spawn_obstacle()
+    if random.randint(0, 100) < 10:
+        if random.randint(0, 100) < 75:
+            spawn_random_obstacle()
+        else:
+             spawn_fixed_obstacle()
 
     obstacles = [(x-SCALE, y) for x, y in obstacles if x > 0]
 
@@ -100,6 +128,5 @@ while running:
 
     if random.randint(0, 100) < 1:
         speedaddition += 1
-    pygame.time.delay(1000//20+speedaddition)
-
+    pygame.time.delay(1000//10+speedaddition)
 pygame.quit()
