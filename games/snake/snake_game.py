@@ -50,8 +50,13 @@ def spawn_snake():
 
 def spawn_apple():
     # while not on element from tail
+    snake_points = [(e.left,e.top) for e in tail]
     x = random.randint(0, 31)
     y = random.randint(0, 31)
+    while (x,y) in snake_points:
+        x = random.randint(0, 31)
+        y = random.randint(0, 31)
+
     return pygame.Rect(x * SCALE, y * SCALE, SCALE, SCALE)
 
 
@@ -60,13 +65,13 @@ def move_snake_joy(x_axis, y_axis, threshold=0.1):
     # Schwellenwert für Stick-Drift oder Neutralzone
     x_axis = 0 if abs(x_axis) < threshold else x_axis
     y_axis = 0 if abs(y_axis) < threshold else y_axis
-    if x_axis < 0:
+    if x_axis < 0 and snake_dir != (-1, 0):
         snake_dir = (1, 0)
-    elif x_axis > 0:
+    elif x_axis > 0 and snake_dir != (1, 0):
         snake_dir = (-1, 0)
-    elif y_axis < 0:
+    elif y_axis < 0 and snake_dir != (0, -1):
         snake_dir = (0, 1)
-    elif y_axis > 0:
+    elif y_axis > 0 and snake_dir != (0, 1):
         snake_dir = (0, -1)
 
     for i in range(0, len(tail) - 1):
@@ -145,7 +150,7 @@ options = RGBMatrixOptions()
 options.rows = 32
 options.chain_length = 1
 options.parallel = 1
-options.hardware_mapping = 'adafruit-hat'  # If you have an Adafruit HAT: 'adafruit-hat'
+options.hardware_mapping = 'adafruit-hat'  # If you hjve an Adafruit HAT: 'adafruit-hat'
 
 matrix = RGBMatrix(options=options)
 while running:
@@ -168,17 +173,13 @@ while running:
     head = tail[0]
     for i, e in enumerate(tail):
         if i == 0:
-            continue
+            draw.rectangle((head.left, head.top, head.left, head.top), fill=(255, 0, 0))
         else:
             draw.rectangle((e.left, e.top, e.left, e.top), fill=(0, 255, 255))
-            continue
 
     print(head.left, head.top)
-    draw.rectangle((head.left, head.top, head.left, head.top), fill=(255, 0, 0))
-    draw.rectangle((apple.left, apple.top,apple.left, apple.top), fill=(255, 255, 0))
-
+    draw.rectangle((apple.left, apple.top, apple.left, apple.top), fill=(255, 255, 0))
 
     matrix.SetImage(image, 0, 0)
     dt = clock.tick(10) / 1000
-
 pygame.quit()
