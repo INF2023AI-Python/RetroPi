@@ -24,7 +24,6 @@ except Exception:
 
 screen_width = 32 * SCALE
 screen_height = 32 * SCALE
-# screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 
 SPEED = 1
@@ -127,8 +126,8 @@ def check_events():
     if tail[0].left == apple.left and tail[0].top == apple.top:
         apple = spawn_apple()
         score = score + 1
-        tail.append(tail[len(tail) - 1].move(-SPEED * snake_dir[0], -SPEED * snake_dir[1]))
-        clist.append(tail[len(tail) - 1].move(-SPEED * snake_dir[0], -SPEED * snake_dir[1]))
+        tail.append(tail[len(tail) - 1].move(SPEED * snake_dir[0], -SPEED * snake_dir[1]))
+        clist.append(tail[len(tail) - 1].move(SPEED * snake_dir[0], -SPEED * snake_dir[1]))
         print("len tail: ", len(tail))
         print(score)
 
@@ -160,14 +159,14 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    # fill the screen with a color to wipe away anything from last frame
-    # screen.fill("black")
+    # clear screen
+    draw.rectangle((0, 0, 32, 32), fill=(0, 0, 0, 0))
     if joystick_found:
         x_axis = joystick.get_axis(0)
         y_axis = joystick.get_axis(1)
         move_snake_joy(x_axis, y_axis)
 
-    draw.rectangle((0, 0, 32, 32), fill=(0, 0, 0, 0))
+
     move_snake()
     check_events()
     head = tail[0]
@@ -181,5 +180,5 @@ while running:
     draw.rectangle((apple.left, apple.top, apple.left, apple.top), fill=(255, 255, 0))
 
     matrix.SetImage(image, 0, 0)
-    dt = clock.tick(10) / 1000
+    dt = clock.tick(8) / 1000
 pygame.quit()
