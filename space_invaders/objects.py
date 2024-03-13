@@ -168,7 +168,7 @@ class MobList:
             print("Amount of Mobs in Row doesn't match the amount of columns.")
             return
 
-        for columns, row_elements zip(self.list, row_of_mobs):
+        for columns, row_elements in zip(self.list, row_of_mobs):
             columns.append(row_elemnts)
         
     def update(self):
@@ -180,25 +180,27 @@ class MobList:
         # for each mob: if a mob is behind the mob, it is deleted and the mob behind is pushed
         # ahead,allowing it to shoot.
         for i in range(len_list):
-            if not self.list[i][0].is_alive():
-                if len(self.list[i]) > 0:
-                    del self.list[i][0]
-                
-                # to save, if all mobs of a columns are dead
-                else:
-                    self.dead_columns[i] = True
+            if self.list[i] != []:
+                if not self.list[i][0].is_alive():
+                    if len(self.list[i]) > 0:
+                        del self.list[i][0]
+    
+                    # to save, if all mobs of a columns are dead
+                    else:
+                        self.dead_columns[i] = True
 
     def get_first_row(self):
         result = []
         for columns in self.list:
-            result.append(columns[0])
-        return result
+            if columns != []:
+                result.append(columns[0])
+            return result
     
     def get_all(self):
         singular_list = [item for sublist in self.list for item in sublist]
         return singular_list
     
-    def all_dead():
+    def all_dead(self):
         a = True
         for col_status in self.dead_columns:
             a = a and col_status

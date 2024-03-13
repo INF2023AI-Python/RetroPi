@@ -63,7 +63,7 @@ def temp():
     """
     pass
 
-def next_wave(moblist: MobList):
+def next_wave(moblist):
     wave = moblist.wave
     mobA_list = []
     mobB_list = []
@@ -119,7 +119,7 @@ player = objects.Player(14,30,5,0,max_hp=3)
 base = objects.Base(10)
 score=0
 running=True
-mob_list = objects.MobList([])
+mob_list = objects.MobList()
 bullet_list=[]
 bullet_list.append(player.bullet)
 
@@ -137,12 +137,13 @@ dt = 0
 while running:
 
     # TODO
-    # # Player Moves
-    # keys = pygame.key.get_pressed()
-    # if keys[pygame.K_a]:
-    #     print("a")
-    #     player.move(dt,1,-1)
-    #     print(player.x)
+    # Player Moves
+    keys = pygame.key.get_pressed()
+    print(keys[pygame.K_a])
+    if keys[pygame.K_a]:
+        print("a")
+        player.move(dt,1,-1)
+        print(player.x)
 
     # if keys[pygame.K_d]:
     #     print("d")
@@ -160,8 +161,8 @@ while running:
 
     # Bullets are shot
     # Player Bullet is shot
-    if keys[pygame.K_w]:
-        player.shoot()
+    # if keys[pygame.K_w]:
+    #     player.shoot()
 
     bullet_list = []
     if player.bullet.is_alive():
@@ -203,7 +204,7 @@ while running:
                     score = score + mob.value
     
     # Mob Rock Collision
-    for mob in mob_list.get_firt_row:
+    for mob in mob_list.get_first_row():
         if mob.is_alive():
             for rock in rock_list:
                 if rock.is_alive():
@@ -228,7 +229,7 @@ while running:
 
 
     dt = clock.tick(60) / 1000
-    print("dt: ", dt)
+    # print("dt: ", dt)
 
 
 # b = objects.Bullet(15,5,0,0,5,2,1)
