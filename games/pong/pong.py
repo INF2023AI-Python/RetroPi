@@ -109,7 +109,6 @@ while running:
         # screen.blit(end_screen_img,playing_field)
         # ball.speed.x *= -1
         # ball.rect.left = playing_field.left
-        print(ball.rect, playing_field)
         print("your score score", score)
         break
     # collide player
