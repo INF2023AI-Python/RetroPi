@@ -22,20 +22,18 @@ clock = pygame.time.Clock() #is just a clock for how often the while loop is rep
 
 running = True  
 
+player_circle = set([])
+player_x = set([])
+
 
 while running:
+
+    #printing the game board
     screen.fill((0, 0, 0))   # Clear the screen and set the screen background
-    pygame.draw.rect(screen, color, [1*scale, 1*scale, 10*scale, 10*scale], 1*scale)
-    pygame.draw.rect(screen, color, [11*scale, 1*scale, 10*scale, 10*scale], 1*scale)
-    pygame.draw.rect(screen, color, [21*scale, 1*scale, 10*scale, 10*scale], 1*scale)
+    
 
-    pygame.draw.rect(screen, color, [1*scale, 11*scale, 10*scale, 10*scale], 1*scale)
-    pygame.draw.rect(screen, color, [11*scale, 11*scale, 10*scale, 10*scale], 1*scale)
-    pygame.draw.rect(screen, color, [21*scale, 11*scale, 10*scale, 10*scale], 1*scale)
+    
 
-    pygame.draw.rect(screen, color, [1*scale, 21*scale, 10*scale, 10*scale], 1*scale)
-    pygame.draw.rect(screen, color, [11*scale, 21*scale, 10*scale, 10*scale], 1*scale)
-    pygame.draw.rect(screen, color, [21*scale, 21*scale, 10*scale, 10*scale], 1*scale)
 
     keys = pygame.key.get_pressed()
     
@@ -48,14 +46,49 @@ while running:
     if keys[pygame.K_DOWN] and y < 21*scale:
         y += vel
 
+   
 
-    if keys[pygame.K_a]:
-        pygame.draw.circle(screen,(255, 255, 255),[x + 5*scale, y + 5*scale], 4*scale, 1*scale)
-    if keys[pygame.K_c]:
-        pygame.draw.line(screen, (255, 255, 255), [x + 1*scale, y + 1*scale], [x + 9*scale, y + 9*scale], 1*scale)
-        pygame.draw.line(screen, (255, 255, 255), [x + 1*scale , y + 9*scale], [x + 9*scale, y + 1*scale], 1*scale)
+
+    if keys[pygame.K_a] and ((x,y) not in player_x) and len(player_circle) <= len(player_x):
+        player_circle.add((x,y))
+        
+        
+    if keys[pygame.K_c] and ((x,y) not in player_circle) and (len(player_circle) > len(player_x)):
+        player_x.add((x,y))
+       
+        
+        
         
     
+
+    for i in player_circle:
+        pygame.draw.circle(screen,(255, 255, 255),[i[0] + 5*scale, i[1] + 5*scale], 4*scale, 1*scale)
+    
+    for i in player_x:
+        pygame.draw.line(screen, (255, 255, 255), [i[0] + 1*scale, i[1] + 1*scale], [i[0] + 9*scale, i[1] + 9*scale], 1*scale)
+        pygame.draw.line(screen, (255, 255, 255), [i[0] + 1*scale , i[1] + 9*scale], [i[0] + 9*scale, i[1] + 1*scale], 1*scale)
+
+
+    
+
+
+
+
+
+
+
+
+    pygame.draw.rect(screen, color, [1*scale, 1*scale, 10*scale, 10*scale], 1*scale)
+    pygame.draw.rect(screen, color, [11*scale, 1*scale, 10*scale, 10*scale], 1*scale)
+    pygame.draw.rect(screen, color, [21*scale, 1*scale, 10*scale, 10*scale], 1*scale)
+
+    pygame.draw.rect(screen, color, [1*scale, 11*scale, 10*scale, 10*scale], 1*scale)
+    pygame.draw.rect(screen, color, [11*scale, 11*scale, 10*scale, 10*scale], 1*scale)
+    pygame.draw.rect(screen, color, [21*scale, 11*scale, 10*scale, 10*scale], 1*scale)
+
+    pygame.draw.rect(screen, color, [1*scale, 21*scale, 10*scale, 10*scale], 1*scale)
+    pygame.draw.rect(screen, color, [11*scale, 21*scale, 10*scale, 10*scale], 1*scale)
+    pygame.draw.rect(screen, color, [21*scale, 21*scale, 10*scale, 10*scale], 1*scale)
 
     pygame.draw.rect(screen, (0, 0, 255), [x, y, width, height], 1*scale)
 
