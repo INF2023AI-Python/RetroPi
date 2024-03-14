@@ -1,2 +1,2 @@
-for i in range( 1, 22,10):
-    print(i)
+if 3+3==6:
+    print("True+")

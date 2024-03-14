@@ -3,7 +3,7 @@ import sys
 
 pygame.init()
 
-# defining the game field
+# defining the game field and general settings
 scale = 25
 screen_height = 32 * scale
 screen_width = 32 * scale
@@ -24,7 +24,6 @@ running = True
 #Tuple to write positions x and y 
 player_circle = set([])
 player_x = set([])
-
 
 while running:
     screen.fill((0, 0, 0))   # Clear the screen and set the screen background
@@ -61,6 +60,55 @@ while running:
     #moving rectangle to trac position
     pygame.draw.rect(screen, (0, 0, 255), [x, y, width, height], 1*scale)
 
+    #check for win for player_circle
+    #Horizontal       
+    if (1*scale,1*scale) in player_circle and (11*scale,1*scale) in player_circle and (21*scale,1*scale) in player_circle : #wenn winner == true muss player_circle wins stehen und play again button
+        winner = True   
+    if (1*scale,11*scale) in player_circle and (11*scale,11*scale) in player_circle and (21*scale,11*scale) in player_circle :
+        winner = True
+    if (1*scale,21*scale) in player_circle and (11*scale,21*scale) in player_circle and (21*scale,21*scale) in player_circle :
+        winner = True
+    #Vertical 
+    if (1*scale,1*scale) in player_circle and (1*scale,11*scale) in player_circle and (1*scale,21*scale) in player_circle :
+        winner = True
+    if (11*scale,1*scale) in player_circle and (11*scale,11*scale) in player_circle and (11*scale,21*scale) in player_circle :
+        winner = True
+    if (21*scale,1*scale) in player_circle and (21*scale,11*scale) in player_circle and (21*scale,21*scale) in player_circle :
+        winner = True
+    #Diogonal
+    if (1*scale,1*scale) in player_circle and (11*scale,11*scale) in player_circle and (21*scale,21*scale) in player_circle :
+        winner = True
+    if (1*scale,21*scale) in player_circle and (11*scale,11*scale) in player_circle and (21*scale,1*scale) in player_circle :
+        winner = True
+
+    #check for win for player_x
+    #Horizontal       
+    if (1*scale,1*scale) in player_x and (11*scale,1*scale) in player_x and (21*scale,1*scale) in player_x :
+        winner = False
+    if (1*scale,11*scale) in player_x and (11*scale,11*scale) in player_x and (21*scale,11*scale) in player_x :
+        winner = False
+    if (1*scale,21*scale) in player_x and (11*scale,21*scale) in player_x and (21*scale,21*scale) in player_x :
+        winner = False
+    #Vertical 
+    if (1*scale,1*scale) in player_x and (1*scale,11*scale) in player_x and (1*scale,21*scale) in player_x :
+        winner = False
+    if (11*scale,1*scale) in player_x and (11*scale,11*scale) in player_x and (11*scale,21*scale) in player_x :
+        winner = False
+    if (21*scale,1*scale) in player_x and (21*scale,11*scale) in player_x and (21*scale,21*scale) in player_x :
+        winner = False
+    #Diogonal
+    if (1*scale,1*scale) in player_x and (11*scale,11*scale) in player_x and (21*scale,21*scale) in player_x :
+        winner = False
+    if (1*scale,21*scale) in player_x and (11*scale,11*scale) in player_x and (21*scale,1*scale) in player_x :
+        winner = False
+
+    #checks for tie
+    if len(player_circle) == 5 and len(player_x) == 4:
+        print("Unentschieden")
+    if len(player_circle) == 4 and len(player_x) == 5:
+        print("Unentschieden")
+
+
 
     pygame.display.flip()  # refreshes the screen
     for event in pygame.event.get():
@@ -69,11 +117,3 @@ while running:
 
     clock.tick(15) 
 
-
-
-#Spielllogik
-# pygame.display.quit()
-#draw hier und dort etwas 
-#definier x und o 
-#input ein feld higliten und 
-#überprüfe auf win 
