@@ -14,12 +14,13 @@ color = (255, 0, 0)
 # defining the moving rectangle
 x = 110  # start position
 y = 10
-width = 20  # size
-height = 20
+width = 100  # size
+height = 100
 vel = 100  # velocity
 
+clock = pygame.time.Clock() #is just a clock for how often the while loop is repeated
 
-running = True  # Hält spiel offen
+running = True  
 while running:
     screen.fill((0, 0, 0))
     pygame.draw.rect(screen, color, [10, 10, 100, 100], 10)
@@ -35,35 +36,25 @@ while running:
     pygame.draw.rect(screen, color, [210, 210, 100, 100], 10)
 
     keys = pygame.key.get_pressed()
-
-    if keys[pygame.K_LEFT] and x == 110:
+    
+    if keys[pygame.K_LEFT] and x > 10:
         x -= vel
-    elif keys[pygame.K_LEFT] and x == 210:
-        x-= vel
-    if keys[pygame.K_RIGHT] and x == 10:                  
+    if keys[pygame.K_RIGHT] and x < 210:
         x += vel
-    elif keys[pygame.K_RIGHT] and x == 110:                        
-        x += vel
-
-    if keys[pygame.K_UP] and y == 110:
+    if keys[pygame.K_UP] and y > 10:
         y -= vel
-    elif keys[pygame.K_UP] and y == 210:
-        y -= vel
-
-    if keys[pygame.K_DOWN] and y==10:
+    if keys[pygame.K_DOWN] and y < 210:
         y += vel
-    elif keys[pygame.K_DOWN] and y==110:
-        y += vel
-
 
     pygame.draw.rect(screen, (0, 0, 255), (x, y, width, height))
 
-    pygame.display.flip()  # Aktualisiere den Bildschirm
+    pygame.display.flip()  # refreshes the screen
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:  # wenn spieler Fenster schließt -> Schleife wird beendet
-            running = False  # Beenden von Pygame
+        if event.type == pygame.QUIT:  # If player is closing the window -> the loop will be closed
+            running = False  # ends pygamges
 
-    
+    clock.tick(6) 
+
 
 
 
