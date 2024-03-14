@@ -114,9 +114,13 @@ while running:
         if x == 0:
             print("PLAY")
             running = False
-        if x == 13:
+        if x == 10:
+            print("SAVE")
+            running = False
+        if x == 20:
             print("EXIT")
             running = False
+
     draw.rectangle((0,0,32,32),fill=(0,0,0,0))
     draw_winmenu()
     draw_box(x)
