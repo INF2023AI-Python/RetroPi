@@ -30,6 +30,7 @@ matrix = RGBMatrix(options=options)
 
 image = Image.new("RGB", (32, 32))
 draw = ImageDraw.Draw(image)
+clock = pygame.time.Clock()
 
 def draw_grid():
     #draws big rectangle over the whole grid and cuts out the middle painted black
@@ -166,16 +167,84 @@ def draw_shutdown_button(color):
     draw.point((28,24),fill=(color))
     draw.line((26,23,26,25),fill=(color))
 
+position_x = 5
+position_y = 5
+pygame.init()
 running = True
 while running:
+
+    #sets everything except the python logo on grey - everything else is grey
     draw_grid()
-    draw_space_invader(RED, GREY ,GREEN, BLUE, WHITE)
-    draw_snake(YELLOW, BLUE, RED)
-    draw_tiktaktoe(RED, BLUE, WHITE)
-    draw_pong(WHITE, RED)
+    draw_pong(LIGHT_GREY, GREY)
+    draw_space_invader(GREY, DARK_GREY ,LIGHT_GREY, GREY, LIGHT_GREY)
+    draw_snake(LIGHT_GREY, GREY, LIGHT_GREY)
+    draw_tiktaktoe(LIGHT_GREY, DARK_GREY, GREY)
     draw_python_logo()
-    draw_endless_runner(WHITE, BLUE, RED)
-    draw_button_test(BLUE, DARK_BLUE)
-    draw_trophy(YELLOW, WHITE, LIGHT_YELLOW)
-    draw_shutdown_button(RED)
+    draw_endless_runner(LIGHT_GREY, GREY, DARK_GREY)
+    draw_button_test(GREY, DARK_GREY)
+    draw_trophy(LIGHT_GREY, WHITE, YELLOW)
+    draw_shutdown_button(DARK_GREY)
+
+    #moves the position
+    for events in pygame.event.get():
+        if events.type == pygame.KEYDOWN:
+            if events.key == pygame.K_LEFT:
+                if position_x > 5:
+                    if not position_y == 15:
+                        position_x -= 10
+            if events.key == pygame.K_RIGHT:
+                if position_x < 20:
+                    if not position_y == 15:
+                        position_x += 10
+            if events.key == pygame.K_UP:
+                if position_y != 5:
+                    if not position_x == 15:
+                        position_y -= 10
+            if events.key == pygame.K_DOWN:
+                if not position_y == 25:
+                    if not position_x == 15:
+                        position_y += 10
+            if events.key == pygame.K_RETURN:
+                if position_x == 5:
+                    if position_y == 5:
+                        print("PONG")
+                    if position_y == 15:
+                        print("SPACE INVADER")
+                    if position_y == 25:
+                        print("BUTTON TEST")
+                if position_x == 15:
+                    if position_y == 5:
+                        print("SNAKE")
+                    if position_y == 25:
+                        print("TROPHY")
+                if position_x == 25:
+                    if position_y == 5:
+                        print("TIK TAK TOE")
+                    if position_y == 15:
+                        print("ENDLESS RUNNER")
+                    if position_y == 25:
+                        print("SHUTDOWN")
+
+    #colors the position you are on
+    if position_x == 5:
+        if position_y == 5:
+            draw_pong(WHITE, RED)
+        if position_y == 15:
+            draw_space_invader(RED, GREY ,GREEN, BLUE, WHITE)
+        if position_y == 25:
+            draw_button_test(BLUE, DARK_BLUE)
+    if position_x == 15:
+        if position_y == 5:
+            draw_snake(YELLOW, BLUE, RED)
+        if position_y == 25:
+            draw_trophy(YELLOW, WHITE, LIGHT_YELLOW)
+    if position_x == 25:
+        if position_y == 5:
+            draw_tiktaktoe(RED, BLUE, WHITE)
+        if position_y == 15:
+            draw_endless_runner(WHITE, BLUE, RED)
+        if position_y == 25:
+            draw_shutdown_button(RED)
+
+    clock.tick(60)
     matrix.SetImage(image, 0, 0)
