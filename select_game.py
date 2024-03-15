@@ -187,6 +187,8 @@ while running:
 
     #moves the position
     for events in pygame.event.get():
+        if events.type == pygame.QUIT:
+            running = False
         if events.type == pygame.KEYDOWN:
             if events.key == pygame.K_LEFT:
                 if position_x > 5:
