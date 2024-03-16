@@ -14,6 +14,18 @@ options.hardware_mapping = 'adafruit-hat'  # If you have an Adafruit HAT: 'adafr
 
 matrix = RGBMatrix(options=options)
 
+joystick_found = True
+pygame.init()
+try:
+    pygame.joystick.init()
+    joystick = pygame.joystick.Joystick(0)
+    joystick.init()
+    joystick.get_numaxes()
+except Exception:
+    joystick_found = False
+    print("Kein Joystick gefunden")
+
+
 BLACK = (0,0,0)
 WHITE = (255,255,255)
 GREEN = (0,255,0)
@@ -22,6 +34,14 @@ LIGHT_BLUE = (0,255,255)
 PLAY_COLOR = WHITE
 EXIT_COLOR = WHITE
 BORDER_COLOR = WHITE
+
+RETURN = 0
+
+x = 0
+play_color = (GREEN)
+exit_color = (WHITE)
+save_color = (WHITE)
+running = True
 
 image = Image.new("RGB", (32, 32))
 draw = ImageDraw.Draw(image)
@@ -87,21 +107,30 @@ def draw_save(color):
     draw.rectangle((13,17,19,17),fill=(color))
     draw.rectangle((14,18,18,18),fill=(color))
 
-clock = pygame.time.Clock() #is just a clock for how often the while loop is repeated
-pygame.init()
-running = True
-x = 0
-play_color = (GREEN)
-exit_color = (WHITE)
-save_color = (WHITE)
-while running:
-
+def move_box():
+    global x
+    global running
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT] and x > 0:  #movment of the select box
         x -= 10
     if keys[pygame.K_RIGHT] and x <= 10:
         x += 10
 
+    if keys[pygame.K_RETURN]: #if enter is pressed
+        if x == 0:
+            print("PLAY")
+            running = False
+        if x == 10:
+            print("SAVE")
+            running = False
+        if x == 20:
+            print("EXIT")
+            running = False
+
+def set_color():
+    global play_color
+    global exit_color
+    global save_color
     #sets the colors for the content of the boxes
     if x == 0:
         play_color = (GREEN)
@@ -116,7 +145,17 @@ while running:
         save_color = (WHITE)
         exit_color = (RED)
 
-    if keys[pygame.K_RETURN]: #if enter is pressed
+def move_box_joy(x_axis):
+    global x
+    global running
+    threshold = 0.1
+    x_axis = 0 if abs(x_axis) < threshold else x_axis
+    if x_axis > 0 and x > 0:
+        x -= 10
+    elif x_axis < 0 and x < 20:
+        x += 10
+
+    if joystick.get_button(RETURN):
         if x == 0:
             print("PLAY")
             running = False
@@ -127,6 +166,15 @@ while running:
             print("EXIT")
             running = False
 
+clock = pygame.time.Clock() #is just a clock for how often the while loop is repeated
+
+while running:
+    if joystick_found:
+        x_axis = joystick.get_axis(0)
+        move_box_joy(x_axis)
+    else:
+        move_box()
+    set_color()
     draw.rectangle((0,0,32,32),fill=(0,0,0,0))
     draw_losemenu()
     draw_box(x)
