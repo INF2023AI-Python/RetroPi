@@ -14,12 +14,31 @@ options.hardware_mapping = 'adafruit-hat'  # If you have an Adafruit HAT: 'adafr
 
 matrix = RGBMatrix(options=options)
 
+joystick_found = True
+pygame.init()
+try:
+    pygame.joystick.init()
+    joystick = pygame.joystick.Joystick(0)
+    joystick.init()
+    joystick.get_numaxes()
+except Exception:
+    joystick_found = False
+    print("Kein Joystick gefunden")
+
 WHITE = (255,255,255)
 GREEN = (0,255,0)
 RED = (255,0,0)
 PLAY_COLOR = WHITE
 EXIT_COLOR = WHITE
 BORDER_COLOR = WHITE
+
+RETURN = 0
+
+pygame.init()
+running = True
+x = 0
+play_color = (GREEN)
+exit_color = (WHITE)
 
 image = Image.new("RGB", (32, 32))
 draw = ImageDraw.Draw(image)
@@ -79,14 +98,11 @@ def draw_exit(color):
     draw.point((23,15),fill=(color))
     draw.point((24,14),fill=(color))
 
-clock = pygame.time.Clock() #is just a clock for how often the while loop is repeated
-pygame.init()
-running = True
-x = 0
-play_color = (GREEN)
-exit_color = (WHITE)
-while running:
-
+def move_box():
+    global play_color
+    global exit_color
+    global running
+    global x
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT] and x < 14:  #movment of the select box
         if x > 0:
@@ -106,6 +122,38 @@ while running:
         if x == 13:
             print("EXIT")
             running = False
+
+def move_box_joy(x_axis):
+    threshold = 0.1
+    global play_color
+    global exit_color
+    global running
+    global x
+    print("joy")
+    x_axis = 0 if abs(x_axis) < threshold else x_axis
+    if x_axis > 0 and x == 13:
+        x = 0
+        print("x = 0")
+    elif x_axis < 0 and x == 0:
+        x = 13
+        print("x = 13")
+
+    if joystick.get_button(RETURN):
+        if x == 0:
+            print("PLAY")
+            running = False
+        if x == 13:
+            print("EXIT")
+            running = False
+
+clock = pygame.time.Clock() #is just a clock for how often the while loop is repeated
+while running:
+
+    if joystick_found:
+        x_axis = joystick.get_axis(0)
+        move_box_joy(x_axis)
+    else:
+        move_box()
     draw.rectangle((0,0,32,32),fill=(0,0,0,0))
     draw_menu()
     draw_box(x)
