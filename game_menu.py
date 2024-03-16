@@ -34,7 +34,6 @@ BORDER_COLOR = WHITE
 
 RETURN = 0
 
-pygame.init()
 running = True
 x = 0
 play_color = (GREEN)
