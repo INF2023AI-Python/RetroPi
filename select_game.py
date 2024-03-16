@@ -1,4 +1,5 @@
 import pygame
+import time
 from PIL import Image
 from PIL import ImageDraw
 try:
@@ -20,6 +21,15 @@ GREY = (128,128,128)
 DARK_GREY = (64,64,64)
 LIGHT_GREY = (192,192,192)
 
+RETURN = 0
+
+position_x = 5
+position_y = 5
+running = True
+
+input_lock_time = .5
+last_input_time = 0
+
 options = RGBMatrixOptions()
 options.rows = 32
 options.chain_length = 1
@@ -27,6 +37,17 @@ options.parallel = 1
 options.hardware_mapping = 'adafruit-hat'  # If you have an Adafruit HAT: 'adafruit-hat'
 
 matrix = RGBMatrix(options=options)
+
+joystick_found = True
+pygame.init()
+try:
+    pygame.joystick.init()
+    joystick = pygame.joystick.Joystick(0)
+    joystick.init()
+    joystick.get_numaxes()
+except Exception:
+    joystick_found = False
+    print("Kein Joystick gefunden")
 
 image = Image.new("RGB", (32, 32))
 draw = ImageDraw.Draw(image)
@@ -167,24 +188,10 @@ def draw_shutdown_button(color):
     draw.point((28,24),fill=(color))
     draw.line((26,23,26,25),fill=(color))
 
-position_x = 5
-position_y = 5
-pygame.init()
-running = True
-while running:
-
-    #sets everything except the python logo on grey - everything else is grey
-    draw_grid()
-    draw_pong(LIGHT_GREY, GREY)
-    draw_space_invader(GREY, DARK_GREY ,LIGHT_GREY, GREY, LIGHT_GREY)
-    draw_snake(LIGHT_GREY, GREY, LIGHT_GREY)
-    draw_tiktaktoe(LIGHT_GREY, DARK_GREY, GREY)
-    draw_python_logo()
-    draw_endless_runner(LIGHT_GREY, GREY, DARK_GREY)
-    draw_button_test(GREY, DARK_GREY)
-    draw_trophy(LIGHT_GREY, WHITE, YELLOW)
-    draw_shutdown_button(DARK_GREY)
-
+def move_key():
+    global position_x
+    global position_y
+    global running
     #moves the position
     for events in pygame.event.get():
         if events.type == pygame.QUIT:
@@ -227,6 +234,64 @@ while running:
                     if position_y == 25:
                         print("SHUTDOWN")
 
+def move_joy(x_axis, y_axis):
+    global position_x
+    global position_y
+    global running
+    global last_input_time
+    global input_lock_time
+
+    current_time = time.time()
+    threshold = 0.1
+    if current_time - last_input_time > input_lock_time:
+        x_axis = 0 if abs(x_axis) < threshold else x_axis
+        y_axis = 0 if abs(y_axis) < threshold else y_axis
+        if x_axis < 0:
+            if position_x < 20:
+                if not position_y == 15:
+                    position_x += 10
+                    last_input_time = current_time
+        elif x_axis > 0:
+            if position_x > 5:
+                if not position_y == 15:
+                    position_x -= 10
+                    last_input_time = current_time
+        elif y_axis < 0:
+            if not position_y == 25:
+                if not position_x == 15:
+                    position_y += 10
+                    last_input_time = current_time
+        elif y_axis > 0:
+            if position_y != 5:
+                if not position_x == 15:
+                    position_y -= 10
+                    last_input_time = current_time
+
+        if joystick.get_button(RETURN):
+            if position_x == 5:
+                if position_y == 5:
+                    print("PONG")
+                if position_y == 15:
+                    print("SPACE INVADER")
+                if position_y == 25:
+                    print("BUTTON TEST")
+            if position_x == 15:
+                if position_y == 5:
+                    print("SNAKE")
+                if position_y == 25:
+                    print("TROPHY")
+            if position_x == 25:
+                if position_y == 5:
+                    print("TIK TAK TOE")
+                if position_y == 15:
+                    print("ENDLESS RUNNER")
+                if position_y == 25:
+                    print("SHUTDOWN")
+
+def draw_colored():
+    global position_x
+    global position_y
+
     #colors the position you are on
     if position_x == 5:
         if position_y == 5:
@@ -247,6 +312,29 @@ while running:
             draw_endless_runner(WHITE, BLUE, RED)
         if position_y == 25:
             draw_shutdown_button(RED)
+
+
+while running:
+    #sets everything except the python logo on grey - everything else is grey
+    draw_grid()
+    draw_pong(LIGHT_GREY, GREY)
+    draw_space_invader(GREY, DARK_GREY ,LIGHT_GREY, GREY, LIGHT_GREY)
+    draw_snake(LIGHT_GREY, GREY, LIGHT_GREY)
+    draw_tiktaktoe(LIGHT_GREY, DARK_GREY, GREY)
+    draw_python_logo()
+    draw_endless_runner(LIGHT_GREY, GREY, DARK_GREY)
+    draw_button_test(GREY, DARK_GREY)
+    draw_trophy(LIGHT_GREY, WHITE, YELLOW)
+    draw_shutdown_button(DARK_GREY)
+
+    if joystick_found:
+        x_axis = joystick.get_axis(0)
+        y_axis = joystick.get_axis(1)
+        move_joy(x_axis,y_axis)
+    else:
+        move_key()
+
+    draw_colored()
 
     clock.tick(60)
     matrix.SetImage(image, 0, 0)
