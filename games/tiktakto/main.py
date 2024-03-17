@@ -10,6 +10,7 @@ screen_width = 32 * scale
 screen = pygame.display.set_mode([screen_width, screen_height])
 pygame.display.set_caption('Tic Tac Tobi')
 color = (255, 0, 0)
+font = pygame.font.SysFont(None, 40) 
 
 # defining the moving rectangle
 x = 11*scale  # start position
@@ -25,6 +26,12 @@ game_over = False
 #Tuple to write positions x and y 
 player_circle = set([])
 player_x = set([])
+
+#shows who won
+def printing_endtest():
+        end_img = font.render(end_text, True, (0, 0, 255))
+        pygame.draw.rect(screen, (0, 255, 0), (screen_width // 2 - 100, screen_height // 2 - 60, 200, 50))
+        screen.blit(end_img, (screen_width // 2 - 100, screen_height // 2 - 50))
 
 while running:
     screen.fill((0, 0, 0))   # Clear the screen and set the screen background
@@ -64,71 +71,84 @@ while running:
     #check for win for player_circle
     #Horizontal       
     if (1*scale,1*scale) in player_circle and (11*scale,1*scale) in player_circle and (21*scale,1*scale) in player_circle : #wenn winner == true muss player_circle wins stehen und play again button
-        winner = True   
+        winner = 0  
         game_over = True
     if (1*scale,11*scale) in player_circle and (11*scale,11*scale) in player_circle and (21*scale,11*scale) in player_circle :
-        winner = True
+        winner = 0
         game_over = True
     if (1*scale,21*scale) in player_circle and (11*scale,21*scale) in player_circle and (21*scale,21*scale) in player_circle :
-        winner = True
+        winner = 0
         game_over = True
     #Vertical 
     if (1*scale,1*scale) in player_circle and (1*scale,11*scale) in player_circle and (1*scale,21*scale) in player_circle :
-        winner = True
+        winner = 0
         game_over = True
     if (11*scale,1*scale) in player_circle and (11*scale,11*scale) in player_circle and (11*scale,21*scale) in player_circle :
-        winner = True
+        winner = 0
         game_over = True
     if (21*scale,1*scale) in player_circle and (21*scale,11*scale) in player_circle and (21*scale,21*scale) in player_circle :
-        winner = True
+        winner = 0
         game_over = True
     #Diogonal
     if (1*scale,1*scale) in player_circle and (11*scale,11*scale) in player_circle and (21*scale,21*scale) in player_circle :
-        winner = True
+        winner = 0
         game_over = True
     if (1*scale,21*scale) in player_circle and (11*scale,11*scale) in player_circle and (21*scale,1*scale) in player_circle :
-        winner = True
+        winner = 0
         game_over = True
 
     #check for win for player_x
     #Horizontal       
     if (1*scale,1*scale) in player_x and (11*scale,1*scale) in player_x and (21*scale,1*scale) in player_x :
-        winner = False
+        winner = 1
         game_over = True
     if (1*scale,11*scale) in player_x and (11*scale,11*scale) in player_x and (21*scale,11*scale) in player_x :
-        winner = False
+        winner = 1
         game_over = True
     if (1*scale,21*scale) in player_x and (11*scale,21*scale) in player_x and (21*scale,21*scale) in player_x :
-        winner = False
+        winner = 1
         game_over = True
     #Vertical 
     if (1*scale,1*scale) in player_x and (1*scale,11*scale) in player_x and (1*scale,21*scale) in player_x :
-        winner = False
+        winner = 1
         game_over = True
     if (11*scale,1*scale) in player_x and (11*scale,11*scale) in player_x and (11*scale,21*scale) in player_x :
-        winner = False
+        winner = 1
         game_over = True
     if (21*scale,1*scale) in player_x and (21*scale,11*scale) in player_x and (21*scale,21*scale) in player_x :
-        winner = False
+        winner = 1
         game_over = True
     #Diogonal
     if (1*scale,1*scale) in player_x and (11*scale,11*scale) in player_x and (21*scale,21*scale) in player_x :
-        winner = False
+        winner = 1
         game_over = True
     if (1*scale,21*scale) in player_x and (11*scale,11*scale) in player_x and (21*scale,1*scale) in player_x :
-        winner = False
+        winner = 1
         game_over = True
 
     #checks for tie
     if len(player_circle) == 5 and len(player_x) == 4:
-        print("Unentschieden")
+        winner = 2
         game_over = True
     if len(player_circle) == 4 and len(player_x) == 5:
-        print("Unentschieden")
+        winner = 2
         game_over = True
 
-    def draw_winner():
-        #needs to be done 
+  
+    if game_over == True and winner == 0:
+        end_text = f"O wins"     
+        printing_endtest()
+
+    if game_over == True and winner == 1:
+        end_text = f"X wins" 
+        printing_endtest()    
+    
+    if game_over == True and winner == 2:
+        end_text = f"tie" 
+        printing_endtest()    
+
+
+
 
 
     pygame.display.flip()  # refreshes the screen
