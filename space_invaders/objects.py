@@ -213,12 +213,3 @@ class MobList:
     
     def reset_dead_columns(self):
         self.dead_columns = [False, False, False, False]
-
-# a = MobList()
-
-# a.add_row(["a1","a2","a3","a4"])
-# a.add_row(["b1","b2","b3","b4"])
-# a.add_row(["c1","c2","c3","c4"])
-
-# print(a.get_first_row())
-# print(a.get_all())

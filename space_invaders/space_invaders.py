@@ -193,6 +193,15 @@ while running:
                 if not mob.is_alive():
                     score = score + mob.value
     
+    if player.bullet.is_alive():
+        if len(bullet_list) > 1:
+            main_bullet = bullet_list[0]
+            for bullet in bullet_list[1:]:
+                if overlap(main_bullet.x, main_bullet.y, bullet.x, bullet.y):
+                    main_bullet.die()
+                    bullet.die()
+                    break
+
     # Mob Rock Collision / Mob Base Collision
     for mob in mob_list.get_first_row():
         if mob.is_alive():
