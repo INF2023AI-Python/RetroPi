@@ -22,16 +22,11 @@ vel = 10*scale  # velocity
 clock = pygame.time.Clock() #is just a clock for how often the while loop is repeated
 running = True  
 game_over = False
+player= 0
 
 #Tuple to write positions x and y 
 player_circle = set([])
 player_x = set([])
-
-#shows who won
-def printing_endtest():
-        end_img = font.render(end_text, True, (0, 0, 255))
-        pygame.draw.rect(screen, (0, 255, 0), (screen_width // 2 - 100, screen_height // 2 - 60, 200, 50))
-        screen.blit(end_img, (screen_width // 2 - 100, screen_height // 2 - 50))
 
 while running:
     screen.fill((0, 0, 0))   # Clear the screen and set the screen background
@@ -48,11 +43,13 @@ while running:
         y += vel
 
     #condition to draw a cirlce or an x
-    if keys[pygame.K_a] and ((x,y) not in player_x) and len(player_circle) <= len(player_x) and game_over == False:
+    if keys[pygame.K_a] and ((x,y) not in player_x) and len(player_circle) <= len(player_x) and game_over == False and player == 0:
         player_circle.add((x,y))
-    if keys[pygame.K_c] and ((x,y) not in player_circle) and (len(player_circle) > len(player_x)) and game_over == False:
+        player = 1
+    if keys[pygame.K_a] and ((x,y) not in player_circle) and (len(player_circle) > len(player_x)) and game_over == False and player == 1:
         player_x.add((x,y))
-            
+        player = 0 
+
     #draws x or circle
     for i in player_circle:
         pygame.draw.circle(screen,(255, 255, 255),[i[0] + 5*scale, i[1] + 5*scale], 4*scale, 1*scale)
@@ -135,18 +132,15 @@ while running:
         game_over = True
 
     #End_test who has won 
-    if game_over == True and winner == 0:
-        end_text = f"O wins"     
-        printing_endtest()
-    if game_over == True and winner == 1:
-        end_text = f"X wins" 
-        printing_endtest()    
+    if game_over == True and winner == 0:  
+         #ruft o wins auf 
+        pass
+    if game_over == True and winner == 1: 
+         #ruft x wins auf 
+        pass
     if game_over == True and winner == 2:
-        end_text = f"tie" 
-        printing_endtest()    
-
-    
-
+         #ruft tie auf. tie fehlt auf matrix ?  
+        pass  
 
 
     pygame.display.flip()  # refreshes the screen
