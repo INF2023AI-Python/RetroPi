@@ -1,4 +1,5 @@
 import pygame
+import time
 from PIL import Image
 from PIL import ImageDraw
 try:
@@ -42,6 +43,9 @@ play_color = (GREEN)
 exit_color = (WHITE)
 save_color = (WHITE)
 running = True
+
+input_lock_time = .3
+last_input_time = 0
 
 image = Image.new("RGB", (32, 32))
 draw = ImageDraw.Draw(image)
@@ -148,12 +152,19 @@ def set_color():
 def move_box_joy(x_axis):
     global x
     global running
+    global last_input_time
+    global input_lock_time
+
+    current_time = time.time()
     threshold = 0.1
-    x_axis = 0 if abs(x_axis) < threshold else x_axis
-    if x_axis > 0 and x > 0:
-        x -= 10
-    elif x_axis < 0 and x < 20:
-        x += 10
+    if current_time - last_input_time > input_lock_time:
+        x_axis = 0 if abs(x_axis) < threshold else x_axis
+        if x_axis > 0 and x > 0:
+            x -= 10
+            last_input_time = current_time
+        elif x_axis < 0 and x < 20:
+            x += 10
+            last_input_time = current_time
 
     if joystick.get_button(RETURN):
         if x == 0:
