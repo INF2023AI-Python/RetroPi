@@ -134,20 +134,18 @@ while running:
         winner = 2
         game_over = True
 
-  
+    #End_test who has won 
     if game_over == True and winner == 0:
         end_text = f"O wins"     
         printing_endtest()
-
     if game_over == True and winner == 1:
         end_text = f"X wins" 
         printing_endtest()    
-    
     if game_over == True and winner == 2:
         end_text = f"tie" 
         printing_endtest()    
 
-
+    
 
 
 
