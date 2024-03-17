@@ -69,7 +69,6 @@ class Mob(Entity):
                     x_place = (self.x[0] + self.x[1])/2
                     self.bullet = Bullet(x_place, self.y[1]+1, 0, 1, dmg = 1, speed = 12, direction = 1)
             
-
 class Bullet(Entity):
 
     def __init__(self, x_pos, y_pos, x_size, y_size, dmg, speed, direction):
@@ -102,7 +101,7 @@ class Player(Entity):
         self.hp = self.hp - dmg
 
         self.color[1] = max(0,int(self.color[1] * (self.hp/self.max_hp)))
-        self.color[0] = (255-color[1])
+        self.color[0] = (255-self.color[1])
         
         if self.hp <= 0:
             self.die()
@@ -125,7 +124,6 @@ class Player(Entity):
             x_place = int((self.x[0] + self.x[1])/2)
             self.bullet = Bullet(x_place, self.y[0]-2, 0, 1, dmg = 1, speed = 2, direction = -1)
             
-
 class Rock(Entity):
 
     def __init__(self, x_pos, y_pos, x_size, y_size, max_hp):
@@ -141,8 +139,6 @@ class Rock(Entity):
         # self.color = [105*int(self.hp/self.max_hp)]*3
         if self.hp <= 0:
             self.die()
-
-
 
 class Base(Entity):
     def __init__(self, max_hp):
@@ -160,7 +156,6 @@ class Base(Entity):
         if self.hp <= 0:
             self.die()
 
-
 class MobList:
     # list_of_list_of_mobs [[col1_mobs],[col2_mobs],...]
     def __init__(self):
@@ -177,7 +172,7 @@ class MobList:
             columns.append(row_elements)
         
     def update(self):
-        len_list = len(self.list)-1
+        len_list = len(self.list)#-1
         if len_list < 0:
             print("List of Mobs is to short.")
             return
@@ -185,26 +180,31 @@ class MobList:
         # for each mob: if a mob is behind the mob, it is deleted and the mob behind is pushed
         # ahead,allowing it to shoot.
         for i in range(len_list):
+            # if mob_column is not empty
             if self.list[i] != []:
+                #it first mob is dead
                 if not self.list[i][0].is_alive():
+                    # if there are other mobs in the lost, delete the mob
                     if len(self.list[i]) > 0:
                         del self.list[i][0]
     
                     # to save, if all mobs of a columns are dead
                     else:
                         self.dead_columns[i] = True
+        
 
     def get_first_row(self):
         result = []
         for columns in self.list:
             if columns != []:
                 result.append(columns[0])
-            return result
+        return result
     
     def get_all(self):
         singular_list = [item for sublist in self.list for item in sublist]
         return singular_list
     
+    # not used nor working
     def all_dead(self):
         a = True
         for col_status in self.dead_columns:
@@ -213,15 +213,12 @@ class MobList:
     
     def reset_dead_columns(self):
         self.dead_columns = [False, False, False, False]
-        
-# useless da nicht jeder move 1 pixel ist
-# class MobMove:
 
-#     def __init__(self,steps):
-#         self.step = -1
-#         self.len_steps = len(steps)
-#         self.steps = steps
-    
-#     def take_step(self):
-#         self.step = ((self.step+1) % self.len_steps)
-#         return self.steps[self.step]
+# a = MobList()
+
+# a.add_row(["a1","a2","a3","a4"])
+# a.add_row(["b1","b2","b3","b4"])
+# a.add_row(["c1","c2","c3","c4"])
+
+# print(a.get_first_row())
+# print(a.get_all())
