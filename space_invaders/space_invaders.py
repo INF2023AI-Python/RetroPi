@@ -1,5 +1,13 @@
 import pygame
 import objects
+from PIL import Image
+from PIL import ImageDraw
+try:
+    from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
+except ImportError:
+    from rgbmatrix import RGBMatrix, RGBMatrixOptions
+
+
 # Improvements für objects:
 # nur ein globales Field
 # bullet, mob, player, base, rock colors machen
@@ -9,61 +17,61 @@ def lose(score):
     print(score)
 
 
+# TODO FIX COLLISION
 # aktuelles Problem: Bullets checken nur das komplette Rectangle
-def collision(entity, bullet):
-    if entity.x[0] <= bullet.x[0] and bullet.x[0] <= entity.x[1]:
-        if bullet.y[1] >= entity.y[0]:
-            entity.take_dmg(bullet.dmg)
-            bullet.die()
+# collision funktioniert nur runter geschossen wird
+
+def overlap(x1, y1, x2, y2):
+    # Check if either rectangle is entirely to the left or right of the other
+    if max(x1) <= min(x2) or max(x2) <= min(x1):
+        return False
+
+    # Check if either rectangle is entirely above or below the other
+    if max(y1) <= min(y2) or max(y2) <= min(y1):
+        return False
+
+    # If none of the above conditions are met, the rectangles overlap
+    print("Overlapping")
+    return True
+
+# TODO FIX COLLISION
+
+def collision(entity,bullet):
+    if overlap(entity.x,entity.y,bullet.x,bullet.y):
+        entity.take_dmg(bullet.dmg)
+        bullet.die()
 
 def collision_rock_mob(rock, mob):
-    if rock.x[0] <= mob.x[0] and mob.x[0] <= rock.x[1]:
-        if mob.y[1] >= rock.y[0]:
-            mob.die()
-            rock.take_dmg(mob.max_hp)
+    if overlap(rock.x,rock.y,mob.x,mob.y):
+        rock.take_dmg(mob.max_hp*3)
+        mob.die()
 
-# TODO - Implement draw function
-# move funktion aller entities gleiche signatur machen
-def draw(entity):
-    pass
 
-# TODO delte when useles:
-def temp():
-    """
-    00000000000000000000000000000000
-    00011111001111100111110011111000
-    00011111001111100111110011111000
-    00011111001111100111110011111000
-    00000000000000000000000000000000
-    00000000000000000000000000000000
-    00011111001111100111110011111000
-    00011111001111100111110011111000
-    00011111001111100111110011111000
-    00000000000000000000000000000000
-    00000000000000000000000000000000
-    00011111001111100111110011111000
-    00011111001111100111110011111000
-    00011111001111100111110011111000
-    00000000000000000000000000000000
-    00000000000000000000000000000000
-    00000000000000000000000000000000
-    00000000000000000000000000000000
-    00000000000000000000000000000000
-    00000000000000000000000000000000
-    00000000000000000000000000000000
-    00000000000000000000000000000000
-    00000000000000000000000000000000
-    00000000000000000000000000000000
-    00000000000000000000000000000000
-    00001111000001110000000001111100
-    00001111000001110000000001111100
-    00000000000000000000000000000000
-    00000000000PPPPP0000000000000000
-    BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
-    """
-    pass
+# collision not working.
+# def collision(entity, bullet):
+#     if entity.x[0] <= bullet.x[0] and bullet.x[0] <= entity.x[1]:
+#         if int(bullet.y[0]) == int(entity.y[1]) or int(bullet.y[1]) == int(entity.y[0]):
+#             entity.take_dmg(bullet.dmg)
+#             bullet.die()
 
+
+# collision not working.
+# def collision_rock_mob(rock, mob):
+#     if mob.y[1] >= rock.y[0]:
+#         if (rock.x[0] <= mob.x[0] and mob.x[0] <= rock.x[1]) or (rock.x[0] <= mob.x[1] and mob.x[1] <= rock.x[1]):
+#             print("collision rock-mob, mob.die")
+#             mob.die()
+#             rock.take_dmg(mob.max_hp*3)
+
+# TODO check moblist frst row
+
+def draw_entity(entity):
+    draw.rectangle([entity.x[0],entity.y[0],entity.x[1],entity.y[1]],fill=(entity.color[0],entity.color[1],entity.color[2]))
+
+# TODO test multiple waves
 def next_wave(moblist):
+    # MOB_SPEED = 0.1
+    MOB_SPEED = 1
     wave = moblist.wave
     mobA_list = []
     mobB_list = []
@@ -77,20 +85,20 @@ def next_wave(moblist):
 
     for i in range(4):
         x_cords = 3+i*7
-        mobA = Mob(x_cords,1,4,2, 1, attack_cooldown_mobA, value_mobA, 2, 3, [161, 8, 8])
+        mobA = objects.Mob(x_cords,1,4,2, 1, attack_cooldown_mobA, value_mobA, MOB_SPEED, 3, [161, 8, 8])
         mobA_list.append(mobA)
 
-        mobB = Mob(x_cords,6,4,2, 1, attack_cooldown_mobB, value_mobB, 2, 2, [92, 29, 140])
+        mobB = objects.Mob(x_cords,6,4,2, 1, attack_cooldown_mobB, value_mobB, MOB_SPEED, 2, [92, 29, 140])
         mobB_list.append(mobB)
         
-        mobC = Mob(x_cords,11,4,2, 2, attack_cooldown_mobC, value_mobC, 2, 4, [40, 29, 140])
+        mobC = objects.Mob(x_cords,11,4,2, 2, attack_cooldown_mobC, value_mobC, MOB_SPEED, 4, [40, 29, 140])
         mobC_list.append(mobC)
 
     moblist.add_row(mobA_list)
     moblist.add_row(mobB_list)
     moblist.add_row(mobC_list)
     moblist.reset_dead_columns()
-
+    moblist.wave = wave+1
     # if wave = 1:
     # # 1 Wave:
     #     mob1A = Mob(x,y,x+,y+, 1, 5, 10, 2, 3, [161, 8, 8])
@@ -109,50 +117,59 @@ def next_wave(moblist):
 
 def reset_rocks(rock_list):
     
-    rock_list[0] = Rock(4,24,3,2,8)
-    rock_list[1] = Rock(13,24,2,2,6)
-    rock_list[2] = Rock(25,24,4,2,10)
+    rock_list.append(objects.Rock(4,24,3,2,8))
+    rock_list.append(objects.Rock(13,24,2,2,6))
+    rock_list.append(objects.Rock(25,24,4,2,10))
+
+options = RGBMatrixOptions()
+options.rows = 32
+options.chain_length = 1
+options.parallel = 1
+options.hardware_mapping = 'adafruit-hat'  # If you have an Adafruit HAT: 'adafruit-hat'
+
+matrix = RGBMatrix(options=options)
+
+image = Image.new("RGB", (32, 32))
+draw = ImageDraw.Draw(image)
+
 
 
 # Game
-player = objects.Player(14,30,5,0,max_hp=3)
+player = objects.Player(14,30,5,0,max_hp=3,speed = 6)
 base = objects.Base(10)
 score=0
 running=True
 mob_list = objects.MobList()
+next_wave(mob_list)
+
 bullet_list=[]
 bullet_list.append(player.bullet)
 
 rock_list=[]
+reset_rocks(rock_list)
 pygame.init()
 SCALE=12
-# screen = pygame.display.set_mode((32*SCALE, 32*SCALE))
+screen = pygame.display.set_mode((32*SCALE, 32*SCALE))
 clock = pygame.time.Clock()
 dt = 0
 
 
-
-
-
 while running:
+    draw.rectangle([0,0,32,32],fill=(0,0,0))
+    pygame.event.get()
 
-    # TODO
     # Player Moves
     keys = pygame.key.get_pressed()
-    print(keys[pygame.K_a])
     if keys[pygame.K_a]:
-        print("a")
-        player.move(dt,1,-1)
-        print(player.x)
+        player.move(dt,-1)
 
-    # if keys[pygame.K_d]:
-    #     print("d")
-    #     player.move(dt,1,1)
-    #     print(player.x)
+    if keys[pygame.K_d]:
+        player.move(dt,1)
+    
     
     # Mobs Move (only move forward atm)
     for mob in mob_list.get_all():
-        mob.move(dt,0,-1)
+        mob.move(dt,0,1)
     
     
     # Bullets Move
@@ -161,8 +178,8 @@ while running:
 
     # Bullets are shot
     # Player Bullet is shot
-    # if keys[pygame.K_w]:
-    #     player.shoot()
+    if keys[pygame.K_w]:
+        player.shoot()
 
     bullet_list = []
     if player.bullet.is_alive():
@@ -197,16 +214,17 @@ while running:
         # Bullet Mob Collisions
         if not bullet.is_alive():
             continue
-        for mob in mob_list.get_firt_row():
+        for mob in mob_list.get_first_row():
             if bullet.is_alive() and mob.is_alive():
                 collision(mob, bullet)
                 if not mob.is_alive():
+                    print("Bullet Killed Mob")
                     score = score + mob.value
     
-    # Mob Rock Collision
+    # Mob Rock Collision / Mob Base Collision
     for mob in mob_list.get_first_row():
         if mob.is_alive():
-            for rock in rock_list:
+            for rock in rock_list+[base]:
                 if rock.is_alive():
                     collision_rock_mob(rock,mob)
 
@@ -216,25 +234,22 @@ while running:
     # Check Lose Condition
     if (not player.is_alive()) or (not base.is_alive()):
         lose(score)
+        break
 
 
     # If all Mob objects are dead => new wave
     if mob_list.all_dead():
         reset_rocks(rock_list)
         next_wave(mob_list)
+        print("all mobs dead, next wave")
     
+    mobs = mob_list.get_all()
+    if mobs == [[],[],[],[]]:
+        mobs = []
     # Draw all Objects:
-    for entity in [player]+[base]+[mob_list]+[rock_list]:
-        draw(entity)
+    for entity in [player] + [base] + rock_list + mobs + bullet_list:
+        if entity.is_alive():
+            draw_entity(entity)
 
-
+    matrix.SetImage(image, 0, 0)
     dt = clock.tick(60) / 1000
-    # print("dt: ", dt)
-
-
-# b = objects.Bullet(15,5,0,0,5,2,1)
-# print("Position: ",b.x,b.y)
-# print("IsAlive?: ",b.is_alive())
-# b.travel(20)
-# print("Position: ",b.x,b.y)
-# print("IsAlive?: ",b.is_alive())

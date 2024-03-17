@@ -67,7 +67,7 @@ class Mob(Entity):
                 self.cooldown = 0
                 if random.randint(1,9) <= 2:
                     x_place = (self.x[0] + self.x[1])/2
-                    self.bullet = Bullet(x_place, self.y[1]+1, 0, 1, dmg = 1, speed = 2, direction = 1)
+                    self.bullet = Bullet(x_place, self.y[1]+1, 0, 1, dmg = 1, speed = 12, direction = 1)
             
 
 class Bullet(Entity):
@@ -75,7 +75,8 @@ class Bullet(Entity):
     def __init__(self, x_pos, y_pos, x_size, y_size, dmg, speed, direction):
         super().__init__(x_pos, y_pos, x_size, y_size)
         self.dmg = dmg
-        self.speed = speed 
+        self.speed = speed
+        self.speed = 10
         self.direction = direction
         self.color = [100, 100, 100]
 
@@ -87,7 +88,7 @@ class Bullet(Entity):
    
 class Player(Entity):
 
-    def __init__(self, x_pos, y_pos, x_size, y_size, max_hp):
+    def __init__(self, x_pos, y_pos, x_size, y_size, max_hp, speed):
         super().__init__(x_pos, y_pos, x_size, y_size)
         self.max_hp = max_hp
         self.hp = max_hp
@@ -95,6 +96,7 @@ class Player(Entity):
         self.shooting = False
         self.bullet = Bullet(-1,-1,0,0,0,0,0)
         self.bullet.die()
+        self.speed = speed
 
     def take_dmg(self, dmg):
         self.hp = self.hp - dmg
@@ -106,8 +108,8 @@ class Player(Entity):
             self.die()
 
         
-    def move(self, time, speed, direction):
-        change = time*speed*direction
+    def move(self, time, direction):
+        change = time*self.speed*direction
         self.x[0] = self.x[0]+change
         self.x[1] = self.x[1]+change
         
@@ -120,7 +122,7 @@ class Player(Entity):
 
     def shoot(self):
         if not self.bullet.is_alive():
-            x_place = (self.x[0] + self.x[1])/2
+            x_place = int((self.x[0] + self.x[1])/2)
             self.bullet = Bullet(x_place, self.y[0]-2, 0, 1, dmg = 1, speed = 2, direction = -1)
             
 
@@ -133,8 +135,10 @@ class Rock(Entity):
         self.color=[105,105,105]
 
     def take_dmg(self, dmg):
+        # print("HP Rock pre hit:",self.hp)
         self.hp = self.hp - dmg
-        self.color = [105*(self.hp/self.max_hp)]*3
+        # print("HP Rock:",self.hp)
+        # self.color = [105*int(self.hp/self.max_hp)]*3
         if self.hp <= 0:
             self.die()
 
@@ -145,12 +149,13 @@ class Base(Entity):
         super().__init__(x_pos=0, y_pos=31, x_size=31, y_size=0)
         self.max_hp = max_hp
         self.hp = max_hp
+        self.color = [0,255,0]
 
     def take_dmg(self, dmg):
         self.hp = self.hp - dmg
 
         self.color[1] = max(0,int(self.color[1] * (self.hp/self.max_hp)))
-        self.color[0] = (255-color[1])
+        self.color[0] = (255-self.color[1])
         
         if self.hp <= 0:
             self.die()
@@ -169,7 +174,7 @@ class MobList:
             return
 
         for columns, row_elements in zip(self.list, row_of_mobs):
-            columns.append(row_elemnts)
+            columns.append(row_elements)
         
     def update(self):
         len_list = len(self.list)-1
