@@ -20,6 +20,7 @@ vel = 10*scale  # velocity
 
 clock = pygame.time.Clock() #is just a clock for how often the while loop is repeated
 running = True  
+game_over = False
 
 #Tuple to write positions x and y 
 player_circle = set([])
@@ -40,9 +41,9 @@ while running:
         y += vel
 
     #condition to draw a cirlce or an x
-    if keys[pygame.K_a] and ((x,y) not in player_x) and len(player_circle) <= len(player_x):
+    if keys[pygame.K_a] and ((x,y) not in player_x) and len(player_circle) <= len(player_x) and game_over == False:
         player_circle.add((x,y))
-    if keys[pygame.K_c] and ((x,y) not in player_circle) and (len(player_circle) > len(player_x)):
+    if keys[pygame.K_c] and ((x,y) not in player_circle) and (len(player_circle) > len(player_x)) and game_over == False:
         player_x.add((x,y))
             
     #draws x or circle
@@ -64,56 +65,75 @@ while running:
     #Horizontal       
     if (1*scale,1*scale) in player_circle and (11*scale,1*scale) in player_circle and (21*scale,1*scale) in player_circle : #wenn winner == true muss player_circle wins stehen und play again button
         winner = True   
+        game_over = True
     if (1*scale,11*scale) in player_circle and (11*scale,11*scale) in player_circle and (21*scale,11*scale) in player_circle :
         winner = True
+        game_over = True
     if (1*scale,21*scale) in player_circle and (11*scale,21*scale) in player_circle and (21*scale,21*scale) in player_circle :
         winner = True
+        game_over = True
     #Vertical 
     if (1*scale,1*scale) in player_circle and (1*scale,11*scale) in player_circle and (1*scale,21*scale) in player_circle :
         winner = True
+        game_over = True
     if (11*scale,1*scale) in player_circle and (11*scale,11*scale) in player_circle and (11*scale,21*scale) in player_circle :
         winner = True
+        game_over = True
     if (21*scale,1*scale) in player_circle and (21*scale,11*scale) in player_circle and (21*scale,21*scale) in player_circle :
         winner = True
+        game_over = True
     #Diogonal
     if (1*scale,1*scale) in player_circle and (11*scale,11*scale) in player_circle and (21*scale,21*scale) in player_circle :
         winner = True
+        game_over = True
     if (1*scale,21*scale) in player_circle and (11*scale,11*scale) in player_circle and (21*scale,1*scale) in player_circle :
         winner = True
+        game_over = True
 
     #check for win for player_x
     #Horizontal       
     if (1*scale,1*scale) in player_x and (11*scale,1*scale) in player_x and (21*scale,1*scale) in player_x :
         winner = False
+        game_over = True
     if (1*scale,11*scale) in player_x and (11*scale,11*scale) in player_x and (21*scale,11*scale) in player_x :
         winner = False
+        game_over = True
     if (1*scale,21*scale) in player_x and (11*scale,21*scale) in player_x and (21*scale,21*scale) in player_x :
         winner = False
+        game_over = True
     #Vertical 
     if (1*scale,1*scale) in player_x and (1*scale,11*scale) in player_x and (1*scale,21*scale) in player_x :
         winner = False
+        game_over = True
     if (11*scale,1*scale) in player_x and (11*scale,11*scale) in player_x and (11*scale,21*scale) in player_x :
         winner = False
+        game_over = True
     if (21*scale,1*scale) in player_x and (21*scale,11*scale) in player_x and (21*scale,21*scale) in player_x :
         winner = False
+        game_over = True
     #Diogonal
     if (1*scale,1*scale) in player_x and (11*scale,11*scale) in player_x and (21*scale,21*scale) in player_x :
         winner = False
+        game_over = True
     if (1*scale,21*scale) in player_x and (11*scale,11*scale) in player_x and (21*scale,1*scale) in player_x :
         winner = False
+        game_over = True
 
     #checks for tie
     if len(player_circle) == 5 and len(player_x) == 4:
         print("Unentschieden")
+        game_over = True
     if len(player_circle) == 4 and len(player_x) == 5:
         print("Unentschieden")
+        game_over = True
 
+    def draw_winner():
+        #needs to be done 
 
 
     pygame.display.flip()  # refreshes the screen
     for event in pygame.event.get():
         if event.type == pygame.QUIT:  # If player is closing the window -> the loop will be closed
             running = False  # ends pygamges
-
     clock.tick(15) 
 
