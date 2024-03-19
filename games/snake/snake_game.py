@@ -105,6 +105,10 @@ def start_snake(matrix, joystick_found, joystick, draw, image):
     apple = spawn_apple()
 
     while running:
+        for events in pygame.event.get():
+            if events.type == pygame.QUIT:
+                running = False
+
         if joystick.get_button(10):
             running = False
 
