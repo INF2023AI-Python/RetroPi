@@ -1,8 +1,9 @@
-def start_pong():
+def start_pong(matrix, joystick_found, joystick, draw, image):
     import pygame
-    import os
-    from game_object import GameObject
+    from games.pong.game_object import GameObject
+
     pygame.init()
+    SCALE = 1
     clock = pygame.time.Clock()
     running = True
     dt = 1  # TODO REMOVE VAR
@@ -17,15 +18,10 @@ def start_pong():
     # ball_pos = pygame.Vector2((screen.get_width()/2), (screen.get_height()/2))
     playing_field = pygame.Rect(0, 0, 32 * SCALE, 32 * SCALE)
 
-
     # next_tick_ball = pygame.Vector2(0,0)
 
     def withinBoard(rect: pygame.Rect):
         return playing_field.contains(rect)
-
-
-    image = Image.new("RGB", (32, 32))
-    draw = ImageDraw.Draw(image)
 
 
     def move():
@@ -42,7 +38,6 @@ def start_pong():
             else:
                 player.rect.top += player.speed.y * dt
 
-
     def move_joy(y_axis, threshold=0.1):
         y_axis = 0 if abs(y_axis) < threshold else y_axis
         if y_axis > 0:
@@ -55,7 +50,6 @@ def start_pong():
                 player.rect.top = 32 * SCALE - player.rect.height
             else:
                 player.rect.top += player.speed.y * dt
-
 
     while running:
         # poll for events
@@ -79,7 +73,8 @@ def start_pong():
 
         draw.rectangle((0, 0, 32, 32), fill=(0, 0, 0, 0))
         draw.rectangle((31, 0, 31, 31), fill=(255, 255, 255, 0))
-        draw.rectangle((player.rect.left, player.rect.top, playing_field.left, player.rect.bottom), fill=(255, 255, 255))
+        draw.rectangle((player.rect.left, player.rect.top, playing_field.left, player.rect.bottom),
+                       fill=(255, 255, 255))
         draw.rectangle((ball.rect.left, ball.rect.top, ball.rect.left, ball.rect.top), fill=(255, 255, 255))
         matrix.SetImage(image, 0, 0)
         # update variable for gameobjects
@@ -115,7 +110,7 @@ def start_pong():
             # ball.speed.x *= -1
             # ball.rect.left = playing_field.left
             print("your score score", score)
-            break
+            running = False
         # collide player
 
         # update position
@@ -129,5 +124,3 @@ def start_pong():
         # dt is delta time in seconds since last frame, used for framerate-
         # independent physics.
         clock.tick(30)
-
-    pygame.quit()

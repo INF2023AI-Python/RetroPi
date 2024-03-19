@@ -1,8 +1,6 @@
 import pygame
 import random
 import copy
-from PIL import Image
-from PIL import ImageDraw
 
 def start_snake(matrix,joystick_found, joystick, draw, image):
     SCALE = 1

@@ -1,11 +1,11 @@
 import pygame
 import time
+from PIL import Image
+from PIL import ImageDraw
 
 from games.pong.pong import start_pong
 from games.snake.snake_game import start_snake
 from games.space_invaders.space_invaders import start_spaceinvader
-from PIL import Image
-from PIL import ImageDraw
 
 try:
     from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
@@ -285,16 +285,16 @@ def move_joy(x_axis, y_axis):
             if position_x == 5:
                 if position_y == 5:
                     print("PONG")
-                    # start_pong()
+                    start_pong(matrix, joystick_found, joystick, draw, image)
                 if position_y == 15:
-                    # start_spaceinvader()
                     print("SPACE INVADER")
+                    start_spaceinvader(matrix, joystick_found, joystick, draw, image)
                 if position_y == 25:
                     print("BUTTON TEST")
             if position_x == 15:
                 if position_y == 5:
-                    start_snake(matrix, joystick_found, joystick, draw, image)
                     print("SNAKE")
+                    start_snake(matrix, joystick_found, joystick, draw, image)
                 if position_y == 25:
                     print("TROPHY")
             if position_x == 25:

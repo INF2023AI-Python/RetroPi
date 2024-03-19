@@ -1,7 +1,10 @@
-def start_spaceinvader(matrix, joystick_found, joystick, draw):
+
+def start_spaceinvader(matrix, joystick_found, joystick, draw, image):
     import pygame
-    import objects
+    from games.space_invaders import objects
+
     pygame.init()
+
     def lose(score):
         print(score)
 
@@ -16,18 +19,19 @@ def start_spaceinvader(matrix, joystick_found, joystick, draw):
 
         return True
 
-    def collision(entity,bullet):
-        if overlap(entity.x,entity.y,bullet.x,bullet.y):
+    def collision(entity, bullet):
+        if overlap(entity.x, entity.y, bullet.x, bullet.y):
             entity.take_dmg(bullet.dmg)
             bullet.die()
 
     def collision_rock_mob(rock, mob):
-        if overlap(rock.x,rock.y,mob.x,mob.y):
-            rock.take_dmg(mob.max_hp*3)
+        if overlap(rock.x, rock.y, mob.x, mob.y):
+            rock.take_dmg(mob.max_hp * 3)
             mob.die()
 
     def draw_entity(entity):
-        draw.rectangle([entity.x[0],entity.y[0],entity.x[1],entity.y[1]],fill=(entity.color[0],entity.color[1],entity.color[2]))
+        draw.rectangle([entity.x[0], entity.y[0], entity.x[1], entity.y[1]],
+                       fill=(entity.color[0], entity.color[1], entity.color[2]))
 
     def next_wave(moblist):
         MOB_SPEED = 1
@@ -35,15 +39,15 @@ def start_spaceinvader(matrix, joystick_found, joystick, draw):
         mobA_list = []
         mobB_list = []
         mobC_list = []
-        value_mobA =  int(10*(1.2**wave))
-        value_mobB =  int(10*(1.2**(wave+1)))
-        value_mobC =  int(10*(1.2**(wave+2)))
-        attack_cooldown_mobA = max(3,5-0.1*wave)
-        attack_cooldown_mobB = max(1,3-0.1*wave)
-        attack_cooldown_mobC = max(2,4-0.1*wave)
+        value_mobA = int(10 * (1.2 ** wave))
+        value_mobB = int(10 * (1.2 ** (wave + 1)))
+        value_mobC = int(10 * (1.2 ** (wave + 2)))
+        attack_cooldown_mobA = max(3, 5 - 0.1 * wave)
+        attack_cooldown_mobB = max(1, 3 - 0.1 * wave)
+        attack_cooldown_mobC = max(2, 4 - 0.1 * wave)
 
         for i in range(4):
-            x_cords = 3+i*7
+            x_cords = 3 + i * 7
             # mobA = first Row
             mobA = objects.Mob(x_cords, 11, 4, 2, 1, attack_cooldown_mobA, value_mobA, MOB_SPEED, [161, 8, 8])
             # mobA = objects.Mob(x_cords,1,4,2, 1, attack_cooldown_mobA, value_mobA, MOB_SPEED, [161, 8, 8])
@@ -58,59 +62,41 @@ def start_spaceinvader(matrix, joystick_found, joystick, draw):
             # mobC = objects.Mob(x_cords,11,4,2, 2, attack_cooldown_mobC, value_mobC, MOB_SPEED, [40, 29, 140])
             mobC_list.append(mobC)
 
-
         moblist.add_row(mobA_list)
         moblist.add_row(mobB_list)
         moblist.add_row(mobC_list)
-        moblist.wave = wave+1
-
+        moblist.wave = wave + 1
 
     def reset_rocks(rock_list):
         rock_list.append(objects.Rock(4, 24, 3, 2, 8))
         rock_list.append(objects.Rock(13, 24, 2, 2, 6))
         rock_list.append(objects.Rock(25, 24, 4, 2, 10))
 
-    # Matrix Options
-    options = RGBMatrixOptions()
-    options.rows = 32
-    options.chain_length = 1
-    options.parallel = 1
-    options.hardware_mapping = 'adafruit-hat'  # If you have an Adafruit HAT: 'adafruit-hat'
-
-    matrix = RGBMatrix(options=options)
-
-    image = Image.new("RGB", (32, 32))
-    draw = ImageDraw.Draw(image)
-
-
-
     # Game Setup
-    player = objects.Player(14, 30, 4, 0, max_hp=3, speed = 8)
+    player = objects.Player(14, 30, 4, 0, max_hp=3, speed=8)
     base = objects.Base(10)
-    score=0
-    running=True
+    score = 0
+    running = True
     mob_list = objects.MobList()
     next_wave(mob_list)
 
-    bullet_list=[]
+    bullet_list = []
     bullet_list.append(player.bullet)
 
-    rock_list=[]
+    rock_list = []
     reset_rocks(rock_list)
-    SCALE=12
-    #screen = pygame.display.set_mode((32*SCALE, 32*SCALE))
+    SCALE = 12
+    # screen = pygame.display.set_mode((32*SCALE, 32*SCALE))
     clock = pygame.time.Clock()
     dt = 0
 
-
     while running:
         # Resetting Image
-        draw.rectangle([0,0,32,32],fill=(0,0,0))
+        draw.rectangle([0, 0, 32, 32], fill=(0, 0, 0))
         # Check for Quitting
         for events in pygame.event.get():
             if events.type == pygame.QUIT:
                 running = False
-
 
         x_axis = 0
         shoot_button = False
@@ -122,15 +108,14 @@ def start_spaceinvader(matrix, joystick_found, joystick, draw):
         # Player Moves
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a] or x_axis > 0:
-            player.move(dt,-1)
+            player.move(dt, -1)
 
         if keys[pygame.K_d] or x_axis < 0:
-            player.move(dt,1)
+            player.move(dt, 1)
 
         # Mobs Move
         for mob in mob_list.get_all():
-            mob.move(dt,0,1)
-
+            mob.move(dt, 0, 1)
 
         # Bullets Move
         for bullet in bullet_list:
@@ -169,7 +154,7 @@ def start_spaceinvader(matrix, joystick_found, joystick, draw):
                 continue
             for rock in rock_list:
                 if bullet.is_alive() and rock.is_alive():
-                    collision(rock,bullet)
+                    collision(rock, bullet)
 
             # Bullet Mob Collisions
             if not bullet.is_alive():
@@ -194,9 +179,9 @@ def start_spaceinvader(matrix, joystick_found, joystick, draw):
         # Mob-Rock / Mob-Base / Mob-Plyer Collision
         for mob in mob_list.get_first_row():
             if mob.is_alive():
-                for rock in rock_list+[base]+[player]:
+                for rock in rock_list + [base] + [player]:
                     if rock.is_alive():
-                        collision_rock_mob(rock,mob)
+                        collision_rock_mob(rock, mob)
 
         # Adjust current mobs
         mob_list.update()
@@ -213,7 +198,7 @@ def start_spaceinvader(matrix, joystick_found, joystick, draw):
 
         # Preparing mobs for drawing
         mobs = mob_list.get_all()
-        if mobs == [[],[],[],[]]:
+        if mobs == [[], [], [], []]:
             mobs = []
 
         # Draw all Objects:
