@@ -11,6 +11,7 @@ except ImportError:
 
 
 pygame.init()
+joystick_found = True
 SCALE = 1
 try:
     pygame.joystick.init()
