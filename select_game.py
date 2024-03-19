@@ -328,6 +328,10 @@ while running:
     draw_trophy(LIGHT_GREY, WHITE, YELLOW)
     draw_shutdown_button(DARK_GREY)
 
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
     if joystick_found:
         x_axis = joystick.get_axis(0)
         y_axis = joystick.get_axis(1)
