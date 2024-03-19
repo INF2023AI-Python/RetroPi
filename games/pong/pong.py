@@ -72,12 +72,12 @@ def move():
 
 def move_joy(y_axis, threshold=0.1):
     y_axis = 0 if abs(y_axis) < threshold else y_axis
-    if y_axis < 0:
+    if y_axis > 0:
         if (player.rect.top - (player.speed.y * dt)) < 0:
             player.rect.top = 0
         else:
             player.rect.top -= player.speed.y * dt
-    elif y_axis > 0:
+    elif y_axis < 0:
         if (player.rect.bottom + (player.speed.y * dt)) > (32 * SCALE):
             player.rect.top = 32 * SCALE - player.rect.height
         else:
