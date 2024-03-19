@@ -30,6 +30,7 @@ gravity = 1
 score = 0
 speedaddition = 0
 running = True
+clock = pygame.time.Clock()
 
 obstacles = []
 
@@ -115,9 +116,9 @@ while running:
         if random.randint(0, 100) < 75:
             spawn_random_obstacle()
         else:
-             spawn_fixed_obstacle()
+            pass
 
-    obstacles = [(x-SCALE, y) for x, y in obstacles if x > 0]
+    obstacles = [(x-1, y) for x, y in obstacles if x > 0]
 
     if collision():
         print("Game Over")
@@ -128,5 +129,7 @@ while running:
 
     if random.randint(0, 100) < 1:
         speedaddition += 1
-    pygame.time.delay(1000//10+speedaddition)
+    #pygame.time.delay(1000//10+speedaddition)
+    clock.tick(30)
+
 pygame.quit()
