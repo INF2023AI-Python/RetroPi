@@ -8,6 +8,8 @@ except ImportError:
     from rgbmatrix import RGBMatrix, RGBMatrixOptions
 
 
+
+
 # TODO implement
 def lose(score):
     print(score)
@@ -37,7 +39,6 @@ def draw_entity(entity):
     draw.rectangle([entity.x[0],entity.y[0],entity.x[1],entity.y[1]],fill=(entity.color[0],entity.color[1],entity.color[2]))
 
 def next_wave(moblist):
-    # MOB_SPEED = 0.1
     MOB_SPEED = 1
     wave = moblist.wave
     mobA_list = []
@@ -53,44 +54,32 @@ def next_wave(moblist):
     for i in range(4):
         x_cords = 3+i*7
         # mobA = first Row
-        mobA = objects.Mob(x_cords,1,4,2, 1, attack_cooldown_mobA, value_mobA, MOB_SPEED, 3, [161, 8, 8])
+        mobA = objects.Mob(x_cords,11,4,2, 1, attack_cooldown_mobA, value_mobA, MOB_SPEED, [161, 8, 8])
+        # mobA = objects.Mob(x_cords,1,4,2, 1, attack_cooldown_mobA, value_mobA, MOB_SPEED, [161, 8, 8])
         mobA_list.append(mobA)
 
         # mobB = second Row
-        mobB = objects.Mob(x_cords,6,4,2, 1, attack_cooldown_mobB, value_mobB, MOB_SPEED, 2, [92, 29, 140])
+        mobB = objects.Mob(x_cords,6,4,2, 1, attack_cooldown_mobB, value_mobB, MOB_SPEED, [92, 29, 140])
         mobB_list.append(mobB)
         
         # mobC = third Row
-        mobC = objects.Mob(x_cords,11,4,2, 2, attack_cooldown_mobC, value_mobC, MOB_SPEED, 4, [40, 29, 140])
+        mobC = objects.Mob(x_cords,1,4,2, 2,  attack_cooldown_mobC, value_mobC, MOB_SPEED, [40, 29, 140])
+        # mobC = objects.Mob(x_cords,11,4,2, 2, attack_cooldown_mobC, value_mobC, MOB_SPEED, [40, 29, 140])
         mobC_list.append(mobC)
 
-    moblist.add_row(mobC_list)
-    moblist.add_row(mobB_list)
+        
     moblist.add_row(mobA_list)
-    moblist.reset_dead_columns()
+    moblist.add_row(mobB_list)
+    moblist.add_row(mobC_list)
     moblist.wave = wave+1
 
-    # if wave = 1:
-    # # 1 Wave:
-    #     mob1A = Mob(x,y,x+,y+, 1, 5, 10, 2, 3, [161, 8, 8])
-    #     mob1B = Mob(x,y,x+,y+, 1, 3, 12, 2, 2, [92, 29, 140])
-    #     mob1C = Mob(x,y,x+,y+, 1, 4, 14, 2, 4, [40, 29, 140])
-    # if wave = 2:
-    #     # 2 Wave:
-    #     mob2A = Mob(x,y,x+,y+, 1, 4.9, 12, 2, 3, [161, 8, 8])
-    #     mob2B = Mob(x,y,x+,y+, 1, 2.9, 14, 2, 2, [92, 29, 140])
-    #     mob2C = Mob(x,y,x+,y+, 1, 3.9, 16, 2, 4, [40, 29, 140])
-    # if wave = 3:
-    # # 3 Wave:
-    #     mob3A = Mob(x,y,x+,y+, 1, 4.8, 14, 2, 3, [161, 8, 8])
-    #     mob3B = Mob(x,y,x+,y+, 1, 2.8, 16, 2, 2, [92, 29, 140])
-    #     mob3C = Mob(x,y,x+,y+, 1, 3.8, 19, 2, 4, [40, 29, 140])
 
 def reset_rocks(rock_list): 
     rock_list.append(objects.Rock(4,24,3,2,8))
     rock_list.append(objects.Rock(13,24,2,2,6))
     rock_list.append(objects.Rock(25,24,4,2,10))
 
+# Matrix Options
 options = RGBMatrixOptions()
 options.rows = 32
 options.chain_length = 1
@@ -104,7 +93,7 @@ draw = ImageDraw.Draw(image)
 
 
 
-# Game
+# Game Setup
 player = objects.Player(14,30,4,0,max_hp=3,speed = 8)
 base = objects.Base(10)
 score=0
@@ -125,8 +114,10 @@ dt = 0
 
 
 while running:
+    # Resetting Image
     draw.rectangle([0,0,32,32],fill=(0,0,0))
     
+    # Check for Quitting
     for events in pygame.event.get():
         if events.type == pygame.QUIT:
             running = False
@@ -139,8 +130,7 @@ while running:
     if keys[pygame.K_d]:
         player.move(dt,1)
     
-    
-    # Mobs Move (only move forward atm)
+    # Mobs Move
     for mob in mob_list.get_all():
         mob.move(dt,0,1)
     
@@ -193,6 +183,8 @@ while running:
                 if not mob.is_alive():
                     score = score + mob.value
     
+    # Bullet-Bullet Collision
+    # Bullet-Bullet somtimes fails when the collision happens close to the player - the player bullet dies 
     if player.bullet.is_alive():
         if len(bullet_list) > 1:
             main_bullet = bullet_list[0]
@@ -202,25 +194,27 @@ while running:
                     bullet.die()
                     break
 
-    # Mob Rock Collision / Mob Base Collision
+    # Mob-Rock / Mob-Base / Mob-Plyer Collision 
     for mob in mob_list.get_first_row():
         if mob.is_alive():
-            for rock in rock_list+[base]:
+            for rock in rock_list+[base]+[player]:
                 if rock.is_alive():
                     collision_rock_mob(rock,mob)
 
-    # adjust current mobs
+    # Adjust current mobs
     mob_list.update()
 
     # Check Lose Condition
     if (not player.is_alive()) or (not base.is_alive()):
         lose(score)
         break
-
+    
+    # Next Wave
     if mob_list.get_first_row() == []:
         reset_rocks(rock_list)
         next_wave(mob_list)
     
+    # Preparing mobs for drawing
     mobs = mob_list.get_all()
     if mobs == [[],[],[],[]]:
         mobs = []
@@ -230,5 +224,6 @@ while running:
         if entity.is_alive():
             draw_entity(entity)
 
+    # Update Matrix-Image
     matrix.SetImage(image, 0, 0)
     dt = clock.tick(60) / 1000

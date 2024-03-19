@@ -1,10 +1,6 @@
 # Game Object Classes
 import random
 
-class Field:
-    def __init__(self,x_size,y_size):
-        self.x_size = x_size
-        self.y_size = y_size
 
 class Entity:
 
@@ -13,10 +9,9 @@ class Entity:
         self.x_size = x_size
         self.y = [y_pos,y_pos+y_size]
         self.y_size = y_size
-
         self.alive = True
-
-        self.field = Field(31,31)
+        self.field_x_size = 31
+        self.field_y_size = 31
 
     def set_x_pos(self, x_pos):
         self.x = [x_pos,x_pos+self.x_size]
@@ -35,14 +30,14 @@ class Entity:
 
 class Mob(Entity):
 
-    def __init__(self, x_pos, y_pos, x_size, y_size, max_hp, attack_cooldown, value, speed, cooldown, color):
+    def __init__(self, x_pos, y_pos, x_size, y_size, max_hp, attack_cooldown, value, speed, color):
         super().__init__(x_pos, y_pos, x_size, y_size)
         
         self.max_hp = max_hp
         self.hp = max_hp
         
         self.attack_cooldown = attack_cooldown
-        self.cooldown = cooldown
+        self.cooldown = 0
         self.value = value
         self.speed = speed
 
@@ -82,7 +77,7 @@ class Bullet(Entity):
     def travel(self, time):
         self.y[0] = self.y[0]+self.speed*self.direction*time
         self.y[1] = self.y[1]+self.speed*self.direction*time
-        if self.y[0] > self.field.y_size or self.y[1] < 0:
+        if self.y[0] > self.field_y_size or self.y[1] < 0:
             self.die()
    
 class Player(Entity):
@@ -112,8 +107,8 @@ class Player(Entity):
         self.x[0] = self.x[0]+change
         self.x[1] = self.x[1]+change
         
-        if self.x[1] > self.field.x_size:
-            self.x[1] = self.field.x_size
+        if self.x[1] > self.field_x_size:
+            self.x[1] = self.field_x_size
             self.x[0] = self.x[1] - self.x_size
         elif self.x[0] < 0:
             self.x[0] = 0
@@ -130,13 +125,13 @@ class Rock(Entity):
         super().__init__(x_pos, y_pos, x_size, y_size)
         self.max_hp = max_hp
         self.hp = max_hp
-        self.color=[105,105,105]
+        self.color=[120,120,120]
 
     def take_dmg(self, dmg):
-        # print("HP Rock pre hit:",self.hp)
         self.hp = self.hp - dmg
-        # print("HP Rock:",self.hp)
-        # self.color = [105*int(self.hp/self.max_hp)]*3
+
+        new_color = max(40,int(120*self.hp/self.max_hp))
+        self.color = [new_color]*3
         if self.hp <= 0:
             self.die()
 
@@ -149,7 +144,6 @@ class Base(Entity):
 
     def take_dmg(self, dmg):
         self.hp = self.hp - dmg
-
         self.color[1] = max(0,int(self.color[1] * (self.hp/self.max_hp)))
         self.color[0] = (255-self.color[1])
         
@@ -157,10 +151,9 @@ class Base(Entity):
             self.die()
 
 class MobList:
-    # list_of_list_of_mobs [[col1_mobs],[col2_mobs],...]
     def __init__(self):
+        # list_of_list_of_mobs [[col1_mobs],[col2_mobs],...]
         self.list = [[],[],[],[]]
-        self.dead_columns = [False, False, False, False]
         self.wave = 0
 
     def add_row(self, row_of_mobs):
@@ -187,10 +180,6 @@ class MobList:
                     # if there are other mobs in the lost, delete the mob
                     if len(self.list[i]) > 0:
                         del self.list[i][0]
-    
-                    # to save, if all mobs of a columns are dead
-                    else:
-                        self.dead_columns[i] = True
         
 
     def get_first_row(self):
@@ -204,12 +193,5 @@ class MobList:
         singular_list = [item for sublist in self.list for item in sublist]
         return singular_list
     
-    # not used nor working
-    def all_dead(self):
-        a = True
-        for col_status in self.dead_columns:
-            a = a and col_status
-        return a
+   
     
-    def reset_dead_columns(self):
-        self.dead_columns = [False, False, False, False]
