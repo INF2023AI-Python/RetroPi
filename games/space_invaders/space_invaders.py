@@ -65,16 +65,16 @@ def next_wave(moblist):
     for i in range(4):
         x_cords = 3+i*7
         # mobA = first Row
-        mobA = objects.Mob(x_cords,11,4,2, 1, attack_cooldown_mobA, value_mobA, MOB_SPEED, [161, 8, 8])
+        mobA = objects.Mob(x_cords, 11, 4, 2, 1, attack_cooldown_mobA, value_mobA, MOB_SPEED, [161, 8, 8])
         # mobA = objects.Mob(x_cords,1,4,2, 1, attack_cooldown_mobA, value_mobA, MOB_SPEED, [161, 8, 8])
         mobA_list.append(mobA)
 
         # mobB = second Row
-        mobB = objects.Mob(x_cords,6,4,2, 1, attack_cooldown_mobB, value_mobB, MOB_SPEED, [92, 29, 140])
+        mobB = objects.Mob(x_cords, 6, 4, 2, 1, attack_cooldown_mobB, value_mobB, MOB_SPEED, [92, 29, 140])
         mobB_list.append(mobB)
         
         # mobC = third Row
-        mobC = objects.Mob(x_cords,1,4,2, 2,  attack_cooldown_mobC, value_mobC, MOB_SPEED, [40, 29, 140])
+        mobC = objects.Mob(x_cords, 1, 4, 2, 2, attack_cooldown_mobC, value_mobC, MOB_SPEED, [40, 29, 140])
         # mobC = objects.Mob(x_cords,11,4,2, 2, attack_cooldown_mobC, value_mobC, MOB_SPEED, [40, 29, 140])
         mobC_list.append(mobC)
 
@@ -86,9 +86,9 @@ def next_wave(moblist):
 
 
 def reset_rocks(rock_list): 
-    rock_list.append(objects.Rock(4,24,3,2,8))
-    rock_list.append(objects.Rock(13,24,2,2,6))
-    rock_list.append(objects.Rock(25,24,4,2,10))
+    rock_list.append(objects.Rock(4, 24, 3, 2, 8))
+    rock_list.append(objects.Rock(13, 24, 2, 2, 6))
+    rock_list.append(objects.Rock(25, 24, 4, 2, 10))
 
 # Matrix Options
 options = RGBMatrixOptions()
@@ -105,7 +105,7 @@ draw = ImageDraw.Draw(image)
 
 
 # Game Setup
-player = objects.Player(14,30,4,0,max_hp=3,speed = 8)
+player = objects.Player(14, 30, 4, 0, max_hp=3, speed = 8)
 base = objects.Base(10)
 score=0
 running=True
