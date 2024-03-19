@@ -1,4 +1,3 @@
-
 def start_spaceinvader(matrix, joystick_found, joystick, draw, image):
     import pygame
     from games.space_invaders import objects
@@ -97,6 +96,8 @@ def start_spaceinvader(matrix, joystick_found, joystick, draw, image):
         for events in pygame.event.get():
             if events.type == pygame.QUIT:
                 running = False
+        if joystick.get_button(10):
+            running = False
 
         x_axis = 0
         shoot_button = False

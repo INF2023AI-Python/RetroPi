@@ -1,8 +1,7 @@
-import pygame
-import random
-import copy
-
-def start_snake(matrix,joystick_found, joystick, draw, image):
+def start_snake(matrix, joystick_found, joystick, draw, image):
+    import pygame
+    import random
+    import copy
     SCALE = 1
     screen_width = 32 * SCALE
     screen_height = 32 * SCALE
@@ -24,7 +23,7 @@ def start_snake(matrix,joystick_found, joystick, draw, image):
     running = True
 
     def spawn_snake():
-        for i in range(0, 30):
+        for i in range(0, 6):
             x = pygame.Rect(i * SCALE, 0, 1 * SCALE, 1 * SCALE)
             tail.append(x)
             clist.append(x)
@@ -94,7 +93,6 @@ def start_snake(matrix,joystick_found, joystick, draw, image):
             score = score + 1
             tail.append(tail[len(tail) - 1].move(SPEED * snake_dir[0], -SPEED * snake_dir[1]))
             clist.append(tail[len(tail) - 1].move(SPEED * snake_dir[0], -SPEED * snake_dir[1]))
-            print("len tail: ", len(tail))
             print(score)
 
     def collision_self(next_relative_position: pygame.Rect) -> bool:
@@ -107,6 +105,8 @@ def start_snake(matrix,joystick_found, joystick, draw, image):
     apple = spawn_apple()
 
     while running:
+        if joystick.get_button(10):
+            running = False
 
         # clear screen
         draw.rectangle((0, 0, 32, 32), fill=(0, 0, 0))
@@ -124,7 +124,6 @@ def start_snake(matrix,joystick_found, joystick, draw, image):
             else:
                 draw.rectangle((e.left, e.top, e.left, e.top), fill=(0, 255, 255))
 
-        print(head.left, head.top)
         draw.rectangle((apple.left, apple.top, apple.left, apple.top), fill=(255, 255, 0))
 
         matrix.SetImage(image, 0, 0)

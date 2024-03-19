@@ -58,6 +58,9 @@ def start_pong(matrix, joystick_found, joystick, draw, image):
             if event.type == pygame.QUIT:
                 running = False
 
+        if joystick.get_button(10):
+            running = False
+
         # fill the screen with a color to wipe away anything from last frame
         ##screen.fill("black")
 
