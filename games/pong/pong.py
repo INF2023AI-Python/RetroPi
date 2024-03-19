@@ -9,13 +9,6 @@ try:
 except ImportError:
     from rgbmatrix import RGBMatrix, RGBMatrixOptions
 
-options = RGBMatrixOptions()
-options.rows = 32
-options.chain_length = 1
-options.parallel = 1
-options.hardware_mapping = 'adafruit-hat'  # If you have an Adafruit HAT: 'adafruit-hat'
-
-matrix = RGBMatrix(options=options)
 
 pygame.init()
 SCALE = 1
@@ -28,6 +21,13 @@ except Exception:
     joystick_found = False
     print("Kein Joystick gefunden")
 
+options = RGBMatrixOptions()
+options.rows = 32
+options.chain_length = 1
+options.parallel = 1
+options.hardware_mapping = 'adafruit-hat'  # If you have an Adafruit HAT: 'adafruit-hat'
+
+matrix = RGBMatrix(options=options)
 ##screen = pygame.display.set_mode((32*SCALE, 32*SCALE),pygame.FULLSCREEN)
 clock = pygame.time.Clock()
 running = True
