@@ -7,6 +7,16 @@ try:
 except ImportError:
     from rgbmatrix import RGBMatrix, RGBMatrixOptions
 
+joystick_found = True
+try:
+    pygame.joystick.init()
+    joystick = pygame.joystick.Joystick(0)
+    joystick.init()
+    joystick.get_numaxes()
+except Exception:
+    joystick_found = False
+    print("Kein Joystick gefunden")
+
 
 
 
@@ -108,7 +118,7 @@ rock_list=[]
 reset_rocks(rock_list)
 pygame.init()
 SCALE=12
-screen = pygame.display.set_mode((32*SCALE, 32*SCALE))
+#screen = pygame.display.set_mode((32*SCALE, 32*SCALE))
 clock = pygame.time.Clock()
 dt = 0
 
@@ -116,18 +126,25 @@ dt = 0
 while running:
     # Resetting Image
     draw.rectangle([0,0,32,32],fill=(0,0,0))
-    
     # Check for Quitting
     for events in pygame.event.get():
         if events.type == pygame.QUIT:
             running = False
 
+
+    if joystick_found:
+        x_axis = joystick.get_axis(0)
+    else:
+        pass
+
+    x_axis = 0 if abs(x_axis) < 0.1 else x_axis
+    shoot_button = joystick.get_button(10)
     # Player Moves
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_a]:
+    if keys[pygame.K_a] or x_axis < 0:
         player.move(dt,-1)
 
-    if keys[pygame.K_d]:
+    if keys[pygame.K_d] or x_axis > 0:
         player.move(dt,1)
     
     # Mobs Move
@@ -141,7 +158,7 @@ while running:
 
     # Bullets are shot
     # Player Bullet is shot
-    if keys[pygame.K_w]:
+    if keys[pygame.K_w] or shoot_button:
         player.shoot()
 
     bullet_list = []
