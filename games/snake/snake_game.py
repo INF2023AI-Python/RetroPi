@@ -41,7 +41,7 @@ apple = 0
 
 
 def spawn_snake():
-    for i in range(0, 10):
+    for i in range(0, 30):
         x = pygame.Rect(i * SCALE, 0, 1 * SCALE, 1 * SCALE)
         tail.append(x)
         clist.append(x)
@@ -102,25 +102,13 @@ def move_snake():
 
 def check_events():
     global snake_dir, apple, score
-    # collision with border directions are relative
-    next_position_ahead = tail[0].move(SPEED * snake_dir[0], SPEED * snake_dir[1])
-    next_position_left = tail[0].move(SPEED * snake_dir[0], SPEED * snake_dir[1])
-    next_position_right = tail[0].move(SPEED * snake_dir[0], SPEED * snake_dir[1])
-
-    # split into method for other checks, such as left and right relative from the snake for self collision
-    if collision_self(next_position_ahead):
-        print("dead self")
-    if collision_self(next_position_left):
-        print("dead left")
-    if collision_self(next_position_right):
-        print("dead right")
-
-    # collision ahead
-    if (next_position_ahead.left < 0) or (next_position_ahead.left > screen_width) or (next_position_ahead.top < 0) or (
-            next_position_ahead.top > screen_height):
+    # collision border
+    for i in range(1,len(tail)-1):
+        if(tail[0].left == tail[i].left) and tail[0].top == tail[i].top:
+            exit(0)
+    if (tail[0].left < 0) or (tail[0].left > screen_width) or (tail[0].top < 0) or (tail[0].top > screen_height):
         print("dead border")
-    # collision above
-    # collsion below
+        exit(0)
 
     # snake on apple
     if tail[0].left == apple.left and tail[0].top == apple.top:
@@ -160,7 +148,7 @@ while running:
             running = False
 
     # clear screen
-    draw.rectangle((0, 0, 32, 32), fill=(0, 0, 0, 0))
+    draw.rectangle((0, 0, 32, 32), fill=(0, 0, 0))
     if joystick_found:
         x_axis = joystick.get_axis(0)
         y_axis = joystick.get_axis(1)
