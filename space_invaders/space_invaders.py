@@ -141,10 +141,10 @@ while running:
     x_axis = 0 if abs(x_axis) < 0.1 else x_axis
     # Player Moves
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_a] or x_axis < 0:
+    if keys[pygame.K_a] or x_axis > 0:
         player.move(dt,-1)
 
-    if keys[pygame.K_d] or x_axis > 0:
+    if keys[pygame.K_d] or x_axis < 0:
         player.move(dt,1)
     
     # Mobs Move
