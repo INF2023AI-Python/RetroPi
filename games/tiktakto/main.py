@@ -1,4 +1,5 @@
 import pygame
+import time
 from PIL import Image
 from PIL import ImageDraw
 try:
@@ -6,8 +7,24 @@ try:
 except ImportError:
     from rgbmatrix import RGBMatrix, RGBMatrixOptions
 
-
 pygame.init()
+
+input_lock_time = 0.3
+last_input_time = 0
+
+image = Image.new("RGB", (32, 32))
+draw = ImageDraw.Draw(image)
+
+joystick_found = True
+#Joystick
+try:
+    pygame.joystick.init()
+    joystick = pygame.joystick.Joystick(0)
+    joystick.init()
+    joystick.get_numaxes()
+except Exception:
+    joystick_found = False
+    print("Kein Joystick gefunden")
 
 options = RGBMatrixOptions()
 options.rows = 32
@@ -16,9 +33,6 @@ options.parallel = 1
 options.hardware_mapping = 'adafruit-hat'  # If you have an Adafruit HAT: 'adafruit-hat'
 
 matrix = RGBMatrix(options=options)
-
-image = Image.new("RGB", (32, 32))
-draw = ImageDraw.Draw(image)
 
 #Colors
 RED=(255, 0, 0)
@@ -47,24 +61,61 @@ player= 0
 player_circle = set([])
 player_x = set([])
 
+def move_box_joy(x_axis, y_axis, threshold=0.1):
+        global last_input_time
+        global input_lock_time
+        global snake_dir
+        global y
+        global x
+
+        current_time=time.time()
+        # Schwellenwert für Stick-Drift oder Neutralzone
+        if current_time - last_input_time > input_lock_time:
+            x_axis = 0 if abs(x_axis) < threshold else x_axis
+            y_axis = 0 if abs(y_axis) < threshold else y_axis
+            print(x_axis, y_axis)
+            if x_axis < 0 and x < 21:
+                x += vel
+                last_input_time = current_time
+            elif x_axis > 0 and x > 1:
+                x -= vel
+                last_input_time = current_time
+            elif y_axis < 0 and y < 21:
+                y += vel
+                last_input_time = current_time
+            elif y_axis > 0 and y > 1:
+                y -= vel
+                last_input_time = current_time
+
 while running:
 
-    #movment of the blue box
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_LEFT] and x > 1*scale:
-        x -= vel
-    if keys[pygame.K_RIGHT] and x < 21*scale:
-        x += vel
-    if keys[pygame.K_UP] and y > 1*scale:
-        y -= vel
-    if keys[pygame.K_DOWN] and y < 21*scale:
-        y += vel
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    if joystick_found:
+        x_axis = joystick.get_axis(0)
+        y_axis = joystick.get_axis(1)
+        move_box_joy(x_axis, y_axis)
+    else:
+        #movment of the blue box
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT] and x > 1*scale:
+            x -= vel
+        if keys[pygame.K_RIGHT] and x < 21*scale:
+            x += vel
+        if keys[pygame.K_UP] and y > 1*scale:
+            y -= vel
+        if keys[pygame.K_DOWN] and y < 21*scale:
+            y += vel
+
+
 
     #condition to draw a cirlce or an x
-    if keys[pygame.K_a] and ((x,y) not in player_x) and len(player_circle) <= len(player_x) and game_over == False and player == 0:
+    if joystick.get_button(8) and ((x,y) not in player_x) and len(player_circle) <= len(player_x) and game_over == False and player == 0:
         player_circle.add((x,y))
         player = 1
-    if keys[pygame.K_a] and ((x,y) not in player_circle) and (len(player_circle) > len(player_x)) and game_over == False and player == 1:
+    if joystick.get_button(8) and ((x,y) not in player_circle) and (len(player_circle) > len(player_x)) and game_over == False and player == 1:
         player_x.add((x,y))
         player = 0
 
@@ -91,7 +142,8 @@ while running:
         draw.rectangle((x ,y ,x+9,y+9),fill=RED)
     draw.rectangle((x+1 ,y+1 ,x+8,y+8),fill=BLACK)
 
-    print(x)
+    #print(x)
+    #print(y)
 
     #draws x or circle
     for b in player_circle:
@@ -100,7 +152,6 @@ while running:
     for i in player_x:
         draw.line((i[0] + 1, i[1] + 1, i[0] + 8,i[1] + 8),fill=RED)
         draw.line((i[0] + 1,i[1] + 8,i[0] + 8,i[1] + 1),fill=RED)
-    print(y)
 
     #check for win for player_circle
     #Horizontal
@@ -185,5 +236,5 @@ while running:
         if event.type == pygame.QUIT:  # If player is closing the window -> the loop will be closed
             running = False  # ends pygamges
     matrix.SetImage(image, 0, 0)
-    clock.tick(15)
+    clock.tick(60)
 
