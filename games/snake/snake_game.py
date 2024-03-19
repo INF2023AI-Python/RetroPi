@@ -86,9 +86,9 @@ def start_snake(matrix, joystick_found, joystick, draw, image):
         # collision border
         for i in range(1, len(tail) - 1):
             if (tail[0].left == tail[i].left) and tail[0].top == tail[i].top:
-                start_losemenu(matrix, joystick_found, joystick, draw, image)
+                running = False
         if (tail[0].left < 0) or (tail[0].left > screen_width) or (tail[0].top < 0) or (tail[0].top > screen_height):
-            start_losemenu(matrix, joystick_found, joystick, draw, image)
+            running = False
 
         # snake on apple
         if tail[0].left == apple.left and tail[0].top == apple.top:
@@ -112,7 +112,6 @@ def start_snake(matrix, joystick_found, joystick, draw, image):
             if events.type == pygame.QUIT:
                 running = False
 
-
         # clear screen
         draw.rectangle((0, 0, 32, 32), fill=(0, 0, 0))
         if joystick_found:
@@ -135,3 +134,5 @@ def start_snake(matrix, joystick_found, joystick, draw, image):
 
         matrix.SetImage(image, 0, 0)
         dt = clock.tick(8) / 1000
+
+    return {"score": score, "game": "snake"}
