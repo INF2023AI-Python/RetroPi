@@ -8,6 +8,7 @@ except ImportError:
     from rgbmatrix import RGBMatrix, RGBMatrixOptions
 
 joystick_found = True
+pygame.init()
 try:
     pygame.joystick.init()
     joystick = pygame.joystick.Joystick(0)
@@ -116,7 +117,6 @@ bullet_list.append(player.bullet)
 
 rock_list=[]
 reset_rocks(rock_list)
-pygame.init()
 SCALE=12
 #screen = pygame.display.set_mode((32*SCALE, 32*SCALE))
 clock = pygame.time.Clock()
@@ -132,11 +132,13 @@ while running:
             running = False
 
 
+    x_axis = 0
+    shoot_button = False
     if joystick_found:
         x_axis = joystick.get_axis(0)
+        shoot_button = joystick.get_button(11)
 
     x_axis = 0 if abs(x_axis) < 0.1 else x_axis
-    shoot_button = joystick.get_button(11)
     # Player Moves
     keys = pygame.key.get_pressed()
     if keys[pygame.K_a] or x_axis < 0:
