@@ -7,6 +7,16 @@ try:
 except ImportError:
     from rgbmatrix import RGBMatrix, RGBMatrixOptions
 
+pygame.init()
+try:
+    pygame.joystick.init()
+    joystick = pygame.joystick.Joystick(0)
+    joystick.init()
+    joystick.get_numaxes()
+except Exception:
+    joystick_found = False
+    print("Kein Joystick gefunden")
+
 PURPLE = (79,0,153)
 BLACK = (0,0,0)
 WHITE = (255,255,255)
@@ -39,15 +49,6 @@ options.hardware_mapping = 'adafruit-hat'  # If you have an Adafruit HAT: 'adafr
 matrix = RGBMatrix(options=options)
 
 joystick_found = True
-pygame.init()
-try:
-    pygame.joystick.init()
-    joystick = pygame.joystick.Joystick(0)
-    joystick.init()
-    joystick.get_numaxes()
-except Exception:
-    joystick_found = False
-    print("Kein Joystick gefunden")
 
 image = Image.new("RGB", (32, 32))
 draw = ImageDraw.Draw(image)
