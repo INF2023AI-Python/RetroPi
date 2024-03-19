@@ -134,11 +134,9 @@ while running:
 
     if joystick_found:
         x_axis = joystick.get_axis(0)
-    else:
-        pass
 
     x_axis = 0 if abs(x_axis) < 0.1 else x_axis
-    shoot_button = joystick.get_button(10)
+    shoot_button = joystick.get_button(11)
     # Player Moves
     keys = pygame.key.get_pressed()
     if keys[pygame.K_a] or x_axis < 0:
