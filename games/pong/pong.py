@@ -58,8 +58,6 @@ def start_pong(matrix, joystick_found, joystick, draw, image):
             if event.type == pygame.QUIT:
                 running = False
 
-        if joystick.get_button(10):
-            running = False
 
         # fill the screen with a color to wipe away anything from last frame
         ##screen.fill("black")
@@ -83,6 +81,8 @@ def start_pong(matrix, joystick_found, joystick, draw, image):
         # update variable for gameobjects
         # player movement
         if joystick_found:
+            if joystick.get_button(10):
+                running = False
             y_axis = joystick.get_axis(1)
             move_joy(y_axis)
         else:

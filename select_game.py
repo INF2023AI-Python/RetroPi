@@ -12,11 +12,15 @@ try:
 except ImportError:
     from rgbmatrix import RGBMatrix, RGBMatrixOptions
 
+joystick_found = False
 pygame.init()
-pygame.joystick.init()
-joystick = pygame.joystick.Joystick(0)
-joystick.init()
-joystick.get_numaxes()
+try:
+    pygame.joystick.init()
+    joystick = pygame.joystick.Joystick(0)
+    joystick.init()
+    joystick.get_numaxes()
+except pygame.error:
+    joystick_found = False
 
 PURPLE = (79, 0, 153)
 BLACK = (0, 0, 0)
@@ -49,7 +53,6 @@ options.hardware_mapping = 'adafruit-hat'  # If you have an Adafruit HAT: 'adafr
 
 matrix = RGBMatrix(options=options)
 
-joystick_found = True
 
 image = Image.new("RGB", (32, 32))
 draw = ImageDraw.Draw(image)
@@ -206,46 +209,44 @@ def move_key():
     global position_y
     global running
     # moves the position
-    for events in pygame.event.get():
-        if events.type == pygame.QUIT:
-            running = False
-        if events.type == pygame.KEYDOWN:
-            if events.key == pygame.K_LEFT:
-                if position_x > 5:
-                    if not position_y == 15:
-                        position_x -= 10
-            if events.key == pygame.K_RIGHT:
-                if position_x < 20:
-                    if not position_y == 15:
-                        position_x += 10
-            if events.key == pygame.K_UP:
-                if position_y != 5:
-                    if not position_x == 15:
-                        position_y -= 10
-            if events.key == pygame.K_DOWN:
-                if not position_y == 25:
-                    if not position_x == 15:
-                        position_y += 10
-            if events.key == pygame.K_RETURN:
-                if position_x == 5:
-                    if position_y == 5:
-                        print("PONG")
-                    if position_y == 15:
-                        print("SPACE INVADER")
-                    if position_y == 25:
-                        print("BUTTON TEST")
-                if position_x == 15:
-                    if position_y == 5:
-                        print("SNAKE")
-                    if position_y == 25:
-                        print("TROPHY")
-                if position_x == 25:
-                    if position_y == 5:
-                        print("TIK TAK TOE")
-                    if position_y == 15:
-                        print("ENDLESS RUNNER")
-                    if position_y == 25:
-                        print("SHUTDOWN")
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_UP]:
+        if position_y != 5:
+            if not position_x == 15:
+                position_y -= 10
+    if keys[pygame.K_DOWN]:
+        if not position_y == 25:
+            if not position_x == 15:
+                position_y += 10
+    if keys[pygame.K_LEFT]:
+        if position_x > 5:
+            if not position_y == 15:
+                position_x -= 10
+    if keys[pygame.K_RIGHT]:
+        if position_x < 20:
+            if not position_y == 15:
+                position_x += 10
+    if keys[pygame.K_SPACE]:
+        if position_x == 5:
+            if position_y == 5:
+                print("PONG")
+            if position_y == 15:
+                print("SPACE INVADER")
+            if position_y == 25:
+                print("BUTTON TEST")
+        if position_x == 15:
+            if position_y == 5:
+                print("SNAKE")
+                start_snake(matrix, False, None, draw, image)
+            if position_y == 25:
+                print("TROPHY")
+        if position_x == 25:
+            if position_y == 5:
+                print("TIK TAK TOE")
+            if position_y == 15:
+                print("ENDLESS RUNNER")
+            if position_y == 25:
+                print("SHUTDOWN")
 
 
 def move_joy(x_axis, y_axis):

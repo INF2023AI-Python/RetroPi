@@ -1,3 +1,6 @@
+from lose_menu import start_losemenu
+
+
 def start_snake(matrix, joystick_found, joystick, draw, image):
     import pygame
     import random
@@ -83,9 +86,9 @@ def start_snake(matrix, joystick_found, joystick, draw, image):
         # collision border
         for i in range(1, len(tail) - 1):
             if (tail[0].left == tail[i].left) and tail[0].top == tail[i].top:
-                running = False
+                start_losemenu(matrix, joystick_found, joystick, draw, image)
         if (tail[0].left < 0) or (tail[0].left > screen_width) or (tail[0].top < 0) or (tail[0].top > screen_height):
-            running = False
+            start_losemenu(matrix, joystick_found, joystick, draw, image)
 
         # snake on apple
         if tail[0].left == apple.left and tail[0].top == apple.top:
@@ -109,12 +112,12 @@ def start_snake(matrix, joystick_found, joystick, draw, image):
             if events.type == pygame.QUIT:
                 running = False
 
-        if joystick.get_button(10):
-            running = False
 
         # clear screen
         draw.rectangle((0, 0, 32, 32), fill=(0, 0, 0))
         if joystick_found:
+            if joystick.get_button(10):
+                running = False
             x_axis = joystick.get_axis(0)
             y_axis = joystick.get_axis(1)
             move_snake_joy(x_axis, y_axis)
