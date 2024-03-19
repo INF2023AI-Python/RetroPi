@@ -19,11 +19,19 @@ matrix = RGBMatrix(options=options)
 
 pygame.init()
 SCALE = 1
+try:
+    pygame.joystick.init()
+    joystick = pygame.joystick.Joystick(0)
+    joystick.init()
+    joystick.get_numaxes()
+except Exception:
+    joystick_found = False
+    print("Kein Joystick gefunden")
 
 ##screen = pygame.display.set_mode((32*SCALE, 32*SCALE),pygame.FULLSCREEN)
 clock = pygame.time.Clock()
 running = True
-dt = 1 # TODO REMOVE VAR
+dt = 1  # TODO REMOVE VAR
 score = 0
 
 PLAYER_SPEED = 1
@@ -44,6 +52,36 @@ def withinBoard(rect: pygame.Rect):
 
 image = Image.new("RGB", (32, 32))
 draw = ImageDraw.Draw(image)
+
+
+def move():
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_w] and withinBoard(player.rect):
+        if (player.rect.top - (player.speed.y * dt)) < 0:
+            player.rect.top = 0
+        else:
+            player.rect.top -= player.speed.y * dt
+
+    if keys[pygame.K_s] and withinBoard(player.rect):
+        if (player.rect.bottom + (player.speed.y * dt)) > (32 * SCALE):
+            player.rect.top = 32 * SCALE - player.rect.height
+        else:
+            player.rect.top += player.speed.y * dt
+
+
+def move_joy(y_axis, threshold=0.1):
+    y_axis = 0 if abs(y_axis) < threshold else y_axis
+    if y_axis < 0:
+        if (player.rect.top - (player.speed.y * dt)) < 0:
+            player.rect.top = 0
+        else:
+            player.rect.top -= player.speed.y * dt
+    elif y_axis > 0:
+        if (player.rect.bottom + (player.speed.y * dt)) > (32 * SCALE):
+            player.rect.top = 32 * SCALE - player.rect.height
+        else:
+            player.rect.top += player.speed.y * dt
+
 
 while running:
     # poll for events
@@ -72,18 +110,11 @@ while running:
     matrix.SetImage(image, 0, 0)
     # update variable for gameobjects
     # player movement
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_w] and withinBoard(player.rect):
-        if (player.rect.top - (player.speed.y * dt)) < 0:
-            player.rect.top = 0
-        else:
-            player.rect.top -= player.speed.y * dt
-
-    if keys[pygame.K_s] and withinBoard(player.rect):
-        if (player.rect.bottom + (player.speed.y * dt)) > (32 * SCALE):
-            player.rect.top = 32 * SCALE - player.rect.height
-        else:
-            player.rect.top += player.speed.y * dt
+    if joystick_found:
+        y_axis = joystick.get_axis(1)
+        move_joy(y_axis)
+    else:
+        move()
 
     # BALL MOVEMENT
 
