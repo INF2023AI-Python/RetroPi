@@ -293,30 +293,30 @@ def move_joy(x_axis, y_axis):
             if not position_x == 15:
                 position_y -= 10
 
-        if joystick.get_button(RETURN):
-            if position_x == 5:
-                if position_y == 5:
-                    print("PONG")
-                    repeat(matrix, joystick_found, joystick, draw, image, start_pong)
-                if position_y == 15:
-                    print("SPACE INVADER")
-                    repeat(matrix, joystick_found, joystick, draw, image, start_spaceinvader)
-                if position_y == 25:
-                    print("BUTTON TEST")
-            if position_x == 15:
-                if position_y == 5:
-                    print("SNAKE")
-                    repeat(matrix, joystick_found, joystick, draw, image, start_snake)
-                if position_y == 25:
-                    print("TROPHY")
-            if position_x == 25:
-                if position_y == 5:
-                    print("TIK TAK TOE")
-                if position_y == 15:
-                    print("ENDLESS RUNNER")
-                    #repeat(matrix, joystick_found, joystick, draw, image, start_runner)
-                if position_y == 25:
-                    print("SHUTDOWN")
+    if joystick.get_button(RETURN):
+        if position_x == 5:
+            if position_y == 5:
+                print("PONG")
+                repeat(matrix, joystick_found, joystick, draw, image, start_pong)
+            if position_y == 15:
+                print("SPACE INVADER")
+                repeat(matrix, joystick_found, joystick, draw, image, start_spaceinvader)
+            if position_y == 25:
+                print("BUTTON TEST")
+        if position_x == 15:
+            if position_y == 5:
+                print("SNAKE")
+                repeat(matrix, joystick_found, joystick, draw, image, start_snake)
+            if position_y == 25:
+                print("TROPHY")
+        if position_x == 25:
+            if position_y == 5:
+                print("TIK TAK TOE")
+            if position_y == 15:
+                print("ENDLESS RUNNER")
+                #repeat(matrix, joystick_found, joystick, draw, image, start_runner)
+            if position_y == 25:
+                print("SHUTDOWN")
 
 
 def draw_colored():
