@@ -6,6 +6,17 @@ try:
 except ImportError:
     from rgbmatrix import RGBMatrix, RGBMatrixOptions
 
+joystick_found = True
+pygame.init()
+try:
+    pygame.joystick.init()
+    joystick = pygame.joystick.Joystick(0)
+    joystick.init()
+    joystick.get_numaxes()
+except Exception:
+    joystick_found = False
+    print("Kein Joystick gefunden")
+
 options = RGBMatrixOptions()
 options.rows = 32
 options.chain_length = 1
@@ -21,6 +32,8 @@ RED = (255,0,0)
 PLAY_COLOR = WHITE
 EXIT_COLOR = WHITE
 BORDER_COLOR = WHITE
+
+RETURN = 8
 
 image = Image.new("RGB", (32, 32))
 draw = ImageDraw.Draw(image)
@@ -43,7 +56,6 @@ def draw_tiemenu(text_color):
     draw.rectangle((1,9,30,9),fill=(WHITE))
     draw.rectangle((1,7,1,9),fill=(WHITE))
     draw.rectangle((30,7,30,9),fill=(WHITE))
-
 
 def draw_box(x):
     #draws box for play arrow
@@ -71,14 +83,11 @@ def draw_exit(color):
     draw.point((23,15),fill=(color))
     draw.point((24,14),fill=(color))
 
-clock = pygame.time.Clock() #is just a clock for how often the while loop is repeated
-pygame.init()
-running = True
-x = 0
-play_color = (GREEN)
-exit_color = (WHITE)
-while running:
-
+def move_box():
+    global play_color
+    global exit_color
+    global running
+    global x
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT] and x < 14:  #movment of the select box
         if x > 0:
@@ -98,6 +107,48 @@ while running:
         if x == 13:
             print("EXIT")
             running = False
+
+def move_box_joy(x_axis):
+    threshold = 0.1
+    global play_color
+    global exit_color
+    global running
+    global x
+    print("joy")
+    x_axis = 0 if abs(x_axis) < threshold else x_axis
+    if x_axis > 0 and x == 13:
+        x = 0
+        print("x = 0")
+        play_color = (GREEN)
+        exit_color = (WHITE)
+    elif x_axis < 0 and x == 0:
+        x = 13
+        play_color = (WHITE)
+        exit_color = (RED)
+        print("x = 13")
+
+    if joystick.get_button(RETURN):
+        if x == 0:
+            print("PLAY")
+            running = False
+        if x == 13:
+            print("EXIT")
+            running = False
+
+
+clock = pygame.time.Clock() #is just a clock for how often the while loop is repeated
+pygame.init()
+running = True
+x = 0
+play_color = (GREEN)
+exit_color = (WHITE)
+while running:
+    if joystick_found:
+        x_axis = joystick.get_axis(0)
+        move_box_joy(x_axis)
+    else:
+        move_box()
+
     draw.rectangle((0,0,32,32),fill=(0,0,0,0))
     draw_tiemenu(WHITE)
     draw_box(x)
@@ -105,4 +156,5 @@ while running:
     draw_exit(exit_color)
 
     matrix.SetImage(image, 0, 0)
-    clock.tick(15)
+    clock.tick(60)
+
