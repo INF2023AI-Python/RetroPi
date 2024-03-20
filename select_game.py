@@ -274,10 +274,10 @@ def move_joy(x_axis, y_axis):
     global input_lock_time
 
     threshold = 0.1
-    x_axis = 0 if abs(x_axis) < threshold else x_axis
-    y_axis = 0 if abs(y_axis) < threshold else y_axis
     current_time = time.time()
     if current_time - last_input_time > input_lock_time:
+        x_axis = 0 if abs(x_axis) < threshold else x_axis
+        y_axis = 0 if abs(y_axis) < threshold else y_axis
         if x_axis < 0:
             if position_x < 20:
                 if not position_y == 15:
