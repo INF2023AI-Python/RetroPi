@@ -1,7 +1,7 @@
 def start_pong(matrix, joystick_found, joystick, draw, image):
     import pygame
     import os
-    from game_object import *
+    from games.pong.game_object import GameObject
 
     pygame.init()
     SCALE = 1
@@ -34,8 +34,6 @@ def start_pong(matrix, joystick_found, joystick, draw, image):
 
 
     clock = pygame.time.Clock()
-    image = Image.new("RGB", (32, 32))
-    draw = ImageDraw.Draw(image)
     running = True
     dt = 1  # TODO REMOVE VAR
     score = 0
