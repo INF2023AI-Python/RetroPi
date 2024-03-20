@@ -48,6 +48,7 @@ class Mob(Entity):
 
     def take_dmg(self, dmg):
         self.hp = self.hp - dmg
+        self.color = [161, 8, 8]
         if self.hp <= 0:
             self.die()
     

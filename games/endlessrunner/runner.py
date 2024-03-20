@@ -36,10 +36,10 @@ def start_runner(matrix, joystick_found, joystick, draw, image):
         threshold = 0.1
         y_axis = joystick.get_axis(1)
 
-        if y_axis > threshhold:
-            return 1
-        if y_axis < -threshold:
+        if y_axis > threshold:
             return -1
+        if y_axis < -threshold:
+            return 1
 
         return 0
 
@@ -84,8 +84,8 @@ def start_runner(matrix, joystick_found, joystick, draw, image):
                 if joystick.get_button(11):
                     player_dir = -player_dir
                     jump_lock = 0.125
-                if joystick_dir != 0:
-                    player_dir = joystick_dir
+                if joystick_dir(joystick) != 0:
+                    player_dir = joystick_dir(joystick)
                 
 
         # player movement
@@ -101,7 +101,6 @@ def start_runner(matrix, joystick_found, joystick, draw, image):
             # Lose Condition
             if distance(obstacle,player) < 1:
                 running = False
-                return {"game": "endlessrunner", "score":int(score)}
 
         # spawn new obstacle
         if spawn_timer >= spawn_time_delay:
@@ -130,4 +129,4 @@ def start_runner(matrix, joystick_found, joystick, draw, image):
         score = score+dt
         matrix.SetImage(image, 0, 0)
         dt = clock.tick(120)/1000
-    return {"game":"runner", "score":score}
+    return {"game":"runner", "score":int(score)}

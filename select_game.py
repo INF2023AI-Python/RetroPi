@@ -1,4 +1,5 @@
 import pygame
+import os
 import time
 from PIL import Image
 from PIL import ImageDraw
@@ -9,6 +10,7 @@ from games.pong.pong import start_pong
 from games.snake.snake_game import start_snake
 from games.space_invaders.space_invaders import start_spaceinvader
 from lose_menu import start_losemenu
+from show_scoreboard import start_show_scoreboard
 
 try:
     from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
@@ -258,6 +260,7 @@ def move_key():
                 repeat(matrix, False, None, draw, image, start_snake)
             if position_y == 25:
                 print("TROPHY")
+                start_show_scoreboard(matrix, False, None, draw, image)
         if position_x == 25:
             if position_y == 5:
                 print("TIK TAK TOE")
@@ -266,6 +269,7 @@ def move_key():
                 repeat(matrix, False, None, draw, image, start_runner)
             if position_y == 25:
                 print("SHUTDOWN")
+                os.system("systemctl poweroff -i")
 
 
 def move_joy(x_axis, y_axis):
@@ -313,6 +317,7 @@ def move_joy(x_axis, y_axis):
                     repeat(matrix, joystick_found, joystick, draw, image, start_snake)
                 if position_y == 25:
                     print("TROPHY")
+                    start_show_scoreboard(matrix, joystick_found, joystick, draw, image)
             if position_x == 25:
                 if position_y == 5:
                     print("TIK TAK TOE")
@@ -321,6 +326,7 @@ def move_joy(x_axis, y_axis):
                     repeat(matrix, joystick_found, joystick, draw, image, start_runner)
                 if position_y == 25:
                     print("SHUTDOWN")
+                    os.system("systemctl poweroff -i")
 
 def draw_colored():
     global position_x
