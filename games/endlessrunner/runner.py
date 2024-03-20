@@ -43,18 +43,6 @@ def start_runner(matix, joystick_found, joystick, draw, image):
 
         return 0
 
-    # Schwellenwert für Stick-Drift oder Neutralzone
-        x_axis = 0 if abs(x_axis) < threshold else x_axis
-        y_axis = 0 if abs(y_axis) < threshold else y_axis
-    if x_axis < 0 and snake_dir != (-1, 0):
-        snake_dir = (1, 0)
-    elif x_axis > 0 and snake_dir != (1, 0):
-        snake_dir = (-1, 0)
-    elif y_axis < 0 and snake_dir != (0, -1):
-        snake_dir = (0, 1)
-    elif y_axis > 0 and snake_dir != (0, 1):
-        snake_dir = (0, -1)
-
 
     # Game statuses
     spawn_time_delay = 0.85
