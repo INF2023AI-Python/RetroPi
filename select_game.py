@@ -212,6 +212,7 @@ def repeat(matrix, joystick_found, joystick, draw, image, game):
         game_data = game(matrix, joystick_found, joystick, draw, image)
         option = start_losemenu(matrix, joystick_found, joystick, draw, image, game_data)
         if game_data["score"] > 0 and "score" in game_data:
+            scoreboard.read_from_file("score.json")
             scoreboard.add_entry(game_data["game"], "", game_data["score"])
             scoreboard.write_to_file("score.json")
         if option == "EXIT":
