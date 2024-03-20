@@ -1,6 +1,7 @@
 def start_losemenu(matrix, joystick_found, joystick, draw, image, game_data):
     import pygame
     import time
+    from displaying_characters import display_chars
     BLACK = (0, 0, 0)
     WHITE = (255, 255, 255)
     GREEN = (0, 255, 0)
@@ -12,7 +13,7 @@ def start_losemenu(matrix, joystick_found, joystick, draw, image, game_data):
 
     RETURN = 0
     global option
-    option = 2
+    option = "EXIT"
     global x
     x = 0
     global play_color, exit_color, save_color
@@ -65,20 +66,17 @@ def start_losemenu(matrix, joystick_found, joystick, draw, image, game_data):
         global option
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] and x > 0:  # movment of the select box
-            x -= 10
+            x -= 20
         if keys[pygame.K_RIGHT] and x <= 10:
-            x += 10
+            x += 20
 
         if keys[pygame.K_RETURN]:  # if enter is pressed
             if x == 0:
                 print("PLAY")
-                option = 0
-            if x == 10:
-                print("SAVE")
-                option = 1
+                option = "PLAY"
             if x == 20:
                 print("EXIT")
-                option = 2
+                option = "EXIT"
             running = False
 
     def set_color():
@@ -90,10 +88,6 @@ def start_losemenu(matrix, joystick_found, joystick, draw, image, game_data):
         if x == 0:
             play_color = (GREEN)
             save_color = (WHITE)
-            exit_color = (WHITE)
-        if x == 10:
-            play_color = (WHITE)
-            save_color = (LIGHT_BLUE)
             exit_color = (WHITE)
         if x == 20:
             play_color = (WHITE)
@@ -112,21 +106,18 @@ def start_losemenu(matrix, joystick_found, joystick, draw, image, game_data):
         if current_time - last_input_time > input_lock_time:
             x_axis = 0 if abs(x_axis) < threshold else x_axis
             if x_axis > 0 and x > 0:
-                x -= 10
+                x -= 20
                 last_input_time = current_time
             elif x_axis < 0 and x < 20:
-                x += 10
+                x += 20
                 last_input_time = current_time
 
         if joystick.get_button(RETURN):
             if x == 0:
-                option = 0
+                option = "PLAY"
                 print("PLAY")
-            if x == 10:
-                option = 1
-                print("SAVE")
             if x == 20:
-                option = 2
+                option = "EXIT"
                 print("EXIT")
 
             running = False
@@ -143,7 +134,8 @@ def start_losemenu(matrix, joystick_found, joystick, draw, image, game_data):
         draw_box(x)
         draw_arrow(play_color)
         draw_exit(exit_color)
-        draw_save(save_color)
+        #draw_save(save_color)
+        display_chars(str(game_data["score"]),2,12,draw)
 
         matrix.SetImage(image, 0, 0)
         clock.tick(60)

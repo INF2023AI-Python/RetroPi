@@ -210,3 +210,4 @@ def start_spaceinvader(matrix, joystick_found, joystick, draw, image):
         # Update Matrix-Image
         matrix.SetImage(image, 0, 0)
         dt = clock.tick(60) / 1000
+    return {"game":"spaceinvader","score":score}

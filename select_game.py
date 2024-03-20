@@ -3,6 +3,7 @@ import time
 from PIL import Image
 from PIL import ImageDraw
 
+from scoreboard import Scoreboard
 from games.pong.pong import start_pong
 from games.snake.snake_game import start_snake
 from games.space_invaders.space_invaders import start_spaceinvader
@@ -205,10 +206,14 @@ def draw_shutdown_button(color):
 
 
 def repeat(matrix, joystick_found, joystick, draw, image, game):
+    scoreboard = Scoreboard()
     while True:
         game_data = game(matrix, joystick_found, joystick, draw, image)
         option = start_losemenu(matrix, joystick_found, joystick, draw, image, game_data)
-        if option == 2:
+        if game_data["score"] > 0 and "score" in game_data:
+            scoreboard.add_entry(game_data["game"],"",game_data["score"])
+            scoreboard.write_to_file("score")
+        elif option == "EXIT":
             break
 
 
@@ -256,6 +261,7 @@ def move_key():
                 print("TIK TAK TOE")
             if position_y == 15:
                 print("ENDLESS RUNNER")
+            repeat(matrix, False, None, draw, image, start_runner)
             if position_y == 25:
                 print("SHUTDOWN")
 

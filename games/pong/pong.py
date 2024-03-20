@@ -23,7 +23,6 @@ def start_pong(matrix, joystick_found, joystick, draw, image):
     def withinBoard(rect: pygame.Rect):
         return playing_field.contains(rect)
 
-
     def move():
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w] and withinBoard(player.rect):
@@ -57,7 +56,6 @@ def start_pong(matrix, joystick_found, joystick, draw, image):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-
 
         # fill the screen with a color to wipe away anything from last frame
         ##screen.fill("black")
@@ -127,3 +125,4 @@ def start_pong(matrix, joystick_found, joystick, draw, image):
         # dt is delta time in seconds since last frame, used for framerate-
         # independent physics.
         clock.tick(30)
+    return {"score": score, "game": "pong"}
