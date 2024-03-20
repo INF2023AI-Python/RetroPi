@@ -6,13 +6,14 @@ from PIL import ImageDraw
 from games.pong.pong import start_pong
 from games.snake.snake_game import start_snake
 from games.space_invaders.space_invaders import start_spaceinvader
+from lose_menu import start_losemenu
 
 try:
     from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
 except ImportError:
     from rgbmatrix import RGBMatrix, RGBMatrixOptions
 
-joystick_found = False
+joystick_found = True
 pygame.init()
 try:
     pygame.joystick.init()
@@ -52,7 +53,6 @@ options.parallel = 1
 options.hardware_mapping = 'adafruit-hat'  # If you have an Adafruit HAT: 'adafruit-hat'
 
 matrix = RGBMatrix(options=options)
-
 
 image = Image.new("RGB", (32, 32))
 draw = ImageDraw.Draw(image)
@@ -204,11 +204,20 @@ def draw_shutdown_button(color):
     draw.line((26, 23, 26, 25), fill=(color))
 
 
+def repeat(matrix, joystick_found, joystick, draw, image, game):
+    while True:
+        game_data = game(matrix, joystick_found, joystick, draw, image)
+        option = start_losemenu(matrix, joystick_found, joystick, draw, image, game_data)
+        if option == 2:
+            break
+
+
 def move_key():
     global position_x
     global position_y
     global running
     # moves the position
+    game_data = {}
     keys = pygame.key.get_pressed()
     if keys[pygame.K_UP]:
         if position_y != 5:
@@ -230,14 +239,16 @@ def move_key():
         if position_x == 5:
             if position_y == 5:
                 print("PONG")
+                repeat(matrix, False, None, draw, image, start_pong)
             if position_y == 15:
                 print("SPACE INVADER")
+                repeat(matrix, False, None, draw, image, start_spaceinvader)
             if position_y == 25:
                 print("BUTTON TEST")
         if position_x == 15:
             if position_y == 5:
                 print("SNAKE")
-                start_snake(matrix, False, None, draw, image)
+                repeat(matrix, False, None, draw, image, start_snake)
             if position_y == 25:
                 print("TROPHY")
         if position_x == 25:
@@ -247,6 +258,9 @@ def move_key():
                 print("ENDLESS RUNNER")
             if position_y == 25:
                 print("SHUTDOWN")
+
+        if game_data:
+            start_losemenu(matrix, False, None, draw, image, game_data)
 
 
 def move_joy(x_axis, y_axis):
@@ -359,5 +373,9 @@ while running:
 
     draw_colored()
 
-    clock.tick(60)
+    if not joystick_found:
+        clock.tick(20)
+    else:
+        clock.tick(60)
+
     matrix.SetImage(image, 0, 0)

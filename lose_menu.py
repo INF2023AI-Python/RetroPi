@@ -1,4 +1,4 @@
-def start_losemenu(matrix, joystick_found, joystick, draw, image):
+def start_losemenu(matrix, joystick_found, joystick, draw, image, game_data):
     import pygame
     import time
     BLACK = (0, 0, 0)
@@ -11,44 +11,19 @@ def start_losemenu(matrix, joystick_found, joystick, draw, image):
     BORDER_COLOR = WHITE
 
     RETURN = 0
-
+    global option
+    option = 2
     global x
     x = 0
     global play_color, exit_color, save_color
     play_color = (GREEN)
     exit_color = (WHITE)
     save_color = (WHITE)
+    global running
     running = True
 
     input_lock_time = .3
     last_input_time = 0
-
-    def draw_losemenu():
-        # draw L
-        draw.rectangle((5, 3, 5, 7), fill=(WHITE))
-        draw.rectangle((6, 7, 8, 7), fill=(WHITE))
-
-        # draw O
-        draw.rectangle((10, 3, 14, 7), fill=(WHITE))
-        draw.rectangle((11, 4, 13, 6), fill=(BLACK))
-
-        # draw S
-        draw.rectangle((16, 3, 20, 3), fill=(WHITE))
-        draw.point((16, 4), fill=(WHITE))
-        draw.rectangle((16, 5, 20, 5), fill=(WHITE))
-        draw.point((20, 6), fill=(WHITE))
-        draw.rectangle((16, 7, 20, 7), fill=(WHITE))
-
-        # draw E
-        draw.rectangle((22, 3, 22, 7), fill=(WHITE))
-        draw.rectangle((23, 3, 26, 3), fill=(WHITE))
-        draw.rectangle((23, 5, 25, 5), fill=(WHITE))
-        draw.rectangle((23, 7, 26, 7), fill=(WHITE))
-
-        # draws underline for Menu
-        draw.rectangle((3, 9, 28, 9), fill=(WHITE))
-        draw.rectangle((3, 7, 3, 9), fill=(WHITE))
-        draw.rectangle((28, 7, 28, 9), fill=(WHITE))
 
     def draw_box(x):
         # draws box for play arrow
@@ -87,6 +62,7 @@ def start_losemenu(matrix, joystick_found, joystick, draw, image):
     def move_box():
         global x
         global running
+        global option
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] and x > 0:  # movment of the select box
             x -= 10
@@ -96,13 +72,14 @@ def start_losemenu(matrix, joystick_found, joystick, draw, image):
         if keys[pygame.K_RETURN]:  # if enter is pressed
             if x == 0:
                 print("PLAY")
-                running = False
+                option = 0
             if x == 10:
                 print("SAVE")
-                running = False
+                option = 1
             if x == 20:
                 print("EXIT")
-                running = False
+                option = 2
+            running = False
 
     def set_color():
         global play_color
@@ -110,15 +87,15 @@ def start_losemenu(matrix, joystick_found, joystick, draw, image):
         global save_color
         global x
         # sets the colors for the content of the boxes
-        if x== 0:
+        if x == 0:
             play_color = (GREEN)
             save_color = (WHITE)
             exit_color = (WHITE)
-        if x== 10:
+        if x == 10:
             play_color = (WHITE)
             save_color = (LIGHT_BLUE)
             exit_color = (WHITE)
-        if x== 20:
+        if x == 20:
             play_color = (WHITE)
             save_color = (WHITE)
             exit_color = (RED)
@@ -126,6 +103,7 @@ def start_losemenu(matrix, joystick_found, joystick, draw, image):
     def move_box_joy(x_axis):
         global x
         global running
+        global option
         global last_input_time
         global input_lock_time
 
@@ -142,15 +120,16 @@ def start_losemenu(matrix, joystick_found, joystick, draw, image):
 
         if joystick.get_button(RETURN):
             if x == 0:
+                option = 0
                 print("PLAY")
-                running = False
             if x == 10:
+                option = 1
                 print("SAVE")
-                running = False
             if x == 20:
+                option = 2
                 print("EXIT")
-                running = False
 
+            running = False
     clock = pygame.time.Clock()  # is just a clock for how often the while loop is repeated
 
     while running:
@@ -161,11 +140,12 @@ def start_losemenu(matrix, joystick_found, joystick, draw, image):
             move_box()
         set_color()
         draw.rectangle((0, 0, 32, 32), fill=(0, 0, 0, 0))
-        draw_losemenu()
         draw_box(x)
         draw_arrow(play_color)
         draw_exit(exit_color)
         draw_save(save_color)
 
         matrix.SetImage(image, 0, 0)
-        clock.tick(10)
+        clock.tick(60)
+
+    return option
