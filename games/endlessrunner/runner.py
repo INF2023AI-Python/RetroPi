@@ -130,3 +130,4 @@ def start_runner(matrix, joystick_found, joystick, draw, image):
         score = score+dt
         matrix.SetImage(image, 0, 0)
         dt = clock.tick(120)/1000
+    return {"game":"runner", "score":score}
