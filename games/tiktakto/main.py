@@ -25,7 +25,7 @@ try:
     joystick.get_numaxes()
 except Exception:
     joystick_found = False
-    print("Kein Joystick gefunden")
+    #print("Kein Joystick gefunden")
 
 options = RGBMatrixOptions()
 options.rows = 32
@@ -73,7 +73,7 @@ def move_box_joy(x_axis, y_axis, threshold=0.1):
         if current_time - last_input_time > input_lock_time:
             x_axis = 0 if abs(x_axis) < threshold else x_axis
             y_axis = 0 if abs(y_axis) < threshold else y_axis
-            print(x_axis, y_axis)
+            #print(x_axis, y_axis)
             if x_axis < 0 and x < 21*scale:
                 x += vel
                 last_input_time = current_time
