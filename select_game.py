@@ -211,7 +211,7 @@ def repeat(matrix, joystick_found, joystick, draw, image, game):
         game_data = game(matrix, joystick_found, joystick, draw, image)
         option = start_losemenu(matrix, joystick_found, joystick, draw, image, game_data)
         if game_data["score"] > 0 and "score" in game_data:
-            scoreboard.add_entry(game_data["game"],"",game_data["score"])
+            scoreboard.add_entry(game_data["game"], "", game_data["score"])
             scoreboard.write_to_file("score")
         elif option == "EXIT":
             break
@@ -261,7 +261,7 @@ def move_key():
                 print("TIK TAK TOE")
             if position_y == 15:
                 print("ENDLESS RUNNER")
-            repeat(matrix, False, None, draw, image, start_runner)
+                # repeat(matrix, False, None, draw, image, start_runner)
             if position_y == 25:
                 print("SHUTDOWN")
 
@@ -306,16 +306,16 @@ def move_joy(x_axis, y_axis):
             if position_x == 5:
                 if position_y == 5:
                     print("PONG")
-                    start_pong(matrix, joystick_found, joystick, draw, image)
+                    repeat(matrix, joystick_found, joystick, draw, image, start_pong)
                 if position_y == 15:
                     print("SPACE INVADER")
-                    start_spaceinvader(matrix, joystick_found, joystick, draw, image)
+                    repeat(matrix, joystick_found, joystick, draw, image, start_spaceinvader)
                 if position_y == 25:
                     print("BUTTON TEST")
             if position_x == 15:
                 if position_y == 5:
                     print("SNAKE")
-                    start_snake(matrix, joystick_found, joystick, draw, image)
+                    repeat(matrix, joystick_found, joystick, draw, image, start_snake)
                 if position_y == 25:
                     print("TROPHY")
             if position_x == 25:
@@ -323,6 +323,7 @@ def move_joy(x_axis, y_axis):
                     print("TIK TAK TOE")
                 if position_y == 15:
                     print("ENDLESS RUNNER")
+                    #repeat(matrix, joystick_found, joystick, draw, image, start_runner)
                 if position_y == 25:
                     print("SHUTDOWN")
 
