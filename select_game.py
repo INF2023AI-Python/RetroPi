@@ -5,6 +5,7 @@ from PIL import Image
 from PIL import ImageDraw
 
 from games.endlessrunner.runner import start_runner
+from games.tiktakto.main import start_tiktaktoe
 from scoreboard import Scoreboard
 from games.pong.pong import start_pong
 from games.snake.snake_game import start_snake
@@ -264,6 +265,7 @@ def move_key():
         if position_x == 25:
             if position_y == 5:
                 print("TIK TAK TOE")
+                start_tiktaktoe(matrix, False, None, draw, image)
             if position_y == 15:
                 print("ENDLESS RUNNER")
                 repeat(matrix, False, None, draw, image, start_runner)
@@ -321,6 +323,7 @@ def move_joy(x_axis, y_axis):
             if position_x == 25:
                 if position_y == 5:
                     print("TIK TAK TOE")
+                    start_tiktaktoe(matrix, joystick_found, joystick, draw, image)
                 if position_y == 15:
                     print("ENDLESS RUNNER")
                     repeat(matrix, joystick_found, joystick, draw, image, start_runner)
