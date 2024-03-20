@@ -370,5 +370,5 @@ while running:
         move_key()
 
     draw_colored()
-    clock.tick(20)
+    clock.tick(60)
     matrix.SetImage(image, 0, 0)

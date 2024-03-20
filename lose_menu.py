@@ -127,8 +127,9 @@ def start_losemenu(matrix, joystick_found, joystick, draw, image, game_data):
         draw_box(x)
         draw_arrow(play_color)
         draw_exit(exit_color)
-        #draw_save(save_color)
-        display_chars(str(game_data["score"]),2,12,draw)
+        # draw_save(save_color)
+
+        display_chars(str(game_data["score"]), 2, (32 - 4 * len(str(game_data["score"]))) // 2, draw)
 
         matrix.SetImage(image, 0, 0)
         clock.tick(60)
