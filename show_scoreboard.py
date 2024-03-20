@@ -155,17 +155,13 @@ def move_joy(x_axis, y_axis,game_displayed,exiting_timer):
         if joystick.get_button(RETURN):
             if position_x < 20:
                 if position_y < 20:
-                    # print("pong")
                     game_displayed="pong"
                 if position_y > 20:
-                    # print("space_invaders")
                     game_displayed="space_invaders"
             if position_x > 20:
                 if position_y < 20:
-                    # print("snake")
                     game_displayed="snake"
                 if position_y > 20:
-                    # print("runner")
                     game_displayed="runner"
 
         if joystick.get_button(10) and game_displayed == "" and exiting_timer <= 0:
@@ -201,7 +197,6 @@ scoreboard_keys = scoreboard.get_games()
 exiting_timer = 0
 dt = 0
 while running:
-    print(exiting_timer)
     pygame.event.get()
 
     for event in pygame.event.get():
