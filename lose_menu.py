@@ -11,7 +11,7 @@ def start_losemenu(matrix, joystick_found, joystick, draw, image, game_data):
     EXIT_COLOR = WHITE
     BORDER_COLOR = WHITE
 
-    RETURN = 0
+    RETURN = 8
     global option
     option = "EXIT"
     global x
@@ -95,6 +95,7 @@ def start_losemenu(matrix, joystick_found, joystick, draw, image, game_data):
         global x
         global running
         global option
+        threshold = 0.1
 
         x_axis = 0 if abs(x_axis) < threshold else x_axis
         if x_axis > 0 and x > 0:
@@ -109,10 +110,9 @@ def start_losemenu(matrix, joystick_found, joystick, draw, image, game_data):
             if x == 20:
                 option = "EXIT"
                 print("EXIT")
-
             running = False
-    clock = pygame.time.Clock()  # is just a clock for how often the while loop is repeated
 
+    clock = pygame.time.Clock()  # is just a clock for how often the while loop is repeated
     while running:
         if joystick_found:
             x_axis = joystick.get_axis(0)

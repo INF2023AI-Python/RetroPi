@@ -276,6 +276,7 @@ def move_joy(x_axis, y_axis):
     threshold = 0.1
     x_axis = 0 if abs(x_axis) < threshold else x_axis
     y_axis = 0 if abs(y_axis) < threshold else y_axis
+
     if x_axis < 0:
         if position_x < 20:
             if not position_y == 15:
@@ -292,7 +293,6 @@ def move_joy(x_axis, y_axis):
         if position_y != 5:
             if not position_x == 15:
                 position_y -= 10
-
     if joystick.get_button(RETURN):
         if position_x == 5:
             if position_y == 5:
@@ -317,31 +317,6 @@ def move_joy(x_axis, y_axis):
                 #repeat(matrix, joystick_found, joystick, draw, image, start_runner)
             if position_y == 25:
                 print("SHUTDOWN")
-        if joystick.get_button(RETURN):
-            if position_x == 5:
-                if position_y == 5:
-                    print("PONG")
-                    repeat(matrix, joystick_found, joystick, draw, image, start_pong)
-                if position_y == 15:
-                    print("SPACE INVADER")
-                    repeat(matrix, joystick_found, joystick, draw, image, start_spaceinvader)
-                if position_y == 25:
-                    print("BUTTON TEST")
-            if position_x == 15:
-                if position_y == 5:
-                    print("SNAKE")
-                    repeat(matrix, joystick_found, joystick, draw, image, start_snake)
-                if position_y == 25:
-                    print("TROPHY")
-            if position_x == 25:
-                if position_y == 5:
-                    print("TIK TAK TOE")
-                if position_y == 15:
-                    print("ENDLESS RUNNER")
-                    #repeat(matrix, joystick_found, joystick, draw, image, start_runner)
-                if position_y == 25:
-                    print("SHUTDOWN")
-
 
 def draw_colored():
     global position_x
