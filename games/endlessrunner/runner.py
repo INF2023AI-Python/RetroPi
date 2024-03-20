@@ -2,7 +2,7 @@ import pygame
 import random
 import math
 
-def start_runner(matix, joystick_found, joystick, draw, image):
+def start_runner(matrix, joystick_found, joystick, draw, image):
 
     pygame.init()
     clock = pygame.time.Clock()

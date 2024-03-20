@@ -3,6 +3,7 @@ import time
 from PIL import Image
 from PIL import ImageDraw
 
+from games.endlessrunner.runner import start_runner
 from scoreboard import Scoreboard
 from games.pong.pong import start_pong
 from games.snake.snake_game import start_snake
@@ -213,7 +214,7 @@ def repeat(matrix, joystick_found, joystick, draw, image, game):
         if game_data["score"] > 0 and "score" in game_data:
             scoreboard.add_entry(game_data["game"], "", game_data["score"])
             scoreboard.write_to_file("score")
-        elif option == "EXIT":
+        if option == "EXIT":
             time.sleep(0.3)
             break
 
@@ -261,7 +262,7 @@ def move_key():
                 print("TIK TAK TOE")
             if position_y == 15:
                 print("ENDLESS RUNNER")
-                # repeat(matrix, False, None, draw, image, start_runner)
+                repeat(matrix, False, None, draw, image, start_runner)
             if position_y == 25:
                 print("SHUTDOWN")
 
@@ -316,7 +317,7 @@ def move_joy(x_axis, y_axis):
                     print("TIK TAK TOE")
                 if position_y == 15:
                     print("ENDLESS RUNNER")
-                    #repeat(matrix, joystick_found, joystick, draw, image, start_runner)
+                    repeat(matrix, joystick_found, joystick, draw, image, start_runner)
                 if position_y == 25:
                     print("SHUTDOWN")
 
