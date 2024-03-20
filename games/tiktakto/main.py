@@ -45,7 +45,6 @@ BLACK=(0, 0, 0)
 scale = 1
 pygame.display.set_caption('Tic Tac Tobi')
 color = (255, 0, 0)
-font = pygame.font.SysFont(None, 40)
 
 # defining the moving rectangle
 x = 11*scale  # start position
