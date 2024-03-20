@@ -4,7 +4,7 @@ class Scoreboard:
     
     def __init__(self):
         self.board={}
-    # tested
+
     def sort_all(self):
         """
         Sorts the entire scoreboard
@@ -14,7 +14,6 @@ class Scoreboard:
             temp = sorted(temp, key=lambda x:int(x[1]), reverse=True)
             self.board[i] = temp
 
-    # tested
     def sort(self, game):
         """
         Sorts the scores of the given game
@@ -30,7 +29,6 @@ class Scoreboard:
         temp = sorted(temp, key=lambda x:int(x[1]), reverse=True)
         self.board[game] = temp
     
-    # tested    
     def add_entry(self, game, name, score):
         """
         Add a entry to the scoreboard
@@ -44,7 +42,6 @@ class Scoreboard:
         self.board[game].append([name,score])
         self.sort(game)
 
-    # tested
     def remove_entry(self, game, name, score):
         """
         Removes a entry of the scoreboard
@@ -65,7 +62,6 @@ class Scoreboard:
         temp.remove([name, score])
         self.board[game] = temp
     
-    # tested
     def remove_place(self, game, place):
         """
         Removes a entry of the scoreboard by the given place
@@ -86,7 +82,6 @@ class Scoreboard:
         del temp[place]
         self.board[game] = temp 
 
-    # tested
     def get_name_and_score(self,game,place):
         """
         Returns thse score of the given game and place
@@ -104,7 +99,6 @@ class Scoreboard:
         print("Out of bounds")
         return (0,0)
 
-    # tested
     def get_number_of_entries(self,game):
         """
         Returns the number of entries of the specified game
@@ -121,7 +115,6 @@ class Scoreboard:
         
         return len(self.board[game])
     
-    # tested
     def get_placement_ranging(self, game, start, stop):
         """
         Returns the entries for the specified placement range
@@ -137,21 +130,19 @@ class Scoreboard:
             start = stop
             stop = temp
         
-        if self.get_number_of_entries(game) < stop or start < 0:
+        if start < 0:
             print("Range out of Bounds")
             return
         if game not in self.board.keys():
             print("No game entries")
             return
 
+        stop = min(len(self.board[game]),stop)
         for i in range(start,stop):
             result.append(self.board[game][i])
-            # debug purpose
-            #print("Place: ", i,": ", self.board[game][i])
         
         return result
 
-    # tested
     def get_all_game_entries(self, game):
         """
         Retunrs all enries of the specified game
@@ -166,7 +157,6 @@ class Scoreboard:
 
         return self.board[game]
 
-    # tested
     def get_all_entries(self):
         """
         Returns all entries saved in the scoreboard as a list
@@ -179,7 +169,6 @@ class Scoreboard:
 
         return result    
 
-    # tested
     def write_to_file(self, filename):
         """
         Saves the scoreboard as a json file
@@ -189,7 +178,7 @@ class Scoreboard:
         with open(filename, "w") as output_file: 
             json.dump(self.board, output_file)
 
-    # tested
+
     def read_from_file(self, filename):
         """
         Loads the scoreboard from a json file
@@ -199,19 +188,5 @@ class Scoreboard:
         with open(filename) as input_file:
             self.board = json.load(input_file)
 
-
-# # stuff for tests
-# a = Scoreboard()
-
-# a.add_entry("SpielA","NameA",1)
-# a.add_entry("SpielA","NameB",2)
-
-# a.add_entry("SpielB","NameBA",1)
-# a.add_entry("SpielB","NameBB",2)
-# a.add_entry("SpielB","NameBC",5)
-# a.add_entry("SpielB","NameBD",4)
-# a.add_entry("SpielB","NameBE",3)
-
-# a.write_to_file("aaaaaaaaaaaaaaa.json")
-# a.read_from_file("aaaaaaaaaaaaaaa.json")
-# print(a.get_all_entries())
+    def get_games(self):
+        return self.board.keys()

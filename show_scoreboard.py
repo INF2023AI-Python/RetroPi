@@ -1,4 +1,5 @@
 from displaying_characters import display_chars
+import scoreboard
 import pygame
 import time
 from PIL import Image
@@ -33,6 +34,7 @@ LIGHT_GREEN = (70,230,0)
 GREY = (128,128,128)
 DARK_GREY = (64,64,64)
 LIGHT_GREY = (192,192,192)
+GOLD = (212,175,55)
 
 RETURN = 8
 
@@ -60,14 +62,14 @@ def display_scoreboard(game, draw, scoreboard):
 
     placements = scoreboard.get_placement_ranging(game,1,5)
     place = 1
-    for score in placements:
+    for name,score in placements:
         y_cords = 6*(place-1)
         display_chars(str(place)+" "+ str(score),y_cords, 1,draw)
         place = place+1
 
 def draw_grid():
-    draw.rectangle((15, 0, 16, 31), fill=PURPLE)
-    draw.rectangle((0, 15, 31, 16), fill=PURPLE)
+    draw.rectangle((15, 0, 16, 31), fill=GOLD)
+    draw.rectangle((0, 15, 31, 16), fill=GOLD)
 
 def draw_pong(wall_color, ball_color):
     draw.line((0,2,0,5), fill=wall_color)
@@ -82,7 +84,7 @@ def draw_snake(body_color, head_color, apple_color):
     draw.point((25,11), fill=head_color)
     draw.point((28,4), fill=apple_color)
 
-def draw_space_invader(mob_color, rock_color, bullet_color, player_color, base_color):
+def draw_space_invaders(mob_color, rock_color, bullet_color, player_color, base_color):
 
     draw.rectangle((2,18,3,19), fill=mob_color)
     draw.rectangle((5,18,6,19), fill=mob_color)
@@ -108,7 +110,7 @@ def draw_space_invader(mob_color, rock_color, bullet_color, player_color, base_c
     draw.line((4,30,6,30), fill=player_color)
     draw.line((0,31,14,31), fill=base_color)
 
-def draw_endlessrunner(player_color, border_color, obstacle_color):
+def draw_runner(player_color, border_color, obstacle_color):
     draw.point((19,30),fill=player_color)
 
     draw.line((17,17,31,17), fill=border_color)
@@ -120,7 +122,7 @@ def draw_endlessrunner(player_color, border_color, obstacle_color):
     draw.point((28,18), fill=obstacle_color)
     draw.point((31,30), fill=obstacle_color)
 
-def move_joy(x_axis, y_axis):
+def move_joy(x_axis, y_axis,game_displayed,exiting_timer):
     global position_x
     global position_y
     global running
@@ -153,52 +155,80 @@ def move_joy(x_axis, y_axis):
         if joystick.get_button(RETURN):
             if position_x < 20:
                 if position_y < 20:
-                    print("pong")
+                    # print("pong")
+                    game_displayed="pong"
                 if position_y > 20:
-                    print("space invader")
+                    # print("space_invaders")
+                    game_displayed="space_invaders"
             if position_x > 20:
                 if position_y < 20:
-                    print("snake")
+                    # print("snake")
+                    game_displayed="snake"
                 if position_y > 20:
-                    print("endless runner")
+                    # print("runner")
+                    game_displayed="runner"
+
+        if joystick.get_button(10) and game_displayed == "" and exiting_timer <= 0:
+            running = False
+        elif joystick.get_button(10):
+            game_displayed=""
+            exiting_timer = 0.3
+        
+    return game_displayed,exiting_timer
 
 def draw_colored(position_x, position_y):
     if position_x < 20:
         if position_y < 20:
             draw_pong(WHITE, RED)
         if position_y > 20:
-            draw_space_invader(RED, GREY, LIGHT_GREY, GREEN, YELLOW)
+            draw_space_invaders(RED, GREY, LIGHT_GREY, GREEN, YELLOW)
     if position_x > 20:
         if position_y < 20:
             draw_snake(BLUE, RED, YELLOW)
         if position_y > 20:
-            draw_endlessrunner(BLUE, WHITE, RED)
+            draw_runner(BLUE, WHITE, RED)
 
 def draw_grey():
     draw_pong(LIGHT_GREY, GREY)
     draw_snake(GREY, DARK_GREY, LIGHT_GREY)
-    draw_space_invader(GREY, DARK_GREY, LIGHT_GREY, LIGHT_GREY, GREY)
-    draw_endlessrunner(LIGHT_GREY, GREY, DARK_GREY)
+    draw_space_invaders(GREY, DARK_GREY, LIGHT_GREY, LIGHT_GREY, GREY)
+    draw_runner(LIGHT_GREY, GREY, DARK_GREY)
 
-
+scoreboard = scoreboard.Scoreboard()
+scoreboard.read_from_file("score.json")
+game_displayed = ""
+scoreboard_keys = scoreboard.get_games()
+exiting_timer = 0
+dt = 0
 while running:
-
+    print(exiting_timer)
     pygame.event.get()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
+    
+
     if joystick_found:
         x_axis = joystick.get_axis(0)
         y_axis = joystick.get_axis(1)
-        move_joy(x_axis,y_axis)
-    print(position_x, position_y)
+        game_displayed,exiting_timer = move_joy(x_axis,y_axis,game_displayed,exiting_timer)
 
     draw.rectangle((0, 0, 31, 31), BLACK)
-    draw_grid()
-    draw_grey()
-    draw_colored(position_x, position_y)
-    #display_scoreboard("Tetris", draw, scoreboard)
+    if game_displayed == "pong" and "pong" in scoreboard_keys:
+        display_scoreboard("pong",draw,scoreboard)
+    elif game_displayed == "snake" and "snake" in scoreboard_keys:
+        display_scoreboard("snake",draw,scoreboard)
+    elif game_displayed == "space_invaders" and "space_invaders" in scoreboard_keys:
+        display_scoreboard("space_invaders",draw,scoreboard)
+    elif game_displayed == "runner" and "runner" in scoreboard_keys:
+        display_scoreboard("runner",draw,scoreboard)
+    else:
+        draw_grid()
+        draw_grey()
+        draw_colored(position_x, position_y)
+    
     matrix.SetImage(image)
-    clock.tick(60)
+    exiting_timer = exiting_timer-dt
+    dt = clock.tick(60) / 1000
