@@ -186,7 +186,7 @@ class Scoreboard:
         Input
         (str) filename: the json file to be saved to e.g. test.json
         """
-        with open(filename, "w") as output_file: 
+        with open(filename, "w+") as output_file:
             json.dump(self.board, output_file)
 
     # tested

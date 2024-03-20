@@ -220,7 +220,6 @@ def repeat(matrix, joystick_found, joystick, draw, image, game):
 def move_key():
     global position_x
     global position_y
-    global running
     # moves the position
     game_data = {}
     keys = pygame.key.get_pressed()
@@ -269,7 +268,6 @@ def move_key():
 def move_joy(x_axis, y_axis):
     global position_x
     global position_y
-    global running
     global last_input_time
     global input_lock_time
 
@@ -372,10 +370,5 @@ while running:
         move_key()
 
     draw_colored()
-
-    if not joystick_found:
-        clock.tick(20)
-    else:
-        clock.tick(15)
-
+    clock.tick(20)
     matrix.SetImage(image, 0, 0)
