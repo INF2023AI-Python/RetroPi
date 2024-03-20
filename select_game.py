@@ -44,7 +44,7 @@ position_x = 5
 position_y = 5
 running = True
 
-input_lock_time = .5
+input_lock_time = .2
 last_input_time = 0
 
 options = RGBMatrixOptions()
