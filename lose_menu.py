@@ -115,6 +115,7 @@ def start_losemenu(matrix, joystick_found, joystick, draw, image, game_data):
     clock = pygame.time.Clock()  # is just a clock for how often the while loop is repeated
     while running:
         if joystick_found:
+            print("lose menu joystick: ",joystick_found)
             x_axis = joystick.get_axis(0)
             move_box_joy(x_axis)
         else:
