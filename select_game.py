@@ -265,9 +265,6 @@ def move_key():
             if position_y == 25:
                 print("SHUTDOWN")
 
-        if game_data:
-            start_losemenu(matrix, False, None, draw, image, game_data)
-
 
 def move_joy(x_axis, y_axis):
     global position_x
@@ -276,31 +273,25 @@ def move_joy(x_axis, y_axis):
     global last_input_time
     global input_lock_time
 
-    current_time = time.time()
     threshold = 0.1
-    if current_time - last_input_time > input_lock_time:
-        x_axis = 0 if abs(x_axis) < threshold else x_axis
-        y_axis = 0 if abs(y_axis) < threshold else y_axis
-        if x_axis < 0:
-            if position_x < 20:
-                if not position_y == 15:
-                    position_x += 10
-                    last_input_time = current_time
-        elif x_axis > 0:
-            if position_x > 5:
-                if not position_y == 15:
-                    position_x -= 10
-                    last_input_time = current_time
-        elif y_axis < 0:
-            if not position_y == 25:
-                if not position_x == 15:
-                    position_y += 10
-                    last_input_time = current_time
-        elif y_axis > 0:
-            if position_y != 5:
-                if not position_x == 15:
-                    position_y -= 10
-                    last_input_time = current_time
+    x_axis = 0 if abs(x_axis) < threshold else x_axis
+    y_axis = 0 if abs(y_axis) < threshold else y_axis
+    if x_axis < 0:
+        if position_x < 20:
+            if not position_y == 15:
+                position_x += 10
+    elif x_axis > 0:
+        if position_x > 5:
+            if not position_y == 15:
+                position_x -= 10
+    elif y_axis < 0:
+        if not position_y == 25:
+            if not position_x == 15:
+                position_y += 10
+    elif y_axis > 0:
+        if position_y != 5:
+            if not position_x == 15:
+                position_y -= 10
 
         if joystick.get_button(RETURN):
             if position_x == 5:
@@ -383,6 +374,6 @@ while running:
     if not joystick_found:
         clock.tick(20)
     else:
-        clock.tick(60)
+        clock.tick(15)
 
     matrix.SetImage(image, 0, 0)
