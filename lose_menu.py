@@ -23,9 +23,6 @@ def start_losemenu(matrix, joystick_found, joystick, draw, image, game_data):
     global running
     running = True
 
-    input_lock_time = .3
-    last_input_time = 0
-
     def draw_box(x):
         # draws box for play arrow
         draw.rectangle((2 + x, 11, 2 + x, 21), fill=(BORDER_COLOR))
@@ -98,19 +95,12 @@ def start_losemenu(matrix, joystick_found, joystick, draw, image, game_data):
         global x
         global running
         global option
-        global last_input_time
-        global input_lock_time
 
-        current_time = time.time()
-        threshold = 0.1
-        if current_time - last_input_time > input_lock_time:
-            x_axis = 0 if abs(x_axis) < threshold else x_axis
-            if x_axis > 0 and x > 0:
-                x -= 20
-                last_input_time = current_time
-            elif x_axis < 0 and x < 20:
-                x += 20
-                last_input_time = current_time
+        x_axis = 0 if abs(x_axis) < threshold else x_axis
+        if x_axis > 0 and x > 0:
+            x -= 20
+        elif x_axis < 0 and x < 20:
+            x += 20
 
         if joystick.get_button(RETURN):
             if x == 0:
