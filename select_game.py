@@ -214,6 +214,7 @@ def repeat(matrix, joystick_found, joystick, draw, image, game):
             scoreboard.add_entry(game_data["game"], "", game_data["score"])
             scoreboard.write_to_file("score")
         elif option == "EXIT":
+            time.sleep(0.3)
             break
 
 
