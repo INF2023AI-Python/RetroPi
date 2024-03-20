@@ -201,7 +201,7 @@ while running:
 
     #printing the game board
     draw_grid()
-    
+
     #moving rectangle to trac position
     if player ==0:
         draw.rectangle((x ,y ,x+9,y+9),fill=BLUE)
@@ -241,5 +241,7 @@ while running:
         if event.type == pygame.QUIT:  # If player is closing the window -> the loop will be closed
             running = False  # ends pygamges
     matrix.SetImage(image, 0, 0)
-    clock.tick(60)
+    clock.tick(30) 
+
+
 
