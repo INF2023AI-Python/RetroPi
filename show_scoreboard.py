@@ -170,6 +170,7 @@ def start_show_scoreboard(matrix, joystick_found, joystick, draw, image):
     scoreboard_keys = scoreboard.get_games()
     exiting_timer = 0
     dt = 0
+    initial_timer = 0.3
     while running:
         pygame.event.get()
 
@@ -177,15 +178,13 @@ def start_show_scoreboard(matrix, joystick_found, joystick, draw, image):
             if event.type == pygame.QUIT:
                 running = False
 
-
-
         if joystick_found:
             x_axis = joystick.get_axis(0)
             y_axis = joystick.get_axis(1)
             game_displayed,exiting_timer = move_joy(x_axis,y_axis,game_displayed,exiting_timer)
 
         draw.rectangle((0, 0, 31, 31), BLACK)
-        if game_displayed == "pong" and "pong" in scoreboard_keys:
+        if game_displayed == "pong" and "pong" in scoreboard_keys and initial_timer <= 0:
             display_scoreboard("pong",draw,scoreboard)
         elif game_displayed == "snake" and "snake" in scoreboard_keys:
             display_scoreboard("snake",draw,scoreboard)
@@ -200,4 +199,5 @@ def start_show_scoreboard(matrix, joystick_found, joystick, draw, image):
 
         matrix.SetImage(image)
         exiting_timer = exiting_timer-dt
+        initial_timer = initial_timer-dt if initial_timer > 0 else 0
         dt = clock.tick(60) / 1000
