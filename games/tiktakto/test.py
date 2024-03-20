@@ -37,6 +37,10 @@ BLUE=(0, 0, 255)
 WHITE=(255, 255, 255)
 BLACK=(0, 0, 0)
 
+#delay
+input_lock_time = 0.3
+last_input_time = 0
+
 pygame.display.set_caption('Tic Tac Tobi')
 
 clock = pygame.time.Clock() #is just a clock for how often the while loop is repeated
@@ -107,6 +111,3 @@ while running:
             running = False  # ends pygamges
     matrix.SetImage(image, 0, 0)
     clock.tick(30) 
-
-
-

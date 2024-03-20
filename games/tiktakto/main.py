@@ -175,6 +175,8 @@ while running:
 
     # imput from the joystick 
     if joystick_found:
+        if joystick.get_button(10):
+            running = False
         x_axis = joystick.get_axis(0)
         y_axis = joystick.get_axis(1)
         move_box_joy(x_axis, y_axis)
