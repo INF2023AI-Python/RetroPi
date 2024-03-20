@@ -39,8 +39,6 @@ BLACK=(0, 0, 0)
 
 pygame.display.set_caption('Tic Tac Tobi')
 
-
-
 clock = pygame.time.Clock() #is just a clock for how often the while loop is repeated
 running = True
 
@@ -48,9 +46,6 @@ running = True
 def move_box_joy(x_axis, y_axis, threshold=0.1):
         global last_input_time
         global input_lock_time
-        global snake_dir
-        global y
-        global x
 
         current_time=time.time()
         # Schwellenwert für Stick-Drift oder Neutralzone
@@ -58,25 +53,25 @@ def move_box_joy(x_axis, y_axis, threshold=0.1):
             x_axis = 0 if abs(x_axis) < threshold else x_axis
             y_axis = 0 if abs(y_axis) < threshold else y_axis
             #print(x_axis, y_axis)
-            if x_axis < 0 and x < 21:
+            if x_axis:
                 #x -+= vel
                 draw.line((5,2,0,2),fill=WHITE)
                 draw.line((5,2,3,0),fill=WHITE)
                 draw.line((5,2,3,4),fill=WHITE)
                 last_input_time = current_time
-            elif x_axis > 0 and x > 1:
+            elif x_axis:
                 #x -= vel
                 draw.line((0,2,6,2),fill=WHITE)
                 draw.line((0,2,2,0),fill=WHITE)
                 draw.line((0,2,2,4),fill=WHITE)
                 last_input_time = current_time
-            elif y_axis < 0 and y < 21:
+            elif y_axis:
                 #y += vel
                 draw.line((0,2,2,0),fill=WHITE)
                 draw.line((2,0,4,2),fill=WHITE)
                 draw.line((2,1,2,5),fill=WHITE)
                 last_input_time = current_time
-            elif y_axis > 0 and y > 1:
+            elif y_axis :
                 #y -= vel
                 draw.line((2,0,2,4),fill=WHITE)
                 draw.line((0,3,2,5),fill=WHITE)
@@ -106,7 +101,7 @@ while running:
         y_axis = joystick.get_axis(1)
         move_box_joy(x_axis, y_axis)
 
-    
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:  # If player is closing the window -> the loop will be closed
             running = False  # ends pygamges
