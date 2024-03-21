@@ -2,7 +2,7 @@ import pygame
 
 def display_o_menu(matrix, joystick_found, joystick, draw, image):
     global x
-    initial_delay = 0.3
+    initial_delay = 0.5
     dt = 0
     x = 0
     BLACK = (0,0,0)
@@ -142,16 +142,18 @@ def display_o_menu(matrix, joystick_found, joystick, draw, image):
     exit_color = (WHITE)
     change_running = "continue"
     while running:
-        if joystick_found and initial_delay <0:
-            x_axis = joystick.get_axis(0)
-            change_running = move_box_joy(x_axis,change_running)
-        else:
-            move_box()
 
-        if change_running == "play_again":
-            return True
-        if change_running == "exit":
-            return False
+        if not(joystick_found):
+            move_box()
+        else:
+            if change_running == "continue" and initial_delay <0:
+                x_axis = joystick.get_axis(0)
+                change_running = move_box_joy(x_axis,change_running)
+            elif change_running == "play_again":
+                print("owin_play_again")
+                return True
+            elif change_running == "exit":
+                return False
         
         draw.rectangle((0,0,32,32),fill=(0,0,0,0))
         draw_o(WHITE)
@@ -160,6 +162,6 @@ def display_o_menu(matrix, joystick_found, joystick, draw, image):
         draw_arrow(play_color)
         draw_exit(exit_color)
 
-        matrix.SetImage(image, 0, 0)
         initial_delay = initial_delay-dt
+        matrix.SetImage(image, 0, 0)
         dt = clock.tick(60)/1000

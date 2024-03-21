@@ -52,6 +52,8 @@ def start_pong(matrix, joystick_found, joystick, draw, image):
 
         # player movement
         if joystick_found:
+            if joystick.get_button(10):
+                running = False
             y_axis = joystick.get_axis(1)
             move_joy(y_axis)
         else:
