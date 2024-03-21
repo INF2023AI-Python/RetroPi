@@ -1,11 +1,11 @@
 import pygame
 import time
+from .o_wins_menu import display_o_menu
 
 def start_tiktaktoe(matrix, joystick_found, joystick, draw, image):
     
     global last_input_time
     global input_lock_time
-    global snake_dir
     global y
     global x
     pygame.init()
@@ -13,6 +13,8 @@ def start_tiktaktoe(matrix, joystick_found, joystick, draw, image):
 
     input_lock_time = 0.3
     last_input_time = 0
+    initial_input_delay = 0.3
+    dt = 0
 
 
     #Colors
@@ -43,7 +45,6 @@ def start_tiktaktoe(matrix, joystick_found, joystick, draw, image):
     def move_box_joy(x_axis, y_axis, threshold=0.1):
         global last_input_time
         global input_lock_time
-        global snake_dir
         global y
         global x
         
@@ -68,7 +69,7 @@ def start_tiktaktoe(matrix, joystick_found, joystick, draw, image):
                 last_input_time = current_time
 
     while running:
-
+        # print(player_circle)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -94,10 +95,12 @@ def start_tiktaktoe(matrix, joystick_found, joystick, draw, image):
 
 
         #condition to draw a cirlce or an x
-        if joystick.get_button(8) and ((x,y) not in player_x) and len(player_circle) <= len(player_x) and game_over == False and player == 0:
+        initial_input_delay = initial_input_delay-dt
+
+        if joystick.get_button(8) and ((x,y) not in player_x) and len(player_circle) <= len(player_x) and game_over == False and player == 0 and (initial_input_delay <= 0):
             player_circle.add((x,y))
             player = 1
-        if joystick.get_button(8) and ((x,y) not in player_circle) and (len(player_circle) > len(player_x)) and game_over == False and player == 1:
+        if joystick.get_button(8) and ((x,y) not in player_circle) and (len(player_circle) > len(player_x)) and game_over == False and player == 1 and (initial_input_delay <= 0):
             player_x.add((x,y))
             player = 0
 
@@ -138,82 +141,104 @@ def start_tiktaktoe(matrix, joystick_found, joystick, draw, image):
         #check for win for player_circle
         #Horizontal
         if (1*scale,1*scale) in player_circle and (11*scale,1*scale) in player_circle and (21*scale,1*scale) in player_circle : #wenn winner == true muss player_circle wins stehen und play again button
+            print("h1")
             winner = 0
             game_over = True
-        if (1*scale,11*scale) in player_circle and (11*scale,11*scale) in player_circle and (21*scale,11*scale) in player_circle :
+        elif (1*scale,11*scale) in player_circle and (11*scale,11*scale) in player_circle and (21*scale,11*scale) in player_circle :
+            print("h2")
             winner = 0
             game_over = True
-        if (1*scale,21*scale) in player_circle and (11*scale,21*scale) in player_circle and (21*scale,21*scale) in player_circle :
+        elif (1*scale,21*scale) in player_circle and (11*scale,21*scale) in player_circle and (21*scale,21*scale) in player_circle :
+            print("h3")
             winner = 0
             game_over = True
         #Vertical
-        if (1*scale,1*scale) in player_circle and (1*scale,11*scale) in player_circle and (1*scale,21*scale) in player_circle :
+        elif (1*scale,1*scale) in player_circle and (1*scale,11*scale) in player_circle and (1*scale,21*scale) in player_circle :
+            print("v1")
             winner = 0
             game_over = True
-        if (11*scale,1*scale) in player_circle and (11*scale,11*scale) in player_circle and (11*scale,21*scale) in player_circle :
+        elif (11*scale,1*scale) in player_circle and (11*scale,11*scale) in player_circle and (11*scale,21*scale) in player_circle :
+            print("v2")
             winner = 0
             game_over = True
-        if (21*scale,1*scale) in player_circle and (21*scale,11*scale) in player_circle and (21*scale,21*scale) in player_circle :
+        elif (21*scale,1*scale) in player_circle and (21*scale,11*scale) in player_circle and (21*scale,21*scale) in player_circle :
+            print("v3")
             winner = 0
             game_over = True
         #Diogonal
-        if (1*scale,1*scale) in player_circle and (11*scale,11*scale) in player_circle and (21*scale,21*scale) in player_circle :
+        elif (1*scale,1*scale) in player_circle and (11*scale,11*scale) in player_circle and (21*scale,21*scale) in player_circle :
+            print("d1")
             winner = 0
             game_over = True
-        if (1*scale,21*scale) in player_circle and (11*scale,11*scale) in player_circle and (21*scale,1*scale) in player_circle :
+        elif (1*scale,21*scale) in player_circle and (11*scale,11*scale) in player_circle and (21*scale,1*scale) in player_circle :
+            print("d2")
             winner = 0
             game_over = True
 
         #check for win for player_x
         #Horizontal
-        if (1*scale,1*scale) in player_x and (11*scale,1*scale) in player_x and (21*scale,1*scale) in player_x :
-            winner = 1
-            game_over = True
-        if (1*scale,11*scale) in player_x and (11*scale,11*scale) in player_x and (21*scale,11*scale) in player_x :
-            winner = 1
-            game_over = True
-        if (1*scale,21*scale) in player_x and (11*scale,21*scale) in player_x and (21*scale,21*scale) in player_x :
-            winner = 1
-            game_over = True
-        #Vertical
-        if (1*scale,1*scale) in player_x and (1*scale,11*scale) in player_x and (1*scale,21*scale) in player_x :
-            winner = 1
-            game_over = True
-        if (11*scale,1*scale) in player_x and (11*scale,11*scale) in player_x and (11*scale,21*scale) in player_x :
-            winner = 1
-            game_over = True
-        if (21*scale,1*scale) in player_x and (21*scale,11*scale) in player_x and (21*scale,21*scale) in player_x :
-            winner = 1
-            game_over = True
-        #Diogonal
-        if (1*scale,1*scale) in player_x and (11*scale,11*scale) in player_x and (21*scale,21*scale) in player_x :
-            winner = 1
-            game_over = True
-        if (1*scale,21*scale) in player_x and (11*scale,11*scale) in player_x and (21*scale,1*scale) in player_x :
-            winner = 1
-            game_over = True
+        # if (1*scale,1*scale) in player_x and (11*scale,1*scale) in player_x and (21*scale,1*scale) in player_x :
+        #     winner = 1
+        #     game_over = True
+        # if (1*scale,11*scale) in player_x and (11*scale,11*scale) in player_x and (21*scale,11*scale) in player_x :
+        #     winner = 1
+        #     game_over = True
+        # if (1*scale,21*scale) in player_x and (11*scale,21*scale) in player_x and (21*scale,21*scale) in player_x :
+        #     winner = 1
+        #     game_over = True
+        # #Vertical
+        # if (1*scale,1*scale) in player_x and (1*scale,11*scale) in player_x and (1*scale,21*scale) in player_x :
+        #     winner = 1
+        #     game_over = True
+        # if (11*scale,1*scale) in player_x and (11*scale,11*scale) in player_x and (11*scale,21*scale) in player_x :
+        #     winner = 1
+        #     game_over = True
+        # if (21*scale,1*scale) in player_x and (21*scale,11*scale) in player_x and (21*scale,21*scale) in player_x :
+        #     winner = 1
+        #     game_over = True
+        # #Diogonal
+        # if (1*scale,1*scale) in player_x and (11*scale,11*scale) in player_x and (21*scale,21*scale) in player_x :
+        #     winner = 1
+        #     game_over = True
+        # if (1*scale,21*scale) in player_x and (11*scale,11*scale) in player_x and (21*scale,1*scale) in player_x :
+        #     winner = 1
+        #     game_over = True
 
         #checks for tie
-        if len(player_circle) == 5 and len(player_x) == 4:
+        elif len(player_circle) == 5 and len(player_x) == 4:
+            print("tie1")
             winner = 2
             game_over = True
-        if len(player_circle) == 4 and len(player_x) == 5:
+        elif len(player_circle) == 4 and len(player_x) == 5:
+            print("tie2")
             winner = 2
             game_over = True
 
         #End_test who has won
         if game_over == True and winner == 0:
-            #ruft o wins auf
-            pass
-        if game_over == True and winner == 1:
-            #ruft x wins auf
-            pass
-        if game_over == True and winner == 2:
+            # o wins
+            running = display_o_menu(matrix, joystick_found, joystick, draw, image)
+            # print("running in main=:", running)
+            player_circle = set([])
+            player_x = set([])
+            print("player_x",player_x)
+            game_over = False
+            player = 0
+            winner = -1
+            time.sleep(0.3)
+            initial_input_delay=0.3
+
+        # elif game_over == True and winner == 1:
+            
+        #     #ruft x wins auf
+            
+        # elif game_over == True and winner == 2:
+            
             #ruft tie auf. tie fehlt auf matrix ?
-            pass
+            
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:  # If player is closing the window -> the loop will be closed
                 running = False  # ends pygamges
         matrix.SetImage(image, 0, 0)
-        clock.tick(60)
+        dt = clock.tick(60)/1000

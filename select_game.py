@@ -324,6 +324,7 @@ def move_joy(x_axis, y_axis):
                 if position_y == 5:
                     print("TIK TAK TOE")
                     start_tiktaktoe(matrix, joystick_found, joystick, draw, image)
+                    time.sleep(0.3)
                 if position_y == 15:
                     print("ENDLESS RUNNER")
                     repeat(matrix, joystick_found, joystick, draw, image, start_runner)
