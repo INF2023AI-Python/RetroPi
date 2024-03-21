@@ -1,6 +1,9 @@
 import pygame
 import time
 from .o_wins_menu import display_o_menu
+from .x_wins_menu import display_x_menu
+from .tie_menu import display_tie_menu
+
 
 def start_tiktaktoe(matrix, joystick_found, joystick, draw, image):
     
@@ -177,32 +180,32 @@ def start_tiktaktoe(matrix, joystick_found, joystick, draw, image):
 
         #check for win for player_x
         #Horizontal
-        # if (1*scale,1*scale) in player_x and (11*scale,1*scale) in player_x and (21*scale,1*scale) in player_x :
-        #     winner = 1
-        #     game_over = True
-        # if (1*scale,11*scale) in player_x and (11*scale,11*scale) in player_x and (21*scale,11*scale) in player_x :
-        #     winner = 1
-        #     game_over = True
-        # if (1*scale,21*scale) in player_x and (11*scale,21*scale) in player_x and (21*scale,21*scale) in player_x :
-        #     winner = 1
-        #     game_over = True
-        # #Vertical
-        # if (1*scale,1*scale) in player_x and (1*scale,11*scale) in player_x and (1*scale,21*scale) in player_x :
-        #     winner = 1
-        #     game_over = True
-        # if (11*scale,1*scale) in player_x and (11*scale,11*scale) in player_x and (11*scale,21*scale) in player_x :
-        #     winner = 1
-        #     game_over = True
-        # if (21*scale,1*scale) in player_x and (21*scale,11*scale) in player_x and (21*scale,21*scale) in player_x :
-        #     winner = 1
-        #     game_over = True
-        # #Diogonal
-        # if (1*scale,1*scale) in player_x and (11*scale,11*scale) in player_x and (21*scale,21*scale) in player_x :
-        #     winner = 1
-        #     game_over = True
-        # if (1*scale,21*scale) in player_x and (11*scale,11*scale) in player_x and (21*scale,1*scale) in player_x :
-        #     winner = 1
-        #     game_over = True
+        elif (1*scale,1*scale) in player_x and (11*scale,1*scale) in player_x and (21*scale,1*scale) in player_x :
+            winner = 1
+            game_over = True
+        elif (1*scale,11*scale) in player_x and (11*scale,11*scale) in player_x and (21*scale,11*scale) in player_x :
+            winner = 1
+            game_over = True
+        elif (1*scale,21*scale) in player_x and (11*scale,21*scale) in player_x and (21*scale,21*scale) in player_x :
+            winner = 1
+            game_over = True
+        #Vertical
+        elif (1*scale,1*scale) in player_x and (1*scale,11*scale) in player_x and (1*scale,21*scale) in player_x :
+            winner = 1
+            game_over = True
+        elif (11*scale,1*scale) in player_x and (11*scale,11*scale) in player_x and (11*scale,21*scale) in player_x :
+            winner = 1
+            game_over = True
+        elif (21*scale,1*scale) in player_x and (21*scale,11*scale) in player_x and (21*scale,21*scale) in player_x :
+            winner = 1
+            game_over = True
+        #Diogonal
+        elif (1*scale,1*scale) in player_x and (11*scale,11*scale) in player_x and (21*scale,21*scale) in player_x :
+            winner = 1
+            game_over = True
+        elif (1*scale,21*scale) in player_x and (11*scale,11*scale) in player_x and (21*scale,1*scale) in player_x :
+            winner = 1
+            game_over = True
 
         #checks for tie
         elif len(player_circle) == 5 and len(player_x) == 4:
@@ -216,9 +219,8 @@ def start_tiktaktoe(matrix, joystick_found, joystick, draw, image):
 
         #End_test who has won
         if game_over == True and winner == 0:
-            # o wins
+            # o win
             running = display_o_menu(matrix, joystick_found, joystick, draw, image)
-            # print("running in main=:", running)
             player_circle = set([])
             player_x = set([])
             print("player_x",player_x)
@@ -228,13 +230,26 @@ def start_tiktaktoe(matrix, joystick_found, joystick, draw, image):
             time.sleep(0.3)
             initial_input_delay=0.3
 
-        # elif game_over == True and winner == 1:
-            
-        #     #ruft x wins auf
-            
-        # elif game_over == True and winner == 2:
-            
-            #ruft tie auf. tie fehlt auf matrix ?
+        elif game_over == True and winner == 1:
+            # x win
+            running = display_x_menu(matrix, joystick_found, joystick, draw, image)
+            player_circle = set([])
+            player_x = set([])
+            game_over = False
+            player = 0
+            winner = -1
+            time.sleep(0.3)
+            initial_input_delay=0.3
+        elif game_over == True and winner == 2:
+            # tie
+            running = display_tie_menu(matrix, joystick_found, joystick, draw, image)
+            player_circle = set([])
+            player_x = set([])
+            game_over = False
+            player = 0
+            winner = -1
+            time.sleep(0.3)
+            initial_input_delay=0.3
             
 
         for event in pygame.event.get():
