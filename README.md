@@ -25,7 +25,9 @@ Navigate through a series of challenging obstacles on the RetroPi's 32 x 32 disp
 
 These original games capture the essence of retro gaming while offering fresh and innovative gameplay experiences. With RetroPi, retro gaming enthusiasts can enjoy hours of entertainment on their Raspberry Pi-powered console without the need for console emulation.
 
-
+## If you want to learn more, check out our wiki:
+---
+https://github.com/INF2023AI-Python/RetroPi/wiki/Hardware
 
 
 
