@@ -4,6 +4,7 @@ import time
 from PIL import Image
 from PIL import ImageDraw
 
+from button_test import start_button_test
 from games.endlessrunner.runner import start_runner
 from games.tiktakto.main import start_tiktaktoe
 from scoreboard import Scoreboard
@@ -214,6 +215,10 @@ def repeat(matrix, joystick_found, joystick, draw, image, game):
     while True:
         game_data = game(matrix, joystick_found, joystick, draw, image)
         option = start_losemenu(matrix, joystick_found, joystick, draw, image, game_data)
+
+        # button, highscore is not returning any data
+        if game_data is None:
+            break
         if game_data["score"] > 0 and "score" in game_data:
             scoreboard.read_from_file("score.json")
             scoreboard.add_entry(game_data["game"], "", game_data["score"])
@@ -255,6 +260,8 @@ def move_key():
                 repeat(matrix, False, None, draw, image, start_spaceinvader)
             if position_y == 25:
                 print("BUTTON TEST")
+                start_button_test(matrix, False, None, draw, image)
+                time.sleep(0.3)
         if position_x == 15:
             if position_y == 5:
                 print("SNAKE")
@@ -266,6 +273,7 @@ def move_key():
             if position_y == 5:
                 print("TIK TAK TOE")
                 start_tiktaktoe(matrix, False, None, draw, image)
+                time.sleep(0.3)
             if position_y == 15:
                 print("ENDLESS RUNNER")
                 repeat(matrix, False, None, draw, image, start_runner)
@@ -313,6 +321,8 @@ def move_joy(x_axis, y_axis):
                     repeat(matrix, joystick_found, joystick, draw, image, start_spaceinvader)
                 if position_y == 25:
                     print("BUTTON TEST")
+                    start_button_test(matrix, joystick_found, joystick, draw, image)
+                    time.sleep(0.3)
             if position_x == 15:
                 if position_y == 5:
                     print("SNAKE")
@@ -331,6 +341,7 @@ def move_joy(x_axis, y_axis):
                 if position_y == 25:
                     print("SHUTDOWN")
                     os.system("systemctl poweroff -i")
+
 
 def draw_colored():
     global position_x
