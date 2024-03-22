@@ -256,32 +256,32 @@ def move_key():
     if keys[pygame.K_SPACE]:
         if position_x == 5:
             if position_y == 5:
-                print("PONG")
+                # Pong
                 repeat(matrix, False, None, draw, image, start_pong)
             if position_y == 15:
-                print("SPACE INVADER")
+                # Space Invaders
                 repeat(matrix, False, None, draw, image, start_spaceinvader)
             if position_y == 25:
-                print("BUTTON TEST")
+                # Button Test
                 start_button_test(matrix, False, None, draw, image)
                 time.sleep(0.3)
         if position_x == 15:
             if position_y == 5:
-                print("SNAKE")
+                # Snake
                 repeat(matrix, False, None, draw, image, start_snake)
             if position_y == 25:
-                print("TROPHY")
+                # Scoreboard
                 start_show_scoreboard(matrix, False, None, draw, image)
         if position_x == 25:
             if position_y == 5:
-                print("TIK TAK TOE")
+                # Tik Tak Toe
                 start_tiktaktoe(matrix, False, None, draw, image)
                 time.sleep(0.3)
             if position_y == 15:
-                print("ENDLESS RUNNER")
+                # Endless Runner
                 repeat(matrix, False, None, draw, image, start_runner)
             if position_y == 25:
-                print("SHUTDOWN")
+                #Shutdown
                 os.system("systemctl poweroff -i")
 
 
@@ -317,32 +317,32 @@ def move_joy(x_axis, y_axis):
         if joystick.get_button(RETURN):
             if position_x == 5:
                 if position_y == 5:
-                    print("PONG")
+                    # Pong
                     repeat(matrix, joystick_found, joystick, draw, image, start_pong)
                 if position_y == 15:
-                    print("SPACE INVADER")
+                    # Space Invader
                     repeat(matrix, joystick_found, joystick, draw, image, start_spaceinvader)
                 if position_y == 25:
-                    print("BUTTON TEST")
+                    # Button Test
                     start_button_test(matrix, joystick_found, joystick, draw, image)
                     time.sleep(0.3)
             if position_x == 15:
                 if position_y == 5:
-                    print("SNAKE")
+                    # Snake
                     repeat(matrix, joystick_found, joystick, draw, image, start_snake)
                 if position_y == 25:
-                    print("TROPHY")
+                    # Scoreboard
                     start_show_scoreboard(matrix, joystick_found, joystick, draw, image)
             if position_x == 25:
                 if position_y == 5:
-                    print("TIK TAK TOE")
+                    # Tik Tak Toe
                     start_tiktaktoe(matrix, joystick_found, joystick, draw, image)
                     time.sleep(0.3)
                 if position_y == 15:
-                    print("ENDLESS RUNNER")
+                    # Endless Runner
                     repeat(matrix, joystick_found, joystick, draw, image, start_runner)
                 if position_y == 25:
-                    print("SHUTDOWN")
+                    # Shutdown
                     os.system("systemctl poweroff -i")
 
 

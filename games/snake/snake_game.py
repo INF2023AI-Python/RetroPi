@@ -96,7 +96,6 @@ def start_snake(matrix, joystick_found, joystick, draw, image):
             score = score + 1
             tail.append(tail[len(tail) - 1].move(SPEED * snake_dir[0], -SPEED * snake_dir[1]))
             clist.append(tail[len(tail) - 1].move(SPEED * snake_dir[0], -SPEED * snake_dir[1]))
-            print(score)
 
     def collision_self(next_relative_position: pygame.Rect) -> bool:
         for snake_element in tail:

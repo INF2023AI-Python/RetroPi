@@ -4,8 +4,6 @@ def start_spaceinvader(matrix, joystick_found, joystick, draw, image):
 
     pygame.init()
 
-    def lose(score):
-        print(score)
 
     def overlap(x1, y1, x2, y2):
         # Check if either rectangle is entirely to the left or right of the other
@@ -189,7 +187,6 @@ def start_spaceinvader(matrix, joystick_found, joystick, draw, image):
 
         # Check Lose Condition
         if (not player.is_alive()) or (not base.is_alive()):
-            lose(score)
             break
 
         # Next Wave

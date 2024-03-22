@@ -69,10 +69,8 @@ def start_losemenu(matrix, joystick_found, joystick, draw, image, game_data):
 
         if keys[pygame.K_RETURN]:  # if enter is pressed
             if x == 0:
-                print("PLAY")
                 option = "PLAY"
             if x == 20:
-                print("EXIT")
                 option = "EXIT"
             running = False
 
@@ -105,10 +103,8 @@ def start_losemenu(matrix, joystick_found, joystick, draw, image, game_data):
 
         if joystick.get_button(RETURN):
             if x == 0:
-                print("PLAY")
                 option = "PLAY"
             if x == 20:
-                print("EXIT")
                 option = "EXIT"
             running = False
 

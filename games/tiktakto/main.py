@@ -6,14 +6,14 @@ import time
 
 
 def start_tiktaktoe(matrix, joystick_found, joystick, draw, image):
-    
+
     global last_input_time
     global input_lock_time
     global y
     global x
     pygame.init()
 
-    
+
     input_lock_time = 0.3
     last_input_time = 0
     initial_input_delay = 0.3
@@ -152,14 +152,13 @@ def start_tiktaktoe(matrix, joystick_found, joystick, draw, image):
         global input_lock_time
         global y
         global x
-        
+
 
         current_time=time.time()
         # Schwellenwert für Stick-Drift oder Neutralzone
         if current_time - last_input_time > input_lock_time:
             x_axis = 0 if abs(x_axis) < threshold else x_axis
             y_axis = 0 if abs(y_axis) < threshold else y_axis
-            # #print(x_axis, y_axis)
             if x_axis < 0 and x < 21:
                 x += vel
                 last_input_time = current_time
@@ -179,7 +178,7 @@ def start_tiktaktoe(matrix, joystick_found, joystick, draw, image):
     # oquit
     # tieplay
     # tiequit
-    
+
     def menu_x_play():
         draw.rectangle((0,0,31,31),fill=(0,0,0))
         draw_winmenu((255,255,255))
@@ -187,7 +186,7 @@ def start_tiktaktoe(matrix, joystick_found, joystick, draw, image):
         draw_box(0)
         draw_arrow((0,255,0))
         draw_exit((255,255,255))
-     
+
     def menu_x_quit():
         draw.rectangle((0,0,31,31),fill=(0,0,0))
         draw_winmenu((255,255,255))
@@ -203,7 +202,7 @@ def start_tiktaktoe(matrix, joystick_found, joystick, draw, image):
         draw_box(0)
         draw_arrow((0,255,0))
         draw_exit((255,255,255))
-    
+
     def menu_o_quit():
         draw.rectangle((0,0,31,31),fill=(0,0,0))
         draw_winmenu((255,255,255))
@@ -211,7 +210,7 @@ def start_tiktaktoe(matrix, joystick_found, joystick, draw, image):
         draw_box(13)
         draw_arrow((255,255,255))
         draw_exit((255,0,0))
-    
+
     def menu_tie_play():
         draw.rectangle((0,0,31,31),fill=(0,0,0))
         draw_tiemenu((255,255,255))
@@ -230,7 +229,7 @@ def start_tiktaktoe(matrix, joystick_found, joystick, draw, image):
 
         if joystick_found:
             if joystick.get_button(10):
-                running = False 
+                running = False
             x_axis = joystick.get_axis(0)
             y_axis = joystick.get_axis(1)
             if not(winner in [0,1,2]):
@@ -282,8 +281,6 @@ def start_tiktaktoe(matrix, joystick_found, joystick, draw, image):
                 draw.rectangle((x ,y ,x+9,y+9),fill=RED)
             draw.rectangle((x+1 ,y+1 ,x+8,y+8),fill=BLACK)
 
-            ##print(x)
-            ##print(y)
 
             #draws x or circle
             for b in player_circle:
@@ -296,37 +293,29 @@ def start_tiktaktoe(matrix, joystick_found, joystick, draw, image):
             #check for win for player_circle
             #Horizontal
             if (1*scale,1*scale) in player_circle and (11*scale,1*scale) in player_circle and (21*scale,1*scale) in player_circle : #wenn winner == true muss player_circle wins stehen und play again button
-                #print("h1")
                 winner = 0
                 game_over = True
             elif (1*scale,11*scale) in player_circle and (11*scale,11*scale) in player_circle and (21*scale,11*scale) in player_circle :
-                #print("h2")
                 winner = 0
                 game_over = True
             elif (1*scale,21*scale) in player_circle and (11*scale,21*scale) in player_circle and (21*scale,21*scale) in player_circle :
-                #print("h3")
                 winner = 0
                 game_over = True
             #Vertical
             elif (1*scale,1*scale) in player_circle and (1*scale,11*scale) in player_circle and (1*scale,21*scale) in player_circle :
-                #print("v1")
                 winner = 0
                 game_over = True
             elif (11*scale,1*scale) in player_circle and (11*scale,11*scale) in player_circle and (11*scale,21*scale) in player_circle :
-                #print("v2")
                 winner = 0
                 game_over = True
             elif (21*scale,1*scale) in player_circle and (21*scale,11*scale) in player_circle and (21*scale,21*scale) in player_circle :
-                #print("v3")
                 winner = 0
                 game_over = True
             #Diogonal
             elif (1*scale,1*scale) in player_circle and (11*scale,11*scale) in player_circle and (21*scale,21*scale) in player_circle :
-                #print("d1")
                 winner = 0
                 game_over = True
             elif (1*scale,21*scale) in player_circle and (11*scale,11*scale) in player_circle and (21*scale,1*scale) in player_circle :
-                #print("d2")
                 winner = 0
                 game_over = True
 
@@ -361,11 +350,9 @@ def start_tiktaktoe(matrix, joystick_found, joystick, draw, image):
 
             #checks for tie
             elif len(player_circle) == 5 and len(player_x) == 4:
-                #print("tie1")
                 winner = 2
                 game_over = True
             elif len(player_circle) == 4 and len(player_x) == 5:
-                #print("tie2")
                 winner = 2
                 game_over = True
 
@@ -384,17 +371,12 @@ def start_tiktaktoe(matrix, joystick_found, joystick, draw, image):
             x = 11
             y = 1
             # time.sleep(0.3)
-        
+
         if winner in [0,1,2]:
             menu_delay = menu_delay -dt
             menu_move_value = menu_movement(joystick,menu_move_value)
-        # if joystick.get_button(8):
-            # #print("main:button8:",joystick.get_button(8))
-            # #print("main:move_value",menu_move_value)
-        
             if menu_move_value == -1:
                 if joystick.get_button(8) and menu_delay < 0:
-                    #print("main:reset")
                     winner = -2
                     menu_move_value = 0
                 if winner == 0:
@@ -406,7 +388,6 @@ def start_tiktaktoe(matrix, joystick_found, joystick, draw, image):
 
             elif menu_move_value == 1:
                 if joystick.get_button(8) and menu_delay < 0:
-                    #print("main:quit tiktatktoe")
                     running = False
                 if winner == 0:
                     menu_o_quit()
@@ -421,7 +402,5 @@ def start_tiktaktoe(matrix, joystick_found, joystick, draw, image):
             if event.type == pygame.QUIT:  # If player is closing the window -> the loop will be closed
                 running = False  # ends pygamgesz
 
-        # #print("main:jbutton8:", joystick.get_button(8))
-        # #print("main:jbutton9:", joystick.get_button(9))
         matrix.SetImage(image, 0, 0)
         dt = clock.tick(60)/1000

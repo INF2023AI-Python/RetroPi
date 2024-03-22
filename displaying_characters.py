@@ -70,5 +70,4 @@ def display_chars(characters: str, y_top: int, x_top: int, draw):
             # drawing_x = start x + character_breite*nr_character+xaus characters_conversion
             drawing_x = x_top+i*4+x
             drawing_y = y_top+y
-            # print("drawing_x: ", drawing_x,"drawing_y: ", drawing_y)
             draw.point((drawing_x,drawing_y), fill=(255,255,255))
