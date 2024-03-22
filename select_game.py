@@ -29,6 +29,8 @@ try:
 except pygame.error:
     joystick_found = False
 
+os.chdir("/home/retropie/RetroPi")
+
 PURPLE = (79, 0, 153)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
