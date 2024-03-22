@@ -28,6 +28,7 @@ try:
     joystick.get_numaxes()
 except pygame.error:
     joystick_found = False
+    exit(1) # needs to be removed for development
 
 os.chdir("/home/retropie/RetroPi")
 
