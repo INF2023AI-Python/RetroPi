@@ -4,7 +4,7 @@ class GameObject:
 
     def __init__(self, rect:pygame.Rect, speed:pygame.Vector2):
         self.rect = rect
-        self.speed = speed        
+        self.speed = speed
         self.x = rect.left
         self.y = rect.top
 
@@ -16,5 +16,5 @@ class GameObject:
         self.speed.x = speed_x
         self.speed.y = speed_y
 
-    def update(self,deltaTime):
-        self.set_position(self.x+ (self.speed.x * deltaTime), self.y + (self.speed.y * deltaTime))
+    def update(self,delta_time):
+        self.set_position(self.x+ (self.speed.x * delta_time), self.y + (self.speed.y * delta_time))

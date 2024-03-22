@@ -33,33 +33,33 @@ def start_spaceinvader(matrix, joystick_found, joystick, draw, image):
     def next_wave(moblist):
         MOB_SPEED = 1
         wave = moblist.wave
-        mobA_list = []
-        mobB_list = []
-        mobC_list = []
-        value_mobA = int(10 * (1.2 ** wave))
-        value_mobB = int(10 * (1.2 ** (wave + 1)))
-        value_mobC = int(10 * (1.2 ** (wave + 2)))
-        attack_cooldown_mobA = max(3, 5 - 0.1 * wave)
-        attack_cooldown_mobB = max(1, 3 - 0.1 * wave)
-        attack_cooldown_mobC = max(2, 4 - 0.1 * wave)
+        mob_a_list = []
+        mob_b_list = []
+        mob_c_list = []
+        value_mob_a = int(10 * (1.2 ** wave))
+        value_mob_b = int(10 * (1.2 ** (wave + 1)))
+        value_mob_c = int(10 * (1.2 ** (wave + 2)))
+        attack_cooldown_mob_a = max(3, 5 - 0.1 * wave)
+        attack_cooldown_mob_b = max(1, 3 - 0.1 * wave)
+        attack_cooldown_mob_c = max(2, 4 - 0.1 * wave)
 
         for i in range(4):
             x_cords = 3 + i * 7
-            # mobA = first Row
-            mobA = objects.Mob(x_cords, 11, 4, 2, 1, attack_cooldown_mobA, value_mobA, MOB_SPEED, [161, 8, 8])
-            mobA_list.append(mobA)
+            # mob_a = first Row
+            mob_a = objects.Mob(x_cords, 11, 4, 2, 1, attack_cooldown_mob_a, value_mob_a, MOB_SPEED, [161, 8, 8])
+            mob_a_list.append(mob_a)
 
-            # mobB = second Row
-            mobB = objects.Mob(x_cords, 6, 4, 2, 1, attack_cooldown_mobB, value_mobB, MOB_SPEED, [92, 29, 140])
-            mobB_list.append(mobB)
+            # mob_b = second Row
+            mob_b = objects.Mob(x_cords, 6, 4, 2, 1, attack_cooldown_mob_b, value_mob_b, MOB_SPEED, [92, 29, 140])
+            mob_b_list.append(mob_b)
 
-            # mobC = third Row
-            mobC = objects.Mob(x_cords, 1, 4, 2, 2, attack_cooldown_mobC, value_mobC, MOB_SPEED, [40, 29, 140])
-            mobC_list.append(mobC)
+            # mob_c = third Row
+            mob_c = objects.Mob(x_cords, 1, 4, 2, 2, attack_cooldown_mob_c, value_mob_c, MOB_SPEED, [40, 29, 140])
+            mob_c_list.append(mob_c)
 
-        moblist.add_row(mobA_list)
-        moblist.add_row(mobB_list)
-        moblist.add_row(mobC_list)
+        moblist.add_row(mob_a_list)
+        moblist.add_row(mob_b_list)
+        moblist.add_row(mob_c_list)
         moblist.wave = wave + 1
 
     def reset_rocks(rock_list):
