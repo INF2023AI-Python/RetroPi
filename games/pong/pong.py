@@ -4,7 +4,6 @@ def start_pong(matrix, joystick_found, joystick, draw, image):
     from games.pong.game_object import GameObject
 
     pygame.init()
-    SCALE = 1
 
     def move():
         keys = pygame.key.get_pressed()

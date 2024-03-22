@@ -53,10 +53,6 @@ def display_chars(characters: str, y_top: int, x_top: int, draw):
         "<" : [[1,1],[2,1],[0,2],[1,3],[2,3]]
     }
 
-    #TOP_BAR = [0,0],[1,0],[2,0]
-    #MID_BAR = [0,2],[1,2],[2,2]
-    #BOT_BAR = [0,4],[1,4],[2,4]
-
     if y_top < 0:
         return
     if x_top < 0:

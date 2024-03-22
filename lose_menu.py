@@ -2,13 +2,9 @@ def start_losemenu(matrix, joystick_found, joystick, draw, image, game_data):
     import pygame
     import time
     from displaying_characters import display_chars
-    BLACK = (0, 0, 0)
     WHITE = (255, 255, 255)
     GREEN = (0, 255, 0)
     RED = (255, 0, 0)
-    LIGHT_BLUE = (0, 255, 255)
-    PLAY_COLOR = WHITE
-    EXIT_COLOR = WHITE
     BORDER_COLOR = WHITE
 
     RETURN = 8
@@ -49,13 +45,6 @@ def start_losemenu(matrix, joystick_found, joystick, draw, image, game_data):
         draw.point((27, 16), fill=(color))
         draw.point((28, 15), fill=(color))
 
-    def draw_save(color):
-        # draws save
-        draw.rectangle((15, 13, 15, 19), fill=(color))
-        draw.rectangle((16, 13, 16, 20), fill=(color))
-        draw.rectangle((17, 13, 17, 19), fill=(color))
-        draw.rectangle((13, 17, 19, 17), fill=(color))
-        draw.rectangle((14, 18, 18, 18), fill=(color))
 
     def move_box():
         global x
@@ -123,7 +112,6 @@ def start_losemenu(matrix, joystick_found, joystick, draw, image, game_data):
         draw_box(x)
         draw_arrow(play_color)
         draw_exit(exit_color)
-        # draw_save(save_color)
 
         display_chars(str(game_data["score"]), 2, (32 - 4 * len(str(game_data["score"]))) // 2, draw)
 

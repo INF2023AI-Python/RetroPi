@@ -5,16 +5,12 @@ import time
 def start_show_scoreboard(matrix, joystick_found, joystick, draw, image):
     pygame.init()
 
-    PURPLE = (79,0,153)
     BLACK = (0,0,0)
     WHITE = (255,255,255)
     BLUE = (0,0,255)
-    DARK_BLUE = (0,8,175)
     RED = (255,0,0)
     YELLOW = (255,221,0)
-    LIGHT_YELLOW = (255,238,132)
     GREEN = (0,255,0)
-    LIGHT_GREEN = (70,230,0)
     GREY = (128,128,128)
     DARK_GREY = (64,64,64)
     LIGHT_GREY = (192,192,192)

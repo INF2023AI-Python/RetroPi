@@ -47,7 +47,6 @@ def start_spaceinvader(matrix, joystick_found, joystick, draw, image):
             x_cords = 3 + i * 7
             # mobA = first Row
             mobA = objects.Mob(x_cords, 11, 4, 2, 1, attack_cooldown_mobA, value_mobA, MOB_SPEED, [161, 8, 8])
-            # mobA = objects.Mob(x_cords,1,4,2, 1, attack_cooldown_mobA, value_mobA, MOB_SPEED, [161, 8, 8])
             mobA_list.append(mobA)
 
             # mobB = second Row
@@ -56,7 +55,6 @@ def start_spaceinvader(matrix, joystick_found, joystick, draw, image):
 
             # mobC = third Row
             mobC = objects.Mob(x_cords, 1, 4, 2, 2, attack_cooldown_mobC, value_mobC, MOB_SPEED, [40, 29, 140])
-            # mobC = objects.Mob(x_cords,11,4,2, 2, attack_cooldown_mobC, value_mobC, MOB_SPEED, [40, 29, 140])
             mobC_list.append(mobC)
 
         moblist.add_row(mobA_list)
@@ -82,8 +80,6 @@ def start_spaceinvader(matrix, joystick_found, joystick, draw, image):
 
     rock_list = []
     reset_rocks(rock_list)
-    SCALE = 12
-    # screen = pygame.display.set_mode((32*SCALE, 32*SCALE))
     clock = pygame.time.Clock()
     dt = 0
 

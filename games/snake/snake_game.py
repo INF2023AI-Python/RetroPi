@@ -97,12 +97,6 @@ def start_snake(matrix, joystick_found, joystick, draw, image):
             tail.append(tail[len(tail) - 1].move(SPEED * snake_dir[0], -SPEED * snake_dir[1]))
             clist.append(tail[len(tail) - 1].move(SPEED * snake_dir[0], -SPEED * snake_dir[1]))
 
-    def collision_self(next_relative_position: pygame.Rect) -> bool:
-        for snake_element in tail:
-            if snake_element.left == next_relative_position.left and snake_element.top == next_relative_position.top:
-                return True
-        return False
-
     spawn_snake()
     apple = spawn_apple()
 

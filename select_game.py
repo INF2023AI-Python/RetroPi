@@ -235,7 +235,6 @@ def move_key():
     global position_x
     global position_y
     # moves the position
-    game_data = {}
     keys = pygame.key.get_pressed()
     if keys[pygame.K_UP]:
         if position_y != 5:

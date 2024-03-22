@@ -1,9 +1,5 @@
 import pygame
 import time
-# from .o_wins_menu import display_o_menu
-# from .x_wins_menu import display_x_menu
-# from .tie_menu import display_tie_menu
-
 
 def start_tiktaktoe(matrix, joystick_found, joystick, draw, image):
 
@@ -25,11 +21,8 @@ def start_tiktaktoe(matrix, joystick_found, joystick, draw, image):
     #Colors
     BLACK = (0,0,0)
     WHITE = (255,255,255)
-    GREEN = (0,255,0)
     RED = (255,0,0)
     BLUE = (0,0,255)
-    PLAY_COLOR = WHITE
-    EXIT_COLOR = WHITE
     BORDER_COLOR = WHITE
 
     # defining the game field and general settings
