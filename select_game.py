@@ -19,6 +19,8 @@ try:
 except ImportError:
     from rgbmatrix import RGBMatrix, RGBMatrixOptions
 
+os.chdir("/home/retropie/RetroPi")
+
 joystick_found = True
 pygame.init()
 try:
@@ -29,8 +31,6 @@ try:
 except pygame.error:
     joystick_found = False
     exit(1) # needs to be removed for development
-
-os.chdir("/home/retropie/RetroPi")
 
 PURPLE = (79, 0, 153)
 BLACK = (0, 0, 0)
