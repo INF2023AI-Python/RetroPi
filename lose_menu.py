@@ -51,12 +51,12 @@ def start_losemenu(matrix, joystick_found, joystick, draw, image, game_data):
         global running
         global option
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT] and x > 0:  # movment of the select box
+        if keys[pygame.K_LEFT] and x > 0:  # movement of the select box
             x -= 20
         if keys[pygame.K_RIGHT] and x <= 10:
             x += 20
 
-        if keys[pygame.K_RETURN]:  # if enter is pressed
+        if keys[pygame.K_RETURN] or keys[pygame.K_SPACE]:
             if x == 0:
                 option = "PLAY"
             if x == 20:

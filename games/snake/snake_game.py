@@ -5,9 +5,8 @@ def start_snake(matrix, joystick_found, joystick, draw, image):
     import pygame
     import random
     import copy
-    SCALE = 1
-    screen_width = 32 * SCALE
-    screen_height = 32 * SCALE
+    screen_width = 31
+    screen_height = 31
     clock = pygame.time.Clock()
 
     SPEED = 1
@@ -15,19 +14,17 @@ def start_snake(matrix, joystick_found, joystick, draw, image):
     clist = []
 
     global score
-    score = 0
-
     global snake_dir
-    snake_dir = (0, 1)
-
     global apple
-    apple = 0
     global running
+    score = 0
+    snake_dir = (0, 1)
+    apple = 0
     running = True
 
     def spawn_snake():
         for i in range(0, 6):
-            x = pygame.Rect(i * SCALE, 0, 1 * SCALE, 1 * SCALE)
+            x = pygame.Rect(i , 0, 1 , 1 )
             tail.append(x)
             clist.append(x)
 
@@ -37,10 +34,9 @@ def start_snake(matrix, joystick_found, joystick, draw, image):
         x = random.randint(0, 31)
         y = random.randint(0, 31)
         while (x, y) in snake_points:
-            x = random.randrange(0, 32, 2)
-            y = random.randrange(0, 32, 2)
-
-        return pygame.Rect(x * SCALE, y * SCALE, SCALE, SCALE)
+            x = random.randint(0, 31)
+            y = random.randint(0, 31)
+        return pygame.Rect(x , y , 1, 1)
 
     def move_snake_joy(x_axis, y_axis, threshold=0.1):
         global snake_dir
@@ -66,13 +62,13 @@ def start_snake(matrix, joystick_found, joystick, draw, image):
     def move_snake():
         global snake_dir
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_w] and snake_dir != (0, 1):
+        if (keys[pygame.K_w] or keys[pygame.K_UP]) and snake_dir != (0, 1):
             snake_dir = (0, -1)
-        elif keys[pygame.K_a] and snake_dir != (1, 0):
+        elif (keys[pygame.K_a] or keys[pygame.K_LEFT]) and snake_dir != (1, 0):
             snake_dir = (-1, 0)
-        elif keys[pygame.K_s] and snake_dir != (0, -1):
+        elif (keys[pygame.K_s] or keys[pygame.K_DOWN]) and snake_dir != (0, -1):
             snake_dir = (0, 1)
-        elif keys[pygame.K_d] and snake_dir != (-1, 0):
+        elif (keys[pygame.K_d] or keys[pygame.K_RIGHT]) and snake_dir != (-1, 0):
             snake_dir = (1, 0)
         for i in range(0, len(tail) - 1):
             tail[i + 1] = copy.deepcopy(clist[i])
@@ -106,7 +102,7 @@ def start_snake(matrix, joystick_found, joystick, draw, image):
                 running = False
 
         # clear screen
-        draw.rectangle((0, 0, 32, 32), fill=(0, 0, 0))
+        draw.rectangle((0, 0, 31, 31), fill=(0, 0, 0))
         if joystick_found:
             if joystick.get_button(10):
                 running = False
@@ -116,14 +112,16 @@ def start_snake(matrix, joystick_found, joystick, draw, image):
         else:
             move_snake()
         check_events()
-        head = tail[0]
-        for i, e in enumerate(tail):
-            if i == 0:
-                draw.rectangle((head.left, head.top, head.left, head.top), fill=(255, 0, 0))
-            else:
-                draw.rectangle((e.left, e.top, e.left, e.top), fill=(0, 255, 255))
 
-        draw.rectangle((apple.left, apple.top, apple.left, apple.top), fill=(255, 255, 0))
+        # Drawing Snake and Apple
+        if tail:
+            head = tail[0]
+            draw.point((head.left, head.top), (255, 0, 0))
+
+        for e in tail[1:]:
+            draw.point((e.left, e.top), (0, 255, 255))
+
+        draw.point((apple.left, apple.top), (255, 255, 0))
 
         matrix.SetImage(image, 0, 0)
         dt = clock.tick(8) / 1000

@@ -36,6 +36,7 @@ PURPLE = (79, 0, 153)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 BLUE = (0, 0, 255)
+LIGHT_BLUE = (0, 255, 255)
 DARK_BLUE = (0, 8, 175)
 RED = (255, 0, 0)
 YELLOW = (255, 221, 0)
@@ -252,7 +253,7 @@ def move_key():
         if position_x < 20:
             if not position_y == 15:
                 position_x += 10
-    if keys[pygame.K_SPACE]:
+    if keys[pygame.K_SPACE] or keys[pygame.K_RETURN]:
         if position_x == 5:
             if position_y == 5:
                 # Pong
@@ -359,7 +360,7 @@ def draw_colored():
             draw_button_test(BLUE, DARK_BLUE)
     if position_x == 15:
         if position_y == 5:
-            draw_snake(YELLOW, BLUE, RED)
+            draw_snake(RED, LIGHT_BLUE, YELLOW)
         if position_y == 25:
             draw_trophy(YELLOW, WHITE, LIGHT_YELLOW)
     if position_x == 25:
