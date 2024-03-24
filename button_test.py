@@ -108,4 +108,4 @@ def start_button_test(matrix, joystick_found, joystick, draw, image):
             exit_timer = joystick_inputs(x_axis, y_axis, exit_timer)
         exit_timer = exit_timer - dt
         matrix.SetImage(image, 0, 0)
-        dt = clock.tick(60)
+        dt = clock.tick(60)/1000
