@@ -3,6 +3,7 @@ import os
 import time
 from PIL import Image
 from PIL import ImageDraw
+import subprocess
 
 from button_test import start_button_test
 from games.endlessrunner.runner import start_runner
@@ -343,7 +344,7 @@ def move_joy(x_axis, y_axis):
                     repeat(matrix, joystick_found, joystick, draw, image, start_runner)
                 if position_y == 25:
                     print("SHUTDOWN")
-                    os.system("systemctl poweroff -i")
+                    subprocess.call("sudo shutdown -h now", shell=True)
 
 
 def draw_colored():
