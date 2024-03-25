@@ -344,7 +344,7 @@ def move_joy(x_axis, y_axis):
                     repeat(matrix, joystick_found, joystick, draw, image, start_runner)
                 if position_y == 25:
                     print("SHUTDOWN")
-                    subprocess.call("sudo shutdown -h now", shell=True)
+                    os.system("shutdown")
 
 
 def draw_colored():
